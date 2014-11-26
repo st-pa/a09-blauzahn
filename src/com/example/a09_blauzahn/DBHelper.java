@@ -230,8 +230,8 @@ extends SQLiteOpenHelper {
 	/** deletes all data. */
 	protected void reset() {
 		try {
-			db.execSQL("DELETE FROM " + TAB_SESSION);
-			db.execSQL("DELETE FROM " + TAB_SIGHTING);
+			db.execSQL("DELETE FROM \"" + TAB_SESSION + "\"");
+			db.execSQL("DELETE FROM \"" + TAB_SIGHTING + "\"");
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}

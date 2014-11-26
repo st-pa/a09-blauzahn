@@ -72,6 +72,9 @@ implements OnClickListener {
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
 		btRefresh.setOnClickListener(this);
+		btResetDb.setOnClickListener(this);
+		btResetDb.setEnabled(false);
+		btShowDevices.setOnClickListener(this);
 
 		showStatus();
 		log(
@@ -259,7 +262,6 @@ implements OnClickListener {
 
 	private void clickedBtConnect() {
 		if (ba != null) {
-			toast("bluetooth found.");
 			Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			// @see #onActivityResult()
 			startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
