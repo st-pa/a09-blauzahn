@@ -31,7 +31,7 @@ implements OnClickListener {
 	/** Kennzeichnung von Log-Meldungen. */
 	private static final String TAG = "Blauzahn";
 	/** ist der "sichtbare" name dieses blauzahns für andere geräte. */
-	private static final String BT_NAME = "Hallo Welt!";
+	private static final String BT_NAME = "Hallihallo Welt!";
 	/** soll als resultat der blauzahn-einschalte-aktivität zurückkommen. */
 	private static final int REQUEST_ENABLE_BT = 42;
 	/** Zeitstempelformat. */
