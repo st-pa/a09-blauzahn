@@ -30,6 +30,11 @@ extends AppTTS {
 	protected DBHelper db;
 	protected Context context;
 
+	@Override
+	public void onTerminate() {
+		db.close();
+	}
+
 	protected void init(Context context) {
 		if (context != null) {
 			db = new DBHelper(context);

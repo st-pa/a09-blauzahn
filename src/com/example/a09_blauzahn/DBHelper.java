@@ -50,6 +50,13 @@ extends SQLiteOpenHelper {
 		this(context,DB_NAME,null,DB_VERSION);
 	}
 
+	public void close() {
+		if (this.db != null) {
+			this.db.close();
+		}
+		super.close();
+	}
+
 	private void toast(String text) {
 		Toast.makeText(
 			context,
@@ -121,21 +128,25 @@ extends SQLiteOpenHelper {
 
 	protected int getMaxSessionId() {
 		init();
-		int result;
-		Cursor c = db.rawQuery(
-			new StringBuffer()
-			.append("SELECT max(")
-			.append(KEY_SESSION_ID)
-			.append(" FROM ")
-			.append(TAB_SESSION)
-			.append("\"")
-			.toString(),
-			null
-		);
-		if (c.moveToFirst()) {
-			result = c.getInt(0);
-		} else result = -1;
-		c.close();
+		int result = -1;
+		try {
+			Cursor c = db.rawQuery(
+				new StringBuffer()
+				.append("SELECT max(\"")
+				.append(KEY_SESSION_ID)
+				.append("\") FROM \"")
+				.append(TAB_SESSION)
+				.append("\"")
+				.toString(),
+				null
+			);
+			if (c.moveToFirst()) {
+				result = c.getInt(0);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
 		return result;
 	}
 
@@ -194,7 +205,11 @@ extends SQLiteOpenHelper {
 
 	/** deletes all data. */
 	protected void reset() {
-		db.execSQL("DELETE FROM " + TAB_SESSION);
-		db.execSQL("DELETE FROM " + TAB_SIGHTING);
+		try {
+			db.execSQL("DELETE FROM " + TAB_SESSION);
+			db.execSQL("DELETE FROM " + TAB_SIGHTING);
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
 	}
 }

@@ -74,6 +74,7 @@ implements OnClickListener {
 		btRefresh.setOnClickListener(this);
 
 		showStatus();
+		log("there were " + app.db.getMaxSessionId() + " sightings so far");
 		enable(true);
 	}
 
