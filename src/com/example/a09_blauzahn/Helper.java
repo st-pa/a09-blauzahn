@@ -32,16 +32,16 @@ public class Helper {
 		StringBuffer s = new StringBuffer();
 		if (ba != null) {
 			s
-			.append("Adresse = \"")
+			.append("address = \"")
 			.append(ba.getAddress())
 			.append("\"\n")
 
-			.append("Name = \"")
+			.append("name = \"")
 			.append(ba.getName())
 			.append("\"\n")
 
-			.append("suchend : ")
-			.append(ba.isDiscovering() ? "ja" : "nein")
+			.append("searching : ")
+			.append(ba.isDiscovering() ? "yes" : "no")
 			.append("\n")
 
 			.append("aktiviert : ")
