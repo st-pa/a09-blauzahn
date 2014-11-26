@@ -23,6 +23,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a09_blauzahn.model.Session;
+import com.example.a09_blauzahn.model.Sighting;
+
 
 public final class MainActivity
 extends ActionBarActivity
@@ -36,6 +39,11 @@ implements OnClickListener {
 	private static final int REQUEST_ENABLE_BT = 42;
 	/** Zeitstempelformat. */
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
+	/** Locale. */
+	private static final Locale LOCALE = new Locale("DE");
+
+	private AppBlauzahn app;
+	private Session session;
 
 	private StringBuffer log = new StringBuffer();
 	private BroadcastReceiver br;
@@ -47,6 +55,9 @@ implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		app = (AppBlauzahn) getApplication();
+		app.init(this);
 
 		ba = BluetoothAdapter.getDefaultAdapter();
 		ba.setName(BT_NAME);
@@ -67,7 +78,7 @@ implements OnClickListener {
 
 	private void showStatus() {
 //		log("status update");
-		tvLabel.setText(Helper.getDescription(ba));
+		tvLabel.setText(AppBlauzahn.getDescription(ba));
 		tvLabel.refreshDrawableState();
 	}
 
@@ -90,24 +101,53 @@ implements OnClickListener {
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
 				log(action);
-				if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+				if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+					log("discovery started");
+					if (session != null) {
+						log("error: double discovery session");
+					}
+					Date now = new Date();
+					session = new Session(-1,now,now);
+					session.setId(app.db.insertSession(session));
+				} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+					log("discovery finished");
+					if (session != null) {
+						Date now = new Date();
+						session.setStop(now);
+						app.db.updateSession(session);
+						session = null;
+					} else log("error: missing discovery session");
+				} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
 					showStatus();
 				} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+					Date now = new Date();
 					BluetoothDevice device = intent
 					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+					short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 					String msg = String.format(
-						"found device: %s [%s]",
+						LOCALE,
+						"found: %s [%s] %d db",
 						device.getName(),
-						device.getAddress()
+						device.getAddress(),
+						rssi
 					);
+					Sighting s = new Sighting(
+						-1,
+						session.getId(),
+						now,
+						device.getName(),
+						device.getAddress(),
+						rssi
+					);
+					s.setId(app.db.insertSighting(s));
 					toast(msg);
 					Log.d(
 						TAG,
 						msg
 					);
-					if (!ba.getBondedDevices().contains(device)) {
-						doPairDevice(device);
-					}
+//					if (!ba.getBondedDevices().contains(device)) {
+//						doPairDevice(device);
+//					}
 				}
 				showStatus();
 			}
@@ -183,7 +223,6 @@ implements OnClickListener {
 	}
 
 	private void clickedBtDisconnect() {
-		showStatus();
 		if (ba != null) {
 			toast("disconnect Bluetooth adapter");
 			if (ba.isDiscovering()) {
@@ -195,7 +234,6 @@ implements OnClickListener {
 				ba.disable();
 			}
 		}
-		showStatus();
 		if (br != null) {
 			toast("unregister Bluetooth receiver");
 			unregisterReceiver(br);
@@ -211,7 +249,6 @@ implements OnClickListener {
 	}
 
 	private void clickedBtConnect() {
-		StringBuffer s = new StringBuffer();
 		if (ba != null) {
 			toast("bluetooth found.");
 			Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
