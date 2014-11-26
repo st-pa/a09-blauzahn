@@ -2,3 +2,6 @@
 /.settings/
 /bin/
 /gen/
+/.classpath
+/.project
+/project.properties
