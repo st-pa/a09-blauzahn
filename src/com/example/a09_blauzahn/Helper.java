@@ -14,6 +14,14 @@ public class Helper {
 		CONST_SCANMODE.put(BluetoothAdapter.SCAN_MODE_CONNECTABLE,"ScanModeConnectable");
 		CONST_SCANMODE.put(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE,"ScanModeConnectableDiscoverable");
 	}
+	private static final Map<Integer,String> CONST_STATE;
+	static {
+		CONST_STATE = new TreeMap<Integer,String>();
+		CONST_STATE.put(BluetoothAdapter.STATE_OFF,"off");
+		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_ON,"turning on");
+		CONST_STATE.put(BluetoothAdapter.STATE_ON,"on");
+		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_OFF,"turning off");
+	}
 
 	/**
 	 * liefert eine mehrzeilige Text-Beschreibung des gegebenen objektes.
@@ -42,6 +50,10 @@ public class Helper {
 
 			.append("scanMode = ")
 			.append(CONST_SCANMODE.get(ba.getScanMode()))
+			.append("\n")
+
+			.append("state = ")
+			.append(CONST_STATE.get(ba.getState()))
 			.append("\n")
 
 //			.append("LEAdvertiser : ")

@@ -2,6 +2,9 @@ package com.example.a09_blauzahn;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,71 +34,96 @@ implements OnClickListener {
 	private static final String BT_NAME = "Hallo Welt!";
 	/** soll als resultat der blauzahn-einschalte-aktivität zurückkommen. */
 	private static final int REQUEST_ENABLE_BT = 42;
+	/** Zeitstempelformat. */
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
 
+	private StringBuffer log = new StringBuffer();
 	private BroadcastReceiver br;
 	private BluetoothAdapter ba;
-	private TextView tvLabel;
-	private Button btConnect,btDisconnect;
+	private TextView tvLabel,tvLog;
+	private Button btConnect,btDisconnect,btRefresh;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		ba = BluetoothAdapter.getDefaultAdapter();
+
 		tvLabel = (TextView) findViewById(R.id.tvLabel);
+		tvLog = (TextView) findViewById(R.id.tvLog);
 		btConnect = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
+		btRefresh = (Button) findViewById(R.id.btRefresh);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
+		btRefresh.setOnClickListener(this);
+
+		showStatus();
+		enable(true);
+	}
+
+	private void showStatus() {
+//		log("status update");
+		tvLabel.setText(Helper.getDescription(ba));
+		tvLabel.refreshDrawableState();
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
-			Toast.makeText(this,"Bluetooth active.",Toast.LENGTH_SHORT).show();
-			tvLabel.setText(Helper.getDescription(ba));
+			toast("Bluetooth active.");
 			if (ba.isEnabled()) {
 				doDiscoverBT();
 			}
+			showStatus();
 		}
 	}
 
 	/** entdecke Blauzahn-Geräte. */
 	private void doDiscoverBT() {
+		toast("start discovery");
 		br = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
-				if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+				log(action);
+				if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+					showStatus();
+				} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 					BluetoothDevice device = intent
 					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+					String msg = String.format(
+						"found device: %s [%s]",
+						device.getName(),
+						device.getAddress()
+					);
+					toast(msg);
 					Log.d(
 						TAG,
-						String.format(
-							"gefunden: %s [%s]",
-							device.getName(),
-							device.getAddress()
-						)
+						msg
 					);
 					if (!ba.getBondedDevices().contains(device)) {
 						doPairDevice(device);
 					}
-					Toast.makeText(
-						getApplication(),
-						Helper.getDescription(ba),
-						Toast.LENGTH_SHORT
-					).show();
 				}
+				showStatus();
 			}
 		};
-		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		registerReceiver(br,filter);
+		registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
+		registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
+		registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
+		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+		ba.startDiscovery();
 	}
 
 	@Override
 	public void onDestroy() {
-		unregisterReceiver(br);
+		clickedBtDisconnect();
 		super.onDestroy();
 	}
 
@@ -103,15 +131,13 @@ implements OnClickListener {
 		try {
 			Method m = device.getClass().getMethod("createBond", (Class[]) null);
 			m.invoke(device,(Class[]) null);
-			Toast.makeText(
-				getApplication(),
+			toast(
 				String.format(
 					"paired with %s [%s]",
 					device.getName(),
 					device.getAddress()
-				),
-				Toast.LENGTH_SHORT
-			).show();
+				)
+			);
 			
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
@@ -145,36 +171,79 @@ implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+//		toast(String.format("button %s clicked.",((Button) v).getText()));
 		if (v == btConnect) {
 			clickedBtConnect();
 		} else if (v == btDisconnect) {
 			clickedBtDisconnect();
+		} else if (v == btRefresh) {
+			showStatus();
 		}
-		
 	}
 
 	private void clickedBtDisconnect() {
+		showStatus();
 		if (ba != null) {
-			ba.cancelDiscovery();
-			ba.disable();
+			toast("disconnect Bluetooth adapter");
+			if (ba.isDiscovering()) {
+				toast("cancel Bluetooth discovery");
+				ba.cancelDiscovery();
+			}
+			if (ba.isEnabled()) {
+				toast("disable Bluetooth");
+				ba.disable();
+			}
 		}
+		showStatus();
+		if (br != null) {
+			toast("unregister Bluetooth receiver");
+			unregisterReceiver(br);
+			br = null;
+		}
+		showStatus();
+		enable(true);
+	}
+
+	private void enable(boolean enable) {
+		btDisconnect.setEnabled(!enable);
+		btConnect.setEnabled(enable);
 	}
 
 	private void clickedBtConnect() {
 		StringBuffer s = new StringBuffer();
-		ba = BluetoothAdapter.getDefaultAdapter();
 		if (ba != null) {
-			s.append("Blauzahn gefunden.");
-//			ba.setName(BLAUZAHN_NAME);
-			
-			if (!ba.isEnabled()) {
-				Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				// @see #onActivityResult()
-				startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
-			}
+			toast("bluetooth found.");
+			Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			// @see #onActivityResult()
+			startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
 		} else {
-			s.append("Kein Blauzahn gefunden.");
+			toast("no bluetooth found.");
 		}
-		tvLabel.setText(s.toString());
+		showStatus();
+		enable(false);
+	}
+
+	private void toast(String text) {
+		log(text);
+		Toast.makeText(
+			getApplication(),
+			text,
+			Toast.LENGTH_SHORT
+		).show();
+	}
+
+	private String now() {
+		return SDF.format(new Date());
+	}
+
+	private void log(String text) {
+		log.insert(
+			0,
+			new StringBuffer()
+			.append(now())
+			.append(text)
+			.append("\n")
+		);
+		tvLog.setText(log.toString());
 	}
 }
