@@ -14,12 +14,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity
-extends ActionBarActivity {
+public final class MainActivity
+extends ActionBarActivity
+implements OnClickListener {
 
 	/** Kennzeichnung von Log-Meldungen. */
 	private static final String TAG = "Blauzahn";
@@ -28,8 +32,10 @@ extends ActionBarActivity {
 	/** soll als resultat der blauzahn-einschalte-aktivität zurückkommen. */
 	private static final int REQUEST_ENABLE_BT = 42;
 
+	private BroadcastReceiver br;
 	private BluetoothAdapter ba;
 	private TextView tvLabel;
+	private Button btConnect,btDisconnect;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,27 +43,17 @@ extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 
 		tvLabel = (TextView) findViewById(R.id.tvLabel);
-
-		StringBuffer s = new StringBuffer();
-		ba = BluetoothAdapter.getDefaultAdapter();
-		if (ba != null) {
-			s.append("Blauzahn gefunden.");
-//			ba.setName(BLAUZAHN_NAME);
-			
-			if (!ba.isEnabled()) {
-				Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-				// @see #onActivityResult()
-				startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
-			}
-		} else {
-			s.append("Kein Blauzahn gefunden.");
-		}
-		tvLabel.setText(s.toString());
+		btConnect = (Button) findViewById(R.id.btConnect);
+		btDisconnect = (Button) findViewById(R.id.btDisconnect);
+		
+		btConnect.setOnClickListener(this);
+		btDisconnect.setOnClickListener(this);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
+			Toast.makeText(this,"Bluetooth active.",Toast.LENGTH_SHORT).show();
 			tvLabel.setText(Helper.getDescription(ba));
 			if (ba.isEnabled()) {
 				doDiscoverBT();
@@ -67,7 +63,7 @@ extends ActionBarActivity {
 
 	/** entdecke Blauzahn-Geräte. */
 	private void doDiscoverBT() {
-		final BroadcastReceiver br = new BroadcastReceiver() {
+		br = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
@@ -95,6 +91,12 @@ extends ActionBarActivity {
 		};
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		registerReceiver(br,filter);
+	}
+
+	@Override
+	public void onDestroy() {
+		unregisterReceiver(br);
+		super.onDestroy();
 	}
 
 	private void doPairDevice(BluetoothDevice device) {
@@ -139,5 +141,40 @@ extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v == btConnect) {
+			clickedBtConnect();
+		} else if (v == btDisconnect) {
+			clickedBtDisconnect();
+		}
+		
+	}
+
+	private void clickedBtDisconnect() {
+		if (ba != null) {
+			ba.cancelDiscovery();
+			ba.disable();
+		}
+	}
+
+	private void clickedBtConnect() {
+		StringBuffer s = new StringBuffer();
+		ba = BluetoothAdapter.getDefaultAdapter();
+		if (ba != null) {
+			s.append("Blauzahn gefunden.");
+//			ba.setName(BLAUZAHN_NAME);
+			
+			if (!ba.isEnabled()) {
+				Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+				// @see #onActivityResult()
+				startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
+			}
+		} else {
+			s.append("Kein Blauzahn gefunden.");
+		}
+		tvLabel.setText(s.toString());
 	}
 }

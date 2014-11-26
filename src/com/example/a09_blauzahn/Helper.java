@@ -44,17 +44,17 @@ public class Helper {
 			.append(CONST_SCANMODE.get(ba.getScanMode()))
 			.append("\n")
 
-			.append("LEAdvertiser : ")
-			.append(ba.getBluetoothLeAdvertiser() == null ? "nicht " : " ")
-			.append("vorhanden\n")
-
-			.append("multi-ad-support : ")
-			.append(ba.isMultipleAdvertisementSupported() ? "ja" : "nein")
-			.append("\n")
-
-			.append("offload filtering : ")
-			.append(ba.isOffloadedFilteringSupported() ? "ja" : "nein")
-			.append("\n")
+//			.append("LEAdvertiser : ")
+//			.append(ba.getBluetoothLeAdvertiser() == null ? "nicht " : " ")
+//			.append("vorhanden\n")
+//
+//			.append("multi-ad-support : ")
+//			.append(ba.isMultipleAdvertisementSupported() ? "ja" : "nein")
+//			.append("\n")
+//
+//			.append("offload filtering : ")
+//			.append(ba.isOffloadedFilteringSupported() ? "ja" : "nein")
+//			.append("\n")
 			;
 		} else {
 			s.append("Kein Blauzahn-Anschluß vorhanden.\n");
