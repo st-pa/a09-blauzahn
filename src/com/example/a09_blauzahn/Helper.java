@@ -44,8 +44,8 @@ public class Helper {
 			.append(ba.isDiscovering() ? "yes" : "no")
 			.append("\n")
 
-			.append("aktiviert : ")
-			.append(ba.isEnabled() ? "ja" : "nein")
+			.append("activated : ")
+			.append(ba.isEnabled() ? "yes" : "no")
 			.append("\n")
 
 			.append("scanMode = ")
@@ -69,7 +69,7 @@ public class Helper {
 //			.append("\n")
 			;
 		} else {
-			s.append("Kein Blauzahn-Anschluß vorhanden.\n");
+			s.append("no bluetooth adapter found.\n");
 		}
 		return s.toString();
 	}
