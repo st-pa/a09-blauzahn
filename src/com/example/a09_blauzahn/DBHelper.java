@@ -150,6 +150,30 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
+	protected int getMaxSightingId() {
+		init();
+		int result = -1;
+		try {
+			Cursor c = db.rawQuery(
+				new StringBuffer()
+				.append("SELECT max(\"")
+				.append(KEY_SIGHTING_ID)
+				.append("\") FROM \"")
+				.append(TAB_SIGHTING)
+				.append("\"")
+				.toString(),
+				null
+			);
+			if (c.moveToFirst()) {
+				result = c.getInt(0);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
 	protected long insertSession(Session session) {
 		init();
 		long result = -1;

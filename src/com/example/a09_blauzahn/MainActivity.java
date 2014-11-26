@@ -74,7 +74,11 @@ implements OnClickListener {
 		btRefresh.setOnClickListener(this);
 
 		showStatus();
-		log("there were " + app.db.getMaxSessionId() + " sightings so far");
+		log(
+			"there were " + app.db.getMaxSessionId() +
+			" sessions with " + app.db.getMaxSightingId() +
+			" sightings so far"
+		);
 		enable(true);
 	}
 
@@ -119,6 +123,7 @@ implements OnClickListener {
 						app.db.updateSession(session);
 						session = null;
 					} else log("error: missing discovery session");
+					btConnect.setEnabled(true);
 				} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
 					showStatus();
 				} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
