@@ -17,7 +17,7 @@ public class DBHelper
 extends SQLiteOpenHelper {
 
 	private static final String DB_NAME = "blauzahn";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 
 	protected static final String TAB_SESSION = "session";
 	protected static final String KEY_SESSION_ID = "id";
@@ -77,10 +77,12 @@ extends SQLiteOpenHelper {
 			.append("CREATE TABLE ")
 			.append(TAB_SIGHTING)
 			.append(" (\n")
-			.append(KEY_SIGHTING_ID)      .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
-			.append(KEY_SIGHTING_ADDRESS) .append(" TEXT,\n")
-			.append(KEY_SIGHTING_NAME)    .append(" TEXT,\n")
-			.append(KEY_SIGHTING_RSSI)    .append(" INTEGER\n")
+			.append(KEY_SIGHTING_ID)        .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+			.append(KEY_SIGHTING_SESSION_ID).append(" INTEGER,\n")
+			.append(KEY_SIGHTING_TIME)      .append(" INTEGER,\n")
+			.append(KEY_SIGHTING_ADDRESS)   .append(" TEXT,\n")
+			.append(KEY_SIGHTING_NAME)      .append(" TEXT,\n")
+			.append(KEY_SIGHTING_RSSI)      .append(" INTEGER\n")
 			.append(")")
 			.toString()
 		);
@@ -89,7 +91,25 @@ extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		toast("DBHelper.onUpdate");
-		// nix unternehmen
+		if (oldVersion == 1 && newVersion == 2)
+		db.execSQL(
+			new StringBuffer()
+			.append("ALTER TABLE ")
+			.append(TAB_SIGHTING)
+			.append(" ADD COLUMN ")
+			.append(KEY_SIGHTING_SESSION_ID)
+			.append(" INTEGER")
+			.toString()
+		);
+		db.execSQL(
+			new StringBuffer()
+			.append("ALTER TABLE ")
+			.append(TAB_SIGHTING)
+			.append(" ADD COLUMN ")
+			.append(KEY_SIGHTING_TIME)
+			.append(" INTEGER")
+			.toString()
+		);
 	}
 
 	private void init() {
@@ -153,16 +173,28 @@ extends SQLiteOpenHelper {
 	public void updateSession(Session session) {
 		init();
 		try {
-			vals.clear();
-			vals.put(KEY_SESSION_STOP,session.getStop().getTime());
-			db.update(
-				TAB_SIGHTING,
-				vals,
-				new StringBuffer(KEY_SIGHTING_ID).append("=").append(Long.toString(session.getId())).toString(),
-				null
+			db.execSQL(
+				new StringBuffer()
+				.append("UPDATE \"")
+				.append(TAB_SESSION)
+				.append("\" SET \"")
+				.append(KEY_SESSION_STOP)
+				.append("\" = ")
+				.append(Long.toString(session.getStop().getTime()))
+				.append(" WHERE \"")
+				.append(KEY_SESSION_ID)
+				.append("\" = ")
+				.append(Long.toString(session.getId()))
+				.toString()
 			);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
+	}
+
+	/** deletes all data. */
+	protected void reset() {
+		db.execSQL("DELETE FROM " + TAB_SESSION);
+		db.execSQL("DELETE FROM " + TAB_SIGHTING);
 	}
 }

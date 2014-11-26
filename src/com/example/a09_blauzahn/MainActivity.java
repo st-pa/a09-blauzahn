@@ -48,6 +48,7 @@ implements OnClickListener {
 	private BluetoothAdapter ba;
 	private TextView tvLabel,tvLog;
 	private Button btConnect,btDisconnect,btRefresh;
+	private Button btShowDevices,btResetDb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,8 @@ implements OnClickListener {
 		btConnect = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
 		btRefresh = (Button) findViewById(R.id.btRefresh);
+		btResetDb = (Button) findViewById(R.id.btResetDb);
+		btShowDevices = (Button) findViewById(R.id.btShowDevices);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
@@ -217,6 +220,8 @@ implements OnClickListener {
 			clickedBtDisconnect();
 		} else if (v == btRefresh) {
 			showStatus();
+		} else if (v == btResetDb) {
+			app.db.reset();
 		}
 	}
 

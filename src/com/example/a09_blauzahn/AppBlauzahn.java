@@ -27,7 +27,7 @@ extends AppTTS {
 		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_OFF,"turning off");
 	}
 
-	protected com.example.a09_blauzahn.DBHelper db;
+	protected DBHelper db;
 	protected Context context;
 
 	protected void init(Context context) {
