@@ -1,7 +1,5 @@
 package com.example.a09_blauzahn;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -167,7 +165,7 @@ implements OnClickListener {
 		clickedBtDisconnect();
 		super.onDestroy();
 	}
-
+/*
 	private void doPairDevice(BluetoothDevice device) {
 		try {
 			Method m = device.getClass().getMethod("createBond", (Class[]) null);
@@ -190,7 +188,7 @@ implements OnClickListener {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
