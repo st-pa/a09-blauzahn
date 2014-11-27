@@ -119,13 +119,19 @@ extends SQLiteOpenHelper {
 		);
 	}
 
+	/** try to initialize the database for writing access if neccessary. */
 	private void init() {
 		if (db == null) {
-			db = this.getWritableDatabase();
+			try {
+				db = this.getWritableDatabase();
+			} catch (SQLiteException e) {
+				e.printStackTrace();
+			}
 			vals.clear();
 		}
 	}
 
+	/** gets the number of rows in the session table. */
 	protected int getMaxSessionId() {
 		init();
 		int result = -1;
@@ -150,6 +156,7 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
+	/** gets the number of rows in the sightings table. */
 	protected int getMaxSightingId() {
 		init();
 		int result = -1;
@@ -226,6 +233,7 @@ extends SQLiteOpenHelper {
 			Log.e("SQL",e.toString());
 		}
 	}
+
 
 	/** deletes all data. */
 	protected void reset() {
