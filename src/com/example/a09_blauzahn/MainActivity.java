@@ -86,7 +86,7 @@ implements OnClickListener {
 		btRefresh = (Button) findViewById(R.id.btRefresh);
 		btResetDb = (Button) findViewById(R.id.btResetDb);
 		btShowDevices = (Button) findViewById(R.id.btShowDevices);
-
+		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
 		btRefresh.setOnClickListener(this);
