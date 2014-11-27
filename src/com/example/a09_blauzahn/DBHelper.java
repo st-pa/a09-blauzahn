@@ -13,8 +13,15 @@ import android.widget.Toast;
 import com.example.a09_blauzahn.model.Session;
 import com.example.a09_blauzahn.model.Sighting;
 
+/**
+ * @author stpa
+ */
 public class DBHelper
 extends SQLiteOpenHelper {
+
+	////////////////////////////////////////////
+	// local constants
+	////////////////////////////////////////////
 
 	private static final String DB_NAME = "blauzahn";
 	private static final int DB_VERSION = 2;
@@ -32,9 +39,18 @@ extends SQLiteOpenHelper {
 	protected static final String KEY_SIGHTING_NAME = "name";
 	protected static final String KEY_SIGHTING_RSSI = "rssi";
 
+	////////////////////////////////////////////
+	// local fields
+	////////////////////////////////////////////
+
 	private Context context;
 	private SQLiteDatabase db;
-	private ContentValues vals = new ContentValues(); // Behälter zum Datenschreiben
+	/** container for writing values to sql. */
+	private ContentValues vals = new ContentValues();
+
+	////////////////////////////////////////////
+	// methods and functions
+	////////////////////////////////////////////
 
 	/** Constructor. */
 	public DBHelper(

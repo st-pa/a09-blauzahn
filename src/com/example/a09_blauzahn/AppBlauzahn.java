@@ -12,8 +12,15 @@ import com.example.aTTS.AppTTS;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 
+/**
+ * @author stpa
+ */
 public class AppBlauzahn
 extends AppTTS {
+
+	////////////////////////////////////////////
+	// local constants
+	////////////////////////////////////////////
 
 	/** Zeitstempelformat. */
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
@@ -37,6 +44,10 @@ extends AppTTS {
 		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_OFF,"turning off");
 	}
 
+	////////////////////////////////////////////
+	// local fields
+	////////////////////////////////////////////
+
 	/** zum Zugriff auf die Datenbank. */
 	protected DBHelper db;
 	/** zum Anzeigen von Toasts. */
@@ -45,6 +56,10 @@ extends AppTTS {
 	protected StringBuffer log = new StringBuffer();
 	/** Informationen über die laufende Bluetooth-Sitzung. */
 	protected Session session;
+
+	////////////////////////////////////////////
+	// methods and functions
+	////////////////////////////////////////////
 
 	@Override
 	public void onTerminate() {

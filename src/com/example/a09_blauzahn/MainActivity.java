@@ -31,7 +31,7 @@ extends ActionBarActivity
 implements OnClickListener {
 
 	////////////////////////////////////////////
-	// lokale Konstanten
+	// local constants
 	////////////////////////////////////////////
 
 	/** Kennzeichnung von Log-Meldungen. */
@@ -46,14 +46,14 @@ implements OnClickListener {
 	private static final boolean ENABLE_RESET  = false;
 
 	////////////////////////////////////////////
-	// lokale Felder
+	// local fields
 	////////////////////////////////////////////
 
 	/** Zugriff auf Bequemlichkeitsmethoden dieser App. */
 	private AppBlauzahn app;
 
 	////////////////////////////////////////////
-	// gui-Elemente
+	// gui-elements
 	////////////////////////////////////////////
 
 	private BroadcastReceiver br;
@@ -63,7 +63,7 @@ implements OnClickListener {
 	private Button btShowDevices,btResetDb;
 
 	////////////////////////////////////////////
-	// Methoden und Funktionen
+	// methods and functions
 	////////////////////////////////////////////
 
 	@Override
