@@ -28,19 +28,23 @@
                 android:id="@+id/btConnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="connect" />
+                android:text="connect?scan!"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btDisconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="disconnect" />
+                android:text="disconnect"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btRefresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="refresh" />
+                android:text="refresh"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
         <TextView
@@ -48,6 +52,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/btShowDevices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="show devices" />
+
+            <Button
+                android:id="@+id/btResetDb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="reset db" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

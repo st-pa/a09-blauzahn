@@ -1,7 +1,5 @@
 package com.example.a09_blauzahn;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -23,6 +21,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a09_blauzahn.model.Session;
+import com.example.a09_blauzahn.model.Sighting;
+
 
 public final class MainActivity
 extends ActionBarActivity
@@ -36,17 +37,26 @@ implements OnClickListener {
 	private static final int REQUEST_ENABLE_BT = 42;
 	/** Zeitstempelformat. */
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
+	/** Locale. */
+	private static final Locale LOCALE = new Locale("DE");
+
+	private AppBlauzahn app;
+	private Session session;
 
 	private StringBuffer log = new StringBuffer();
 	private BroadcastReceiver br;
 	private BluetoothAdapter ba;
 	private TextView tvLabel,tvLog;
 	private Button btConnect,btDisconnect,btRefresh;
+	private Button btShowDevices,btResetDb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		app = (AppBlauzahn) getApplication();
+		app.init(this);
 
 		ba = BluetoothAdapter.getDefaultAdapter();
 		if (ba != null) {
@@ -58,70 +68,118 @@ implements OnClickListener {
 		btConnect = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
 		btRefresh = (Button) findViewById(R.id.btRefresh);
+		btResetDb = (Button) findViewById(R.id.btResetDb);
+		btShowDevices = (Button) findViewById(R.id.btShowDevices);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
 		btRefresh.setOnClickListener(this);
+		btResetDb.setOnClickListener(this);
+		btResetDb.setEnabled(false);
+		btShowDevices.setOnClickListener(this);
 
 		showStatus();
+		log(
+			"there were " + app.db.getMaxSessionId() +
+			" sessions with " + app.db.getMaxSightingId() +
+			" sightings so far"
+		);
 		enable(true);
 	}
 
+	/** aktualisiert die verbale bluetooth-status-anzeige. */
 	private void showStatus() {
 //		log("status update");
-		tvLabel.setText(Helper.getDescription(ba));
+		tvLabel.setText(AppBlauzahn.getDescription(ba));
 		tvLabel.refreshDrawableState();
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
-			toast("Bluetooth active.");
-			if (ba.isEnabled()) {
-				doDiscoverBT();
-			}
+			// die blauzahn-anforderung wurde erfüllt
+			scan();
 			showStatus();
 		}
 	}
 
 	/** entdecke Blauzahn-Geräte. */
-	private void doDiscoverBT() {
-		toast("start discovery");
-		br = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				String action = intent.getAction();
-				log(action);
-				if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-					showStatus();
-				} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-					BluetoothDevice device = intent
-					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-					String msg = String.format(
-						"found device: %s [%s]",
-						device.getName(),
-						device.getAddress()
-					);
-					toast(msg);
-					Log.d(
-						TAG,
-						msg
-					);
-					if (!ba.getBondedDevices().contains(device)) {
-						doPairDevice(device);
+	private void scan() {
+		if (ba.isEnabled()) {
+			toast("start discovery");
+			// receiver nicht mehrfach registrieren!
+			if (br == null) {
+				// konstruiere empfänger für signale
+				br = new BroadcastReceiver() {
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						String action = intent.getAction();
+						log(action);
+						if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+							log("discovery started");
+							if (session != null) {
+								log("error: double discovery session");
+							}
+							Date now = new Date();
+							session = new Session(-1,now,now);
+							session.setId(app.db.insertSession(session));
+						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+							log("discovery finished");
+							if (session != null) {
+								Date now = new Date();
+								session.setStop(now);
+								app.db.updateSession(session);
+								session = null;
+							} else log("error: missing discovery session");
+							btConnect.setEnabled(true);
+						} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+							showStatus();
+						} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+							Date now = new Date();
+							BluetoothDevice device = intent
+							.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
+							String msg = String.format(
+								LOCALE,
+								"found: %s [%s] %d db",
+								device.getName(),
+								device.getAddress(),
+								rssi
+							);
+							Sighting s = new Sighting(
+								-1,
+								session.getId(),
+								now,
+								device.getName(),
+								device.getAddress(),
+								rssi
+							);
+							s.setId(app.db.insertSighting(s));
+							toast(msg);
+							Log.d(
+								TAG,
+								msg
+							);
+		//					if (!ba.getBondedDevices().contains(device)) {
+		//						doPairDevice(device);
+		//					}
+						}
+						showStatus();
 					}
-				}
-				showStatus();
+				};
+				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
+				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
+				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 			}
-		};
-		registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
-		registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
-		registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
-		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-		registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
-		ba.startDiscovery();
+			// starte scan
+			ba.startDiscovery();
+		} else {
+			toast("error:expected active adapter");
+		}
 	}
 
 	@Override
@@ -129,7 +187,7 @@ implements OnClickListener {
 		clickedBtDisconnect();
 		super.onDestroy();
 	}
-
+/*
 	private void doPairDevice(BluetoothDevice device) {
 		try {
 			Method m = device.getClass().getMethod("createBond", (Class[]) null);
@@ -152,7 +210,7 @@ implements OnClickListener {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -181,11 +239,13 @@ implements OnClickListener {
 			clickedBtDisconnect();
 		} else if (v == btRefresh) {
 			showStatus();
+		} else if (v == btResetDb) {
+			app.db.reset();
 		}
 	}
 
+	/** der trenn-knopf wurde gedrückt. */
 	private void clickedBtDisconnect() {
-		showStatus();
 		if (ba != null) {
 			toast("disconnect Bluetooth adapter");
 			if (ba.isDiscovering()) {
@@ -197,7 +257,6 @@ implements OnClickListener {
 				ba.disable();
 			}
 		}
-		showStatus();
 		if (br != null) {
 			toast("unregister Bluetooth receiver");
 			unregisterReceiver(br);
@@ -207,18 +266,22 @@ implements OnClickListener {
 		enable(true);
 	}
 
+	/** macht scan- & trenn-buttons (un-)benutzbar. */
 	private void enable(boolean enable) {
 		btDisconnect.setEnabled(!enable);
 		btConnect.setEnabled(enable);
 	}
 
+	/** der scan-/verbinden-button wurde gedrückt. */
 	private void clickedBtConnect() {
-		StringBuffer s = new StringBuffer();
 		if (ba != null) {
-			toast("bluetooth found.");
-			Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			// @see #onActivityResult()
-			startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
+			if (ba.isEnabled()) {
+				scan();
+			} else {
+				Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+				// @see #onActivityResult()
+				startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
+			}
 		} else {
 			toast("no bluetooth found.");
 		}
@@ -226,6 +289,7 @@ implements OnClickListener {
 		enable(false);
 	}
 
+	/** zeigt einen kurzen toast an. */
 	private void toast(String text) {
 		log(text);
 		Toast.makeText(
@@ -235,10 +299,12 @@ implements OnClickListener {
 		).show();
 	}
 
+	/** gibt einen formatierten zeitstempel zurück. */
 	private String now() {
 		return SDF.format(new Date());
 	}
 
+	/** fügt einen gezeitstempelten text ins log ein. */
 	private void log(String text) {
 		log.insert(
 			0,

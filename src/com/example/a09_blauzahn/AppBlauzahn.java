@@ -3,9 +3,13 @@ package com.example.a09_blauzahn;
 import java.util.Map;
 import java.util.TreeMap;
 
-import android.bluetooth.BluetoothAdapter;
+import com.example.aTTS.AppTTS;
 
-public class Helper {
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+
+public class AppBlauzahn
+extends AppTTS {
 
 	private static final Map<Integer,String> CONST_SCANMODE;
 	static {
@@ -21,6 +25,21 @@ public class Helper {
 		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_ON,"turning on");
 		CONST_STATE.put(BluetoothAdapter.STATE_ON,"on");
 		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_OFF,"turning off");
+	}
+
+	protected DBHelper db;
+	protected Context context;
+
+	@Override
+	public void onTerminate() {
+		db.close();
+	}
+
+	protected void init(Context context) {
+		if (context != null) {
+			db = new DBHelper(context);
+			this.context = context;
+		}
 	}
 
 	/**
