@@ -6,11 +6,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.example.a09_blauzahn.model.Session;
-import com.example.aTTS.AppTTS;
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.net.NetworkInfo;
+
+import com.example.a09_blauzahn.model.Session;
+import com.example.aTTS.AppTTS;
 
 /**
  * @author stpa
@@ -122,6 +123,75 @@ extends AppTTS {
 			;
 		} else {
 			s.append("no bluetooth adapter found.\n");
+		}
+		return s.toString();
+	}
+
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param info {@link NetworkInfo}
+	 * @return {@link String}
+	 */
+	public static final String getDescription(NetworkInfo info) {
+		StringBuffer s = new StringBuffer();
+		if (info != null) {
+			s
+			.append("describeContents = ")
+			.append(Integer.toBinaryString(info.describeContents()))
+			.append("\n")
+
+			.append("getExtraInfo = \"")
+			.append(info.getExtraInfo())
+			.append("\"\n")
+
+			.append("getReason = \"")
+			.append(info.getReason())
+			.append("\"\n")
+
+			.append("getSubType = ")
+			.append(info.getSubtype())
+			.append(", ")
+
+			.append("getSubTypeName = \"")
+			.append(info.getSubtypeName())
+			.append("\"\n")
+
+			.append("getType = ")
+			.append(info.getType())
+			.append(", ")
+
+			.append("getTypeName = \"")
+			.append(info.getTypeName())
+			.append("\"\n")
+
+			.append("getState.name = \"")
+			.append(info.getState().name())
+			.append("\"\n")
+
+			.append("getDetailedState.name = \"")
+			.append(info.getDetailedState().name())
+			.append("\"\n")
+
+			.append("isAvailable = ")
+			.append(info.isAvailable())
+			.append("\n")
+
+			.append("isConnected = ")
+			.append(info.isConnected())
+			.append("\n")
+
+			.append("isConnectedOrConnecting = ")
+			.append(info.isConnectedOrConnecting())
+			.append("\n")
+
+			.append("isFailover = ")
+			.append(info.isFailover())
+			.append("\n")
+
+			.append("isRoaming = ")
+			.append(info.isRoaming())
+			.append("\n")
+			;
 		}
 		return s.toString();
 	}

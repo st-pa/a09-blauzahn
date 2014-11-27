@@ -9,6 +9,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -258,10 +260,40 @@ implements OnClickListener {
 		} else if (v == btDisconnect) {
 			clickedBtDisconnect();
 		} else if (v == btRefresh) {
-			showStatus();
+			clickedBtRefresh();
 		} else if (v == btResetDb) {
-			app.db.reset();
+			clickedBtResetDb();
+		} else if (v == btShowNetInfo) {
+			clickedBtShowNetInfo();
 		}
+	}
+
+	/** react to a click on {@link #btShowNetInfo}. */
+	private void clickedBtShowNetInfo() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo[] infos = cm.getAllNetworkInfo();
+		StringBuffer s = new StringBuffer("network information:\n");
+		int i = 0;
+		for (NetworkInfo info : infos) {
+			i++;
+			s.append(
+				String.format(
+					"\n==> network #%d(%d) <==\n",
+					i,infos.length
+				)
+			).append(AppBlauzahn.getDescription(info));
+		}
+		log(s);
+	}
+
+	/** react to a click on {@link #btRefresh}. */
+	private void clickedBtRefresh() {
+		showStatus();
+	}
+
+	/** react to a click on {@link #btResetDb}. */
+	private void clickedBtResetDb() {
+		app.db.reset();
 	}
 
 	/** react to a click on {@link #btDisconnect}. */
@@ -309,7 +341,10 @@ implements OnClickListener {
 		enable(false);
 	}
 
-	/** show a short toast message. */
+	/**
+	 * show a short toast message.
+	 * @param text {@link String}
+	 */
 	private void toast(String text) {
 		log(text);
 		Toast.makeText(
@@ -319,9 +354,20 @@ implements OnClickListener {
 		).show();
 	}
 
-	/** add a timestamped message to the app's log. */
+	/**
+	 * add a timestamped message to the app's log.
+	 * @param text {@link String}
+	 */
 	private void log(String text) {
 		app.log(text);
 		tvLog.setText(app.getLog());
+	}
+
+	/**
+	 * convenience method to call {@link #log(String)}.
+	 * @param s {@link StringBuffer} should not be <code>null</code>.
+	 */
+	private void log(StringBuffer s) {
+		log(s.toString());
 	}
 }
