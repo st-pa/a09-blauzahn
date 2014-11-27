@@ -22,10 +22,10 @@ extends AppTTS {
 	// local constants
 	////////////////////////////////////////////
 
-	/** Zeitstempelformat. */
+	/** date/time-format for use in timestamps. */
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
 
-	/** StringWerte für IntegerKonstanten. */
+	/** String-values for Integer-constants. */
 	private static final Map<Integer,String> CONST_SCANMODE;
 	static {
 		CONST_SCANMODE = new TreeMap<Integer,String>();
@@ -34,7 +34,7 @@ extends AppTTS {
 		CONST_SCANMODE.put(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE,"ScanModeConnectableDiscoverable");
 	}
 
-	/** StringWerte für IntegerKonstanten. */
+	/** String-values for Integer-constants. */
 	private static final Map<Integer,String> CONST_STATE;
 	static {
 		CONST_STATE = new TreeMap<Integer,String>();
@@ -48,13 +48,13 @@ extends AppTTS {
 	// local fields
 	////////////////////////////////////////////
 
-	/** zum Zugriff auf die Datenbank. */
+	/** for easier access to the database. */
 	protected DBHelper db;
-	/** zum Anzeigen von Toasts. */
+	/** for convenience. */
 	protected Context context;
-	/** zum akkumulieren von Meldungen. */
+	/** for collecting log messages. */
 	protected StringBuffer log = new StringBuffer();
-	/** Informationen über die laufende Bluetooth-Sitzung. */
+	/** informationen about the currently running bluetooth-session. */
 	protected Session session;
 
 	////////////////////////////////////////////
@@ -67,7 +67,7 @@ extends AppTTS {
 		super.onTerminate();
 	}
 
-	/** versucht, die Datenbank zu initialisieren. */
+	/** try to initialize the database. */
 	protected void init(Context context) {
 		if (context != null) {
 			db = new DBHelper(context);
@@ -76,9 +76,9 @@ extends AppTTS {
 	}
 
 	/**
-	 * liefert eine mehrzeilige Text-Beschreibung des gegebenen objektes.
+	 * returns a multiline text description of the given object.
 	 * @param ba {@link BluetoothAdapter}
-	 * @return
+	 * @return {@link String}
 	 */
 	public static final String getDescription(BluetoothAdapter ba) {
 		StringBuffer s = new StringBuffer();
@@ -126,12 +126,12 @@ extends AppTTS {
 		return s.toString();
 	}
 
-	/** gibt einen formatierten zeitstempel zurück. */
+	/** make a formatted timestamp. */
 	private String now() {
 		return SDF.format(new Date());
 	}
 
-	/** fügt einen Text ins log ein. */
+	/** insert a message to the top of the log. */
 	public void log(String text) {
 		this.log.insert(
 			0,
@@ -143,12 +143,12 @@ extends AppTTS {
 		);
 	}
 
-	/** gibt das gesammelte Log zurück. */
+	/** returns the contents of the app's log. */
 	public String getLog() {
 		return this.log.toString();
 	}
 
-	/** gibt wahr zurück, wenn noch nichts im log steht. */
+	/** <code>true</code> if the app's log is empty. */
 	public boolean isLogEmpty() {
 		return this.log.length() == 0;
 	}

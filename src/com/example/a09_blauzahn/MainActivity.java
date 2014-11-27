@@ -34,22 +34,22 @@ implements OnClickListener {
 	// local constants
 	////////////////////////////////////////////
 
-	/** Kennzeichnung von Log-Meldungen. */
+	/** tag for LogCat-messages. */
 	private static final String TAG            = "Blauzahn";
-	/** ist der "sichtbare" Name dieses Blauzahns für andere Geräte. */
+	/** the name of this bluetooth-device that is "visible" to others. */
 	private static final String BT_NAME        = "GT-Ixxxx";
-	/** als Ergebniskennung der Blauzahn-Einschalte-Aktivität, eindeutig innerhalb der App. */
+	/** used as result code of the enable-bluetooth-request-action, unique value in this app. */
 	private static final int REQUEST_ENABLE_BT = 42;
-	/** vordefiniertes Locale für {@link String#format(Locale,String,Object...)}. */
+	/** predefined {@link Locale} for use in {@link String#format(Locale,String,Object...)}. */
 	private static final Locale LOCALE         = new Locale("DE");
-	/** ob der "reset-db"-Button aktivierbar sein soll oder nicht. */
+	/** whether or not the button {@link #btResetDb} should be clickable. */
 	private static final boolean ENABLE_RESET  = false;
 
 	////////////////////////////////////////////
 	// local fields
 	////////////////////////////////////////////
 
-	/** Zugriff auf Bequemlichkeitsmethoden dieser App. */
+	/** access to convenience methods for this app. */
 	private AppBlauzahn app;
 
 	////////////////////////////////////////////
@@ -103,7 +103,7 @@ implements OnClickListener {
 		enable(true);
 	}
 
-	/** aktualisiert die verbale bluetooth-status-anzeige. */
+	/** update the verbal bluetooth-status display. */
 	private void showStatus() {
 //		log("status update");
 		tvLabel.setText(AppBlauzahn.getDescription(ba));
@@ -119,7 +119,7 @@ implements OnClickListener {
 		}
 	}
 
-	/** entdecke Blauzahn-Geräte. */
+	/** discover bluetooth devices. */
 	private void scan() {
 		if (ba.isEnabled()) {
 			toast("start discovery");
@@ -260,7 +260,7 @@ implements OnClickListener {
 		}
 	}
 
-	/** der trenn-knopf wurde gedrückt. */
+	/** react to a click on {@link #btDisconnect}. */
 	private void clickedBtDisconnect() {
 		if (ba != null) {
 			toast("disconnect Bluetooth adapter");
@@ -282,13 +282,13 @@ implements OnClickListener {
 		enable(true);
 	}
 
-	/** macht scan- & trenn-buttons (un-)benutzbar. */
+	/** enable or disable the buttons {@link #btConnect} and {@link #btDisconnect}. */
 	private void enable(boolean enable) {
 		btDisconnect.setEnabled(!enable);
 		btConnect.setEnabled(enable);
 	}
 
-	/** der scan-/verbinden-button wurde gedrückt. */
+	/** react to a click on {@link #btConnect}. */
 	private void clickedBtConnect() {
 		if (ba != null) {
 			if (ba.isEnabled()) {
@@ -305,7 +305,7 @@ implements OnClickListener {
 		enable(false);
 	}
 
-	/** zeigt einen kurzen toast an. */
+	/** show a short toast message. */
 	private void toast(String text) {
 		log(text);
 		Toast.makeText(
@@ -315,7 +315,7 @@ implements OnClickListener {
 		).show();
 	}
 
-	/** fügt einen gezeitstempelten text ins log ein. */
+	/** add a timestamped message to the app's log. */
 	private void log(String text) {
 		app.log(text);
 		tvLog.setText(app.getLog());
