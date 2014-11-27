@@ -33,21 +33,21 @@
                     android:id="@+id/btConnect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="connect?scan!"
+                    android:text="@string/btConnect"
                     android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btDisconnect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="disconnect"
+                    android:text="@string/btDisconnect"
                     android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btRefresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="refresh"
+                    android:text="@string/btRefresh"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -56,17 +56,17 @@
                 android:layout_height="wrap_content" >
 
                 <Button
-                    android:id="@+id/btShowDevices"
+                    android:id="@+id/btShowNetInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="show devices"
+                    android:text="@string/btShowNetInfo"
                     android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btResetDb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="reset db"
+                    android:text="@string/btResetDb"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -76,7 +76,7 @@
             android:id="@+id/tvLog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?" />
+            android:text="@string/tvLog" />
 
     </LinearLayout>
 

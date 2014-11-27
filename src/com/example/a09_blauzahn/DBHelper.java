@@ -43,7 +43,9 @@ extends SQLiteOpenHelper {
 	// local fields
 	////////////////////////////////////////////
 
+	/** used in {@link #toast(String)}. */
 	private Context context;
+	/** the actual database. */
 	private SQLiteDatabase db;
 	/** container for writing values to sql. */
 	private ContentValues vals = new ContentValues();

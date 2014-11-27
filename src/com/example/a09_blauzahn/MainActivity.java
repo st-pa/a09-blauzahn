@@ -51,16 +51,20 @@ implements OnClickListener {
 
 	/** access to convenience methods for this app. */
 	private AppBlauzahn app;
+	private BroadcastReceiver br;
+	private BluetoothAdapter ba;
 
 	////////////////////////////////////////////
 	// gui-elements
 	////////////////////////////////////////////
 
-	private BroadcastReceiver br;
-	private BluetoothAdapter ba;
-	private TextView tvLabel,tvLog;
-	private Button btConnect,btDisconnect,btRefresh;
-	private Button btShowDevices,btResetDb;
+	private TextView tvLabel;
+	private TextView tvLog;
+	private Button btConnect;
+	private Button btDisconnect;
+	private Button btRefresh;
+	private Button btShowNetInfo;
+	private Button btResetDb;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -85,12 +89,12 @@ implements OnClickListener {
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
 		btRefresh = (Button) findViewById(R.id.btRefresh);
 		btResetDb = (Button) findViewById(R.id.btResetDb);
-		btShowDevices = (Button) findViewById(R.id.btShowDevices);
+		btShowNetInfo = (Button) findViewById(R.id.btShowNetInfo);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
 		btRefresh.setOnClickListener(this);
-		btShowDevices.setOnClickListener(this);
+		btShowNetInfo.setOnClickListener(this);
 		btResetDb.setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
 

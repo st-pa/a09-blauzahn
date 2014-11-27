@@ -28,21 +28,21 @@
                 android:id="@+id/btConnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="connect?scan!"
+                android:text="@string/btConnect"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btDisconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="disconnect"
+                android:text="@string/btDisconnect"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btRefresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="refresh"
+                android:text="@string/btRefresh"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -51,23 +51,23 @@
             android:id="@+id/tvLog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/tvLog" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btShowDevices"
+                android:id="@+id/btShowNetInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="show devices" />
+                android:text="@string/btShowNetInfo" />
 
             <Button
                 android:id="@+id/btResetDb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="reset db" />
+                android:text="@string/btResetDb" />
 
         </LinearLayout>
 
