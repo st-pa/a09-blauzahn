@@ -1,5 +1,8 @@
 package com.example.a09_blauzahn;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,6 +14,10 @@ import android.content.Context;
 public class AppBlauzahn
 extends AppTTS {
 
+	/** Zeitstempelformat. */
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
+
+	/** StringWerte für IntegerKonstanten. */
 	private static final Map<Integer,String> CONST_SCANMODE;
 	static {
 		CONST_SCANMODE = new TreeMap<Integer,String>();
@@ -18,6 +25,8 @@ extends AppTTS {
 		CONST_SCANMODE.put(BluetoothAdapter.SCAN_MODE_CONNECTABLE,"ScanModeConnectable");
 		CONST_SCANMODE.put(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE,"ScanModeConnectableDiscoverable");
 	}
+
+	/** StringWerte für IntegerKonstanten. */
 	private static final Map<Integer,String> CONST_STATE;
 	static {
 		CONST_STATE = new TreeMap<Integer,String>();
@@ -27,14 +36,19 @@ extends AppTTS {
 		CONST_STATE.put(BluetoothAdapter.STATE_TURNING_OFF,"turning off");
 	}
 
+	/** zum Zugriff auf die Datenbank. */
 	protected DBHelper db;
+	/** zum Anzeigen von Toasts. */
 	protected Context context;
+	/** zum akkumulieren von Meldungen. */
+	protected StringBuffer log = new StringBuffer();
 
 	@Override
 	public void onTerminate() {
 		db.close();
 	}
 
+	/** versucht, die Datenbank zu initialisieren. */
 	protected void init(Context context) {
 		if (context != null) {
 			db = new DBHelper(context);
@@ -91,5 +105,26 @@ extends AppTTS {
 			s.append("no bluetooth adapter found.\n");
 		}
 		return s.toString();
+	}
+
+	/** gibt einen formatierten zeitstempel zurück. */
+	private String now() {
+		return SDF.format(new Date());
+	}
+
+	/** fügt einen Text ins log ein. */
+	public void log(String text) {
+		this.log.insert(
+			0,
+			new StringBuffer()
+			.append(now())
+			.append(text)
+			.append("\n")
+		);
+	}
+
+	public String getLog() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

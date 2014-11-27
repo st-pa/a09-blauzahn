@@ -35,15 +35,12 @@ implements OnClickListener {
 	private static final String BT_NAME = "Hallihallo Welt!";
 	/** soll als resultat der blauzahn-einschalte-aktivität zurückkommen. */
 	private static final int REQUEST_ENABLE_BT = 42;
-	/** Zeitstempelformat. */
-	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
 	/** Locale. */
 	private static final Locale LOCALE = new Locale("DE");
 
 	private AppBlauzahn app;
 	private Session session;
 
-	private StringBuffer log = new StringBuffer();
 	private BroadcastReceiver br;
 	private BluetoothAdapter ba;
 	private TextView tvLabel,tvLog;
@@ -299,20 +296,9 @@ implements OnClickListener {
 		).show();
 	}
 
-	/** gibt einen formatierten zeitstempel zurück. */
-	private String now() {
-		return SDF.format(new Date());
-	}
-
 	/** fügt einen gezeitstempelten text ins log ein. */
 	private void log(String text) {
-		log.insert(
-			0,
-			new StringBuffer()
-			.append(now())
-			.append(text)
-			.append("\n")
-		);
-		tvLog.setText(log.toString());
+		app.log(text);
+		tvLog.setText(app.getLog());
 	}
 }
