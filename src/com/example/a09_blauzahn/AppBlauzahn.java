@@ -46,6 +46,7 @@ extends AppTTS {
 	@Override
 	public void onTerminate() {
 		db.close();
+		super.onTerminate();
 	}
 
 	/** versucht, die Datenbank zu initialisieren. */
