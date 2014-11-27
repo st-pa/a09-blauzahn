@@ -71,9 +71,9 @@ implements OnClickListener {
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
 		btRefresh.setOnClickListener(this);
-		btResetDb.setOnClickListener(this);
-		btResetDb.setEnabled(false);
 		btShowDevices.setOnClickListener(this);
+		btResetDb.setOnClickListener(this);
+//		btResetDb.setEnabled(false);
 
 		showStatus();
 		log(

@@ -121,11 +121,12 @@ extends AppTTS {
 			.append(now())
 			.append(text)
 			.append("\n")
+			.toString()
 		);
 	}
 
+	/** gibt das gesammelte Log zurück. */
 	public String getLog() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.log.toString();
 	}
 }
