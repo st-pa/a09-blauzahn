@@ -53,8 +53,6 @@ implements OnClickListener {
 
 	/** access to convenience methods for this app. */
 	private AppBlauzahn app;
-	private BroadcastReceiver br;
-	private BluetoothAdapter ba;
 
 	////////////////////////////////////////////
 	// gui-elements
@@ -79,10 +77,8 @@ implements OnClickListener {
 
 		app = (AppBlauzahn) getApplication();
 		app.init(this);
-
-		ba = BluetoothAdapter.getDefaultAdapter();
-		if (ba != null) {
-			ba.setName(BT_NAME);
+		if (app.ba != null) {
+			app.ba.setName(BT_NAME);
 		}
 
 		tvLabel = (TextView) findViewById(R.id.tvLabel);
@@ -101,18 +97,22 @@ implements OnClickListener {
 		btResetDb.setEnabled(ENABLE_RESET);
 
 		showStatus();
-		if (app.isLogEmpty()) log(
-			"there were " + app.db.getMaxSessionId() +
-			" sessions with " + app.db.getMaxSightingId() +
-			" sightings so far"
-		);
+		if (app.isLogEmpty()) {
+			log(
+				"there were " + app.db.getMaxSessionId() +
+				" sessions with " + app.db.getMaxSightingId() +
+				" sightings so far"
+			);
+		} else {
+			tvLog.setText(app.getLog());
+		}
 		enable(true);
 	}
 
 	/** update the verbal bluetooth-status display. */
 	private void showStatus() {
 //		log("status update");
-		tvLabel.setText(AppBlauzahn.getDescription(ba));
+		tvLabel.setText(AppBlauzahn.getDescription(app.ba));
 		tvLabel.refreshDrawableState();
 	}
 
@@ -127,12 +127,12 @@ implements OnClickListener {
 
 	/** discover bluetooth devices. */
 	private void scan() {
-		if (ba.isEnabled()) {
+		if (app.ba.isEnabled()) {
 			toast("start discovery");
 			// receiver nicht mehrfach registrieren!
-			if (br == null) {
+			if (app.br == null) {
 				// konstruiere empfänger für signale
-				br = new BroadcastReceiver() {
+				app.br = new BroadcastReceiver() {
 					@Override
 					public void onReceive(Context context, Intent intent) {
 						String action = intent.getAction();
@@ -189,16 +189,16 @@ implements OnClickListener {
 						showStatus();
 					}
 				};
-				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
-				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
-				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
-				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+				registerReceiver(app.br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
+				registerReceiver(app.br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
+				registerReceiver(app.br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
+				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 			}
 			// starte scan
-			ba.startDiscovery();
+			app.ba.startDiscovery();
 		} else {
 			toast("error:expected active adapter");
 		}
@@ -298,21 +298,21 @@ implements OnClickListener {
 
 	/** react to a click on {@link #btDisconnect}. */
 	private void clickedBtDisconnect() {
-		if (ba != null) {
+		if (app.ba != null) {
 			toast("disconnect Bluetooth adapter");
-			if (ba.isDiscovering()) {
+			if (app.ba.isDiscovering()) {
 				toast("cancel Bluetooth discovery");
-				ba.cancelDiscovery();
+				app.ba.cancelDiscovery();
 			}
-			if (ba.isEnabled()) {
+			if (app.ba.isEnabled()) {
 				toast("disable Bluetooth");
-				ba.disable();
+				app.ba.disable();
 			}
 		}
-		if (br != null) {
+		if (app.br != null) {
 			toast("unregister Bluetooth receiver");
-			unregisterReceiver(br);
-			br = null;
+			unregisterReceiver(app.br);
+			app.br = null;
 		}
 		showStatus();
 		enable(true);
@@ -326,8 +326,8 @@ implements OnClickListener {
 
 	/** react to a click on {@link #btConnect}. */
 	private void clickedBtConnect() {
-		if (ba != null) {
-			if (ba.isEnabled()) {
+		if (app.ba != null) {
+			if (app.ba.isEnabled()) {
 				scan();
 			} else {
 				Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

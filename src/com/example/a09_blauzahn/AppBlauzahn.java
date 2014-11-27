@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.NetworkInfo;
 
@@ -57,6 +58,10 @@ extends AppTTS {
 	protected StringBuffer log = new StringBuffer();
 	/** informationen about the currently running bluetooth-session. */
 	protected Session session;
+	/** application-wide bluetooth adapter to avoid reinitializations. */
+	protected BluetoothAdapter ba;
+	/** application-wide broadcast receiver to avoid reinitializations. */
+	protected BroadcastReceiver br;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -71,7 +76,8 @@ extends AppTTS {
 	/** try to initialize the database. */
 	protected void init(Context context) {
 		if (context != null) {
-			db = new DBHelper(context);
+			if (db == null) db = new DBHelper(context);
+			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			this.context = context;
 		}
 	}
