@@ -49,7 +49,7 @@ implements OnClickListener {
 	// lokale Felder
 	////////////////////////////////////////////
 
-	/** Bequemlichkeitsmethoden dieser App. */
+	/** Zugriff auf Bequemlichkeitsmethoden dieser App. */
 	private AppBlauzahn app;
 
 	////////////////////////////////////////////
