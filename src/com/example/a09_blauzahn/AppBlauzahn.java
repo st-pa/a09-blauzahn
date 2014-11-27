@@ -198,6 +198,8 @@ extends AppTTS {
 			.append(info.isRoaming())
 			.append("\n")
 			;
+		} else {
+			s.append("no network information found.");
 		}
 		return s.toString();
 	}
