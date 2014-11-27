@@ -50,19 +50,12 @@ extends SQLiteOpenHelper {
 		this(context,DB_NAME,null,DB_VERSION);
 	}
 
+	@Override
 	public void close() {
 		if (this.db != null) {
 			this.db.close();
 		}
 		super.close();
-	}
-
-	private void toast(String text) {
-		Toast.makeText(
-			context,
-			text,
-			Toast.LENGTH_SHORT
-		).show();
 	}
 
 	@Override
@@ -119,6 +112,18 @@ extends SQLiteOpenHelper {
 		);
 	}
 
+	/**
+	 * convenience method that shows a short toast-message.
+	 * @param text {@link String}
+	 */
+	private void toast(String text) {
+		Toast.makeText(
+			context,
+			text,
+			Toast.LENGTH_SHORT
+		).show();
+	}
+
 	/** try to initialize the database for writing access if neccessary. */
 	private void init() {
 		if (db == null) {
@@ -131,7 +136,22 @@ extends SQLiteOpenHelper {
 		}
 	}
 
-	/** gets the number of rows in the session table. */
+	/** delete all data by dropping all tables and calling {@link #onCreate(SQLiteDatabase)}. */
+	protected void reset() {
+		try {
+			db.execSQL("DROP TABLE \"" + TAB_SESSION + "\"");
+			db.execSQL("DROP TABLE \"" + TAB_SIGHTING + "\"");
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		onCreate(db);
+	}
+
+	/**
+	 * gets the maximum id value in the session table,
+	 * which should be identical to the row count.
+	 * @return {@link Integer}
+	 */
 	protected int getMaxSessionId() {
 		init();
 		int result = -1;
@@ -156,7 +176,11 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
-	/** gets the number of rows in the sightings table. */
+	/**
+	 * gets the maximum id value in the sighting table,
+	 * which should be identical to the row count.
+	 * @return {@link Integer}
+	 */
 	protected int getMaxSightingId() {
 		init();
 		int result = -1;
@@ -181,13 +205,19 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
+	/**
+	 * adds a new row to the session-table using only the start time value
+	 * and returns the autoinced id.
+	 * @param session {@link Session}
+	 * @return {@link Long}
+	 */
 	protected long insertSession(Session session) {
 		init();
 		long result = -1;
 		try {
 			vals.clear();
 			vals.put(KEY_SESSION_START,session.getStart().getTime());
-			vals.put(KEY_SESSION_STOP,session.getStop().getTime());
+			vals.put(KEY_SESSION_STOP,-1);
 			result = db.insert(TAB_SESSION,null,vals);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
@@ -195,16 +225,21 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
-	public long insertSighting(Sighting s) {
+	/**
+	 * adds a new row to the sightings-table and returns the autoinced id.
+	 * @param sighting {@link Sighting}
+	 * @return {@link Long}
+	 */
+	public long insertSighting(Sighting sighting) {
 		init();
 		long result = -1;
 		try {
 			vals.clear();
-			vals.put(KEY_SIGHTING_ADDRESS,s.getAddress());
-			vals.put(KEY_SIGHTING_NAME,s.getName());
-			vals.put(KEY_SIGHTING_RSSI,s.getRssi());
-			vals.put(KEY_SIGHTING_SESSION_ID,s.getSessionId());
-			vals.put(KEY_SIGHTING_TIME,s.getTime().getTime());
+			vals.put(KEY_SIGHTING_ADDRESS,sighting.getAddress());
+			vals.put(KEY_SIGHTING_NAME,sighting.getName());
+			vals.put(KEY_SIGHTING_RSSI,sighting.getRssi());
+			vals.put(KEY_SIGHTING_SESSION_ID,sighting.getSessionId());
+			vals.put(KEY_SIGHTING_TIME,sighting.getTime().getTime());
 			result = db.insert(TAB_SIGHTING,null,vals);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
@@ -212,6 +247,10 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
+	/**
+	 * updates the stop time of the given session.
+	 * @param sighting {@link Session}
+	 */
 	public void updateSession(Session session) {
 		init();
 		try {
@@ -232,17 +271,5 @@ extends SQLiteOpenHelper {
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
-	}
-
-
-	/** deletes all data. */
-	protected void reset() {
-		try {
-			db.execSQL("DROP TABLE \"" + TAB_SESSION + "\"");
-			db.execSQL("DROP TABLE \"" + TAB_SIGHTING + "\"");
-		} catch (SQLiteException e) {
-			Log.e("SQL",e.toString());
-		}
-		onCreate(db);
 	}
 }

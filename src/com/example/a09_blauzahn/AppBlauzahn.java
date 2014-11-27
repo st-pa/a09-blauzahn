@@ -132,4 +132,9 @@ extends AppTTS {
 	public String getLog() {
 		return this.log.toString();
 	}
+
+	/** gibt wahr zurück, wenn noch nichts im log steht. */
+	public boolean isLogEmpty() {
+		return this.log.length() == 0;
+	}
 }

@@ -95,7 +95,7 @@ implements OnClickListener {
 		btResetDb.setEnabled(ENABLE_RESET);
 
 		showStatus();
-		log(
+		if (app.isLogEmpty()) log(
 			"there were " + app.db.getMaxSessionId() +
 			" sessions with " + app.db.getMaxSightingId() +
 			" sightings so far"
