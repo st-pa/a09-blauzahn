@@ -28,7 +28,7 @@ import com.example.a09_blauzahn.model.Sighting;
 /**
  * @author stpa
  */
-public final class MainActivity
+public final class ActivityMain
 extends ActionBarActivity
 implements OnClickListener {
 
