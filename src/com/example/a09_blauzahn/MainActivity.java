@@ -23,10 +23,16 @@ import android.widget.Toast;
 import com.example.a09_blauzahn.model.Session;
 import com.example.a09_blauzahn.model.Sighting;
 
-
+/**
+ * @author stpa
+ */
 public final class MainActivity
 extends ActionBarActivity
 implements OnClickListener {
+
+	////////////////////////////////////////////
+	// lokale Konstanten
+	////////////////////////////////////////////
 
 	/** Kennzeichnung von Log-Meldungen. */
 	private static final String TAG            = "Blauzahn";
@@ -36,15 +42,29 @@ implements OnClickListener {
 	private static final int REQUEST_ENABLE_BT = 42;
 	/** vordefiniertes Locale für {@link String#format(Locale,String,Object...)}. */
 	private static final Locale LOCALE         = new Locale("DE");
+	/** ob der "reset-db"-Button aktivierbar sein soll oder nicht. */
+	private static final boolean ENABLE_RESET  = false;
+
+	////////////////////////////////////////////
+	// lokale Felder
+	////////////////////////////////////////////
 
 	/** Bequemlichkeitsmethoden dieser App. */
 	private AppBlauzahn app;
+
+	////////////////////////////////////////////
+	// gui-Elemente
+	////////////////////////////////////////////
 
 	private BroadcastReceiver br;
 	private BluetoothAdapter ba;
 	private TextView tvLabel,tvLog;
 	private Button btConnect,btDisconnect,btRefresh;
 	private Button btShowDevices,btResetDb;
+
+	////////////////////////////////////////////
+	// Methoden und Funktionen
+	////////////////////////////////////////////
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +92,7 @@ implements OnClickListener {
 		btRefresh.setOnClickListener(this);
 		btShowDevices.setOnClickListener(this);
 		btResetDb.setOnClickListener(this);
-//		btResetDb.setEnabled(false);
+		btResetDb.setEnabled(ENABLE_RESET);
 
 		showStatus();
 		log(
