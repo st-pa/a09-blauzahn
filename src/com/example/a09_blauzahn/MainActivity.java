@@ -59,9 +59,7 @@ implements OnClickListener {
 		app.init(this);
 
 		ba = BluetoothAdapter.getDefaultAdapter();
-		if (ba != null) {
-			ba.setName(BT_NAME);
-		}
+		ba.setName(BT_NAME);
 
 		tvLabel = (TextView) findViewById(R.id.tvLabel);
 		tvLog = (TextView) findViewById(R.id.tvLog);
