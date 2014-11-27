@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.example.a09_blauzahn.model.Session;
 import com.example.aTTS.AppTTS;
 
 import android.bluetooth.BluetoothAdapter;
@@ -42,6 +43,8 @@ extends AppTTS {
 	protected Context context;
 	/** zum akkumulieren von Meldungen. */
 	protected StringBuffer log = new StringBuffer();
+	/** Informationen über die laufende Bluetooth-Sitzung. */
+	protected Session session;
 
 	@Override
 	public void onTerminate() {

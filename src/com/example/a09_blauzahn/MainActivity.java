@@ -1,6 +1,5 @@
 package com.example.a09_blauzahn;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -30,16 +29,16 @@ extends ActionBarActivity
 implements OnClickListener {
 
 	/** Kennzeichnung von Log-Meldungen. */
-	private static final String TAG = "Blauzahn";
-	/** ist der "sichtbare" name dieses blauzahns für andere geräte. */
-	private static final String BT_NAME = "Hallihallo Welt!";
-	/** soll als resultat der blauzahn-einschalte-aktivität zurückkommen. */
+	private static final String TAG            = "Blauzahn";
+	/** ist der "sichtbare" Name dieses Blauzahns für andere Geräte. */
+	private static final String BT_NAME        = "GT-Ixxxx";
+	/** als Ergebniskennung der Blauzahn-Einschalte-Aktivität, eindeutig innerhalb der App. */
 	private static final int REQUEST_ENABLE_BT = 42;
-	/** Locale. */
-	private static final Locale LOCALE = new Locale("DE");
+	/** vordefiniertes Locale für {@link String#format(Locale,String,Object...)}. */
+	private static final Locale LOCALE         = new Locale("DE");
 
+	/** Bequemlichkeitsmethoden dieser App. */
 	private AppBlauzahn app;
-	private Session session;
 
 	private BroadcastReceiver br;
 	private BluetoothAdapter ba;
@@ -114,19 +113,19 @@ implements OnClickListener {
 						log(action);
 						if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
 							log("discovery started");
-							if (session != null) {
+							if (app.session != null) {
 								log("error: double discovery session");
 							}
 							Date now = new Date();
-							session = new Session(-1,now,now);
-							session.setId(app.db.insertSession(session));
+							app.session = new Session(-1,now,now);
+							app.session.setId(app.db.insertSession(app.session));
 						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 							log("discovery finished");
-							if (session != null) {
+							if (app.session != null) {
 								Date now = new Date();
-								session.setStop(now);
-								app.db.updateSession(session);
-								session = null;
+								app.session.setStop(now);
+								app.db.updateSession(app.session);
+								app.session = null;
 							} else log("error: missing discovery session");
 							btConnect.setEnabled(true);
 						} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
@@ -138,14 +137,14 @@ implements OnClickListener {
 							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 							String msg = String.format(
 								LOCALE,
-								"found: %s [%s] %d db",
-								device.getName(),
+								"found: %s [%s] %ddb",
 								device.getAddress(),
+								device.getName(),
 								rssi
 							);
 							Sighting s = new Sighting(
 								-1,
-								session.getId(),
+								app.session.getId(),
 								now,
 								device.getName(),
 								device.getAddress(),
