@@ -105,71 +105,75 @@ implements OnClickListener {
 	private void scan() {
 		if (ba.isEnabled()) {
 			toast("start discovery");
-			// konstruiere empfänger für signale
-			br = new BroadcastReceiver() {
-				@Override
-				public void onReceive(Context context, Intent intent) {
-					String action = intent.getAction();
-					log(action);
-					if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-						log("discovery started");
-						if (session != null) {
-							log("error: double discovery session");
-						}
-						Date now = new Date();
-						session = new Session(-1,now,now);
-						session.setId(app.db.insertSession(session));
-					} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-						log("discovery finished");
-						if (session != null) {
+			// receiver nicht mehrfach registrieren!
+			if (br == null) {
+				// konstruiere empfänger für signale
+				br = new BroadcastReceiver() {
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						String action = intent.getAction();
+						log(action);
+						if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+							log("discovery started");
+							if (session != null) {
+								log("error: double discovery session");
+							}
 							Date now = new Date();
-							session.setStop(now);
-							app.db.updateSession(session);
-							session = null;
-						} else log("error: missing discovery session");
-						btConnect.setEnabled(true);
-					} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+							session = new Session(-1,now,now);
+							session.setId(app.db.insertSession(session));
+						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+							log("discovery finished");
+							if (session != null) {
+								Date now = new Date();
+								session.setStop(now);
+								app.db.updateSession(session);
+								session = null;
+							} else log("error: missing discovery session");
+							btConnect.setEnabled(true);
+						} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+							showStatus();
+						} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+							Date now = new Date();
+							BluetoothDevice device = intent
+							.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
+							String msg = String.format(
+								LOCALE,
+								"found: %s [%s] %d db",
+								device.getName(),
+								device.getAddress(),
+								rssi
+							);
+							Sighting s = new Sighting(
+								-1,
+								session.getId(),
+								now,
+								device.getName(),
+								device.getAddress(),
+								rssi
+							);
+							s.setId(app.db.insertSighting(s));
+							toast(msg);
+							Log.d(
+								TAG,
+								msg
+							);
+		//					if (!ba.getBondedDevices().contains(device)) {
+		//						doPairDevice(device);
+		//					}
+						}
 						showStatus();
-					} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-						Date now = new Date();
-						BluetoothDevice device = intent
-						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-						short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-						String msg = String.format(
-							LOCALE,
-							"found: %s [%s] %d db",
-							device.getName(),
-							device.getAddress(),
-							rssi
-						);
-						Sighting s = new Sighting(
-							-1,
-							session.getId(),
-							now,
-							device.getName(),
-							device.getAddress(),
-							rssi
-						);
-						s.setId(app.db.insertSighting(s));
-						toast(msg);
-						Log.d(
-							TAG,
-							msg
-						);
-	//					if (!ba.getBondedDevices().contains(device)) {
-	//						doPairDevice(device);
-	//					}
 					}
-					showStatus();
-				}
-			};
-			registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
-			registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
-			registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
-			registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-			registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-			registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-			registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+				};
+				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
+				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
+				registerReceiver(br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+			}
+			// starte scan
 			ba.startDiscovery();
 		} else {
 			toast("error:expected active adapter");
