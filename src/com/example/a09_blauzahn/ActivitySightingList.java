@@ -38,7 +38,7 @@ implements OnItemClickListener, OnClickListener {
 
 		lv1sightingComplete = (ListView) findViewById(R.id.lv1sightingComplete);
 		adapter = new AdapterSightingComplete(
-			getApplicationContext(),
+			this,
 			app.db.getListSightingComplete(LIMIT)
 		);
 		lv1sightingComplete.setAdapter(adapter);

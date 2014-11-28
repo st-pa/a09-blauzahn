@@ -302,19 +302,20 @@ extends SQLiteOpenHelper {
 		init();
 		List<Sighting> result = new ArrayList<Sighting>();
 		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT\n\t")
+			.append(KEY_SIGHTING_ID).append(",\n\t")
+			.append(KEY_SIGHTING_SESSION_ID).append(",\n\t")
+			.append(KEY_SIGHTING_TIME).append(",\n\t")
+			.append(KEY_SIGHTING_NAME).append(",\n\t")
+			.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
+			.append(KEY_SIGHTING_RSSI).append("\n")
+			.append("FROM ").append(TAB_SIGHTING).append("\n")
+			.append("ORDER BY ").append(KEY_SIGHTING_ID).append(" DESC\n")
+			.append("LIMIT ").append(Integer.toString(limit))
+			;
 			Cursor c = db.rawQuery(
-				new StringBuffer()
-				.append("SELECT\n\t")
-				.append(KEY_SIGHTING_ID).append(",\n\t")
-				.append(KEY_SIGHTING_SESSION_ID).append(",\n\t")
-				.append(KEY_SIGHTING_TIME).append(",\n\t")
-				.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
-				.append(KEY_SIGHTING_NAME).append(",\n\t")
-				.append(KEY_SIGHTING_RSSI).append("\n\t")
-				.append("FROM ").append(TAB_SIGHTING).append("\n")
-				.append("ORDER BY ").append(KEY_SIGHTING_ID).append(" DESC\n")
-				.append("LIMIT ").append(Integer.toString(limit))
-				.toString(),
+				s.toString(),
 				null
 			);
 			while (c.moveToNext()) {

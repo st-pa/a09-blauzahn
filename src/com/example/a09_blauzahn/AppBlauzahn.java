@@ -24,8 +24,10 @@ extends AppTTS {
 	// local constants
 	////////////////////////////////////////////
 
+	/** time-format for use in timestamps. */
+	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:MM:ss,SS ",new Locale("DE"));
 	/** date/time-format for use in timestamps. */
-	private static final SimpleDateFormat SDF = new SimpleDateFormat("hh:MM:ss,SS ",new Locale("DE"));
+	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yy-mm-dd HH:MM:ss,SS ",new Locale("DE"));
 
 	/** String-values for Integer-constants. */
 	private static final Map<Integer,String> CONST_SCANMODE;
@@ -206,7 +208,7 @@ extends AppTTS {
 
 	/** make a formatted timestamp. */
 	private String now() {
-		return SDF.format(new Date());
+		return TIMESTAMP.format(new Date());
 	}
 
 	/** insert a message to the top of the log. */

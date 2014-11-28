@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
 
 /**
@@ -21,7 +22,7 @@ extends ArrayAdapter<Sighting> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
-		TextView id,sessionId,time,name,address,rssi;
+		TextView label,name;
 	}
 
 	/** for convenience, store the {@link LayoutInflater}. */
@@ -35,8 +36,8 @@ extends ArrayAdapter<Sighting> {
 		Context context,
 		List<Sighting> list
 	) {
-		super(context,R.layout.list_sighting_complete,R.id.lv1sightingComplete);
-		inflater = LayoutInflater.from(context);
+		super(context,R.layout.list_sighting_complete,list);
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.list = list;
 	}
 
@@ -47,24 +48,27 @@ extends ArrayAdapter<Sighting> {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.list_sighting_complete, null);
 			holder = new ViewHolder();
-			holder.id        = (TextView) convertView.findViewById(R.id.tvList1id);
-			holder.sessionId = (TextView) convertView.findViewById(R.id.tvList1sessionId);
-			holder.time      = (TextView) convertView.findViewById(R.id.tvList1time);
+			holder.label     = (TextView) convertView.findViewById(R.id.tvList1label);
 			holder.name      = (TextView) convertView.findViewById(R.id.tvList1name);
-			holder.address   = (TextView) convertView.findViewById(R.id.tvList1address);
-			holder.rssi      = (TextView) convertView.findViewById(R.id.tvList1rssi);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
 		Sighting s = list.get(position);
-		holder.id.setText(Long.toString(s.getId()));
-		holder.sessionId.setText(Long.toString(s.getSessionId()));
-		holder.time.setText(Long.toString(s.getTime().getTime()));
-		holder.address.setText(s.getAddress());
+		holder.label.setText(
+			String.format(
+				"#%d (%d) %s [%s] %ddb",
+				s.getId(),
+				s.getSessionId(),
+				AppBlauzahn.DATETIMESTAMP.format(
+					s.getTime()
+				),
+				s.getAddress(),
+				s.getRssi()
+			)
+		);
 		holder.name.setText(s.getName());
-		holder.id.setText(Long.toString(s.getRssi()));
 		// and give back the modified view
 		return convertView;
 	}
