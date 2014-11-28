@@ -13,5 +13,6 @@
     <string name="btCloseListSightingComplete">close this list view</string>
     <string name="btShowSightingsComplete">sightings</string>
     <string name="btShowDevices">devices</string>
+    <string name="btShowSessions">sessions</string>
 
 </resources>

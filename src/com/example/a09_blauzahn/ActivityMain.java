@@ -67,6 +67,7 @@ implements OnClickListener {
 	private Button btResetDb;
 	private Button btShowSightings;
 	private Button btShowDevices;
+	private Button btShowSessions;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -92,24 +93,28 @@ implements OnClickListener {
 		btShowNetInfo  = (Button) findViewById(R.id.btShowNetInfo);
 		btShowSightings = (Button) findViewById(R.id.btShowSightings);
 		btShowDevices   = (Button) findViewById(R.id.btShowDevices);
-		
-		btConnect.setOnClickListener(this);
-		btDisconnect.setOnClickListener(this);
-		btRefresh.setOnClickListener(this);
-		btShowNetInfo.setOnClickListener(this);
-		btResetDb.setOnClickListener(this);
+		btShowSessions  = (Button) findViewById(R.id.btShowSessions);
+
+		btConnect      .setOnClickListener(this);
+		btDisconnect   .setOnClickListener(this);
+		btRefresh      .setOnClickListener(this);
+		btShowNetInfo  .setOnClickListener(this);
+		btResetDb      .setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
 		btShowSightings.setOnClickListener(this);
-		btShowDevices.setOnClickListener(this);
+		btShowDevices  .setOnClickListener(this);
+		btShowSessions .setOnClickListener(this);
 
 		showStatus();
 		if (app.isLogEmpty()) {
+			// the very first log entry
 			log(
 				"there were " + app.db.getMaxSessionId() +
 				" sessions with " + app.db.getMaxSightingId() +
 				" sightings so far"
 			);
 		} else {
+			// restore existing log, e.g. when screen was flipped
 			tvLog.setText(app.getLog());
 		}
 		enable(true);
@@ -149,7 +154,7 @@ implements OnClickListener {
 								log("error: double discovery session");
 							}
 							Date now = new Date();
-							app.session = new Session(-1,now,now);
+							app.session = new Session(-1,now,now,-1);
 							app.session.setId(app.db.insertSession(app.session));
 						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 							log("discovery finished");
@@ -275,7 +280,21 @@ implements OnClickListener {
 			clickedBtShowSightings();
 		} else if (v == btShowDevices) {
 			clickedBtShowDevices();
+		} else if (v == btShowSessions) {
+			clickedBtShowSessions();
 		}
+	}
+
+	private void clickedBtShowSessions() {
+		Intent intent = new Intent(
+			ActivityMain.this,
+			ActivityListView.class
+		);
+		intent.putExtra(
+			AppBlauzahn.EXTRA_LIST_TYPE,
+			AppBlauzahn.LIST_TYPE_SESSIONS
+		);
+		startActivity(intent);
 	}
 
 	/** react to click on {@link #btShowSightings}. */

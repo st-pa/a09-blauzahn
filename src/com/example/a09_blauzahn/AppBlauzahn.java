@@ -24,10 +24,10 @@ extends AppTTS {
 	// global constants
 	////////////////////////////////////////////
 
-	public static final String EXTRA_LIST_TYPE = "listType";
+	public static final String EXTRA_LIST_TYPE  = "listType";
 	public static final int LIST_TYPE_SIGHTINGS = 0;
-	public static final int LIST_TYPE_DEVICES = 1;
-
+	public static final int LIST_TYPE_DEVICES   = 1;
+	public static final int LIST_TYPE_SESSIONS  = 2;
 
 	/** time-format for use in timestamps. */
 	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:MM:ss,SS ",new Locale("DE"));

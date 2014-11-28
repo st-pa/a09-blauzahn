@@ -7,13 +7,21 @@ public class Session {
 	private long id;
 	private Date start;
 	private Date stop;
+	private long countSightings;
 
-	/** Constructor. */
-	public Session(long id, Date start, Date stop) {
+	/**
+	 * Constructor.
+	 * @param id {@link Long}
+	 * @param start {@link Date}
+	 * @param stop {@link Date}
+	 * @param countSightings {@link Long} number of sightings
+	 */
+	public Session(long id, Date start, Date stop, long countSightings) {
 		super();
 		this.id = id;
 		this.start = start;
 		this.stop = stop;
+		this.countSightings = countSightings;
 	}
 
 	/**
@@ -58,5 +66,17 @@ public class Session {
 		this.stop = stop;
 	}
 
-	
+	/**
+	 * @return the countSightings
+	 */
+	public final long getCountSightings() {
+		return countSightings;
+	}
+
+	/**
+	 * @param countSightings the number of sightings to set
+	 */
+	public final void setCountSightings(long countSightings) {
+		this.countSightings = countSightings;
+	}
 }
