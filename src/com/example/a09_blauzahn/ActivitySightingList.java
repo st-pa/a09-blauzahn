@@ -4,13 +4,25 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.a09_blauzahn.model.AdapterSightingComplete;
 
 public class ActivitySightingList
-extends ActionBarActivity {
+extends ActionBarActivity
+implements OnItemClickListener, OnClickListener {
+
+	/** maximum number of list entries to be displayed. */
+	private static final int LIMIT = 512;
 
 	private AppBlauzahn app;
+	private ListView lv1sightingComplete;
+	private Button btCloseListSightingComplete;
 
 	private AdapterSightingComplete adapter;
 
@@ -21,7 +33,16 @@ extends ActionBarActivity {
 
 		app = (AppBlauzahn) getApplication();
 
-		adapter = new AdapterSightingComplete(getApplicationContext(), app.db.getListSightingComplete());
+		btCloseListSightingComplete = (Button) findViewById(R.id.btCloseListSightingComplete);
+		btCloseListSightingComplete.setOnClickListener(this);
+
+		lv1sightingComplete = (ListView) findViewById(R.id.lv1sightingComplete);
+		adapter = new AdapterSightingComplete(
+			getApplicationContext(),
+			app.db.getListSightingComplete(LIMIT)
+		);
+		lv1sightingComplete.setAdapter(adapter);
+		lv1sightingComplete.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -41,5 +62,17 @@ extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v == btCloseListSightingComplete) {
+			finish();
+		}
 	}
 }

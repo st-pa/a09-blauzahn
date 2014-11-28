@@ -1,5 +1,7 @@
 package com.example.a09_blauzahn;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -28,18 +30,18 @@ extends SQLiteOpenHelper {
 	private static final String DB_NAME = "blauzahn";
 	private static final int DB_VERSION = 2;
 
-	protected static final String TAB_SESSION = "session";
-	protected static final String KEY_SESSION_ID = "id";
-	protected static final String KEY_SESSION_START = "start";
-	protected static final String KEY_SESSION_STOP = "stop";
+	protected static final String TAB_SESSION = "\"session\"";
+	protected static final String KEY_SESSION_ID = "\"id\"";
+	protected static final String KEY_SESSION_START = "\"start\"";
+	protected static final String KEY_SESSION_STOP = "\"stop\"";
 
-	protected static final String TAB_SIGHTING = "sighting";
-	protected static final String KEY_SIGHTING_ID = "id";
-	protected static final String KEY_SIGHTING_SESSION_ID = "sessionId";
-	protected static final String KEY_SIGHTING_TIME = "time";
-	protected static final String KEY_SIGHTING_ADDRESS = "address";
-	protected static final String KEY_SIGHTING_NAME = "name";
-	protected static final String KEY_SIGHTING_RSSI = "rssi";
+	protected static final String TAB_SIGHTING = "\"sighting\"";
+	protected static final String KEY_SIGHTING_ID = "\"id\"";
+	protected static final String KEY_SIGHTING_SESSION_ID = "\"sessionId\"";
+	protected static final String KEY_SIGHTING_TIME = "\"time\"";
+	protected static final String KEY_SIGHTING_ADDRESS = "\"address\"";
+	protected static final String KEY_SIGHTING_NAME = "\"name\"";
+	protected static final String KEY_SIGHTING_RSSI = "\"rssi\"";
 
 	////////////////////////////////////////////
 	// local fields
@@ -159,8 +161,8 @@ extends SQLiteOpenHelper {
 	/** delete all data by dropping all tables and calling {@link #onCreate(SQLiteDatabase)}. */
 	protected void reset() {
 		try {
-			db.execSQL("DROP TABLE \"" + TAB_SESSION + "\"");
-			db.execSQL("DROP TABLE \"" + TAB_SIGHTING + "\"");
+			db.execSQL("DROP TABLE " + TAB_SESSION);
+			db.execSQL("DROP TABLE " + TAB_SIGHTING);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -178,11 +180,10 @@ extends SQLiteOpenHelper {
 		try {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
-				.append("SELECT max(\"")
+				.append("SELECT max(")
 				.append(KEY_SESSION_ID)
-				.append("\") FROM \"")
+				.append(") FROM ")
 				.append(TAB_SESSION)
-				.append("\"")
 				.toString(),
 				null
 			);
@@ -207,11 +208,10 @@ extends SQLiteOpenHelper {
 		try {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
-				.append("SELECT max(\"")
+				.append("SELECT max(")
 				.append(KEY_SIGHTING_ID)
-				.append("\") FROM \"")
+				.append(") FROM ")
 				.append(TAB_SIGHTING)
-				.append("\"")
 				.toString(),
 				null
 			);
@@ -276,15 +276,15 @@ extends SQLiteOpenHelper {
 		try {
 			db.execSQL(
 				new StringBuffer()
-				.append("UPDATE \"")
+				.append("UPDATE ")
 				.append(TAB_SESSION)
-				.append("\" SET \"")
+				.append(" SET ")
 				.append(KEY_SESSION_STOP)
-				.append("\" = ")
+				.append(" = ")
 				.append(Long.toString(session.getStop().getTime()))
-				.append(" WHERE \"")
+				.append(" WHERE ")
 				.append(KEY_SESSION_ID)
-				.append("\" = ")
+				.append(" = ")
 				.append(Long.toString(session.getId()))
 				.toString()
 			);
@@ -293,8 +293,46 @@ extends SQLiteOpenHelper {
 		}
 	}
 
-	public List<Sighting> getListSightingComplete() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * gets a list of all sighted devices.
+	 * warning! this can be very long.
+	 * @return {@link List}<{@link Sighting}>
+	 */
+	public List<Sighting> getListSightingComplete(int limit) {
+		init();
+		List<Sighting> result = new ArrayList<Sighting>();
+		try {
+			Cursor c = db.rawQuery(
+				new StringBuffer()
+				.append("SELECT\n\t")
+				.append(KEY_SIGHTING_ID).append(",\n\t")
+				.append(KEY_SIGHTING_SESSION_ID).append(",\n\t")
+				.append(KEY_SIGHTING_TIME).append(",\n\t")
+				.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
+				.append(KEY_SIGHTING_NAME).append(",\n\t")
+				.append(KEY_SIGHTING_RSSI).append("\n\t")
+				.append("FROM ").append(TAB_SIGHTING).append("\n")
+				.append("ORDER BY ").append(KEY_SIGHTING_ID).append(" DESC\n")
+				.append("LIMIT ").append(Integer.toString(limit))
+				.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				result.add(
+					new Sighting(
+						c.getLong(0),
+						c.getLong(1),
+						new Date(c.getLong(2)),
+						c.getString(3),
+						c.getString(4),
+						c.getLong(5)
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
 	}
 }

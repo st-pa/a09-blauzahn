@@ -28,6 +28,7 @@
                 android:id="@+id/btConnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
                 android:text="@string/btConnect"
                 android:textSize="12sp" />
 
@@ -35,6 +36,7 @@
                 android:id="@+id/btDisconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
                 android:text="@string/btDisconnect"
                 android:textSize="12sp" />
 
@@ -42,6 +44,7 @@
                 android:id="@+id/btRefresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
                 android:text="@string/btRefresh"
                 android:textSize="12sp" />
 
@@ -61,13 +64,25 @@
                 android:id="@+id/btShowNetInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btShowNetInfo" />
+                android:padding="6dp"
+                android:text="@string/btShowNetInfo"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btResetDb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btResetDb" />
+                android:padding="6dp"
+                android:text="@string/btResetDb"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btShowSightingsComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/btShowSightingsComplete"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

@@ -65,6 +65,7 @@ implements OnClickListener {
 	private Button btRefresh;
 	private Button btShowNetInfo;
 	private Button btResetDb;
+	private Button btShowSightingsComplete;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -88,6 +89,7 @@ implements OnClickListener {
 		btRefresh = (Button) findViewById(R.id.btRefresh);
 		btResetDb = (Button) findViewById(R.id.btResetDb);
 		btShowNetInfo = (Button) findViewById(R.id.btShowNetInfo);
+		btShowSightingsComplete = (Button) findViewById(R.id.btShowSightingsComplete);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
@@ -95,6 +97,7 @@ implements OnClickListener {
 		btShowNetInfo.setOnClickListener(this);
 		btResetDb.setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
+		btShowSightingsComplete.setOnClickListener(this);
 
 		showStatus();
 		if (app.isLogEmpty()) {
@@ -265,7 +268,18 @@ implements OnClickListener {
 			clickedBtResetDb();
 		} else if (v == btShowNetInfo) {
 			clickedBtShowNetInfo();
+		} else if (v == btShowSightingsComplete) {
+			clickedBtShowSightingsComplete();
 		}
+	}
+
+	/** react to click on {@link #btShowSightingsComplete}. */
+	private void clickedBtShowSightingsComplete() {
+		Intent intent = new Intent(
+			ActivityMain.this,
+			ActivitySightingList.class
+		);
+		startActivity(intent);
 	}
 
 	/** react to a click on {@link #btShowNetInfo}. */
