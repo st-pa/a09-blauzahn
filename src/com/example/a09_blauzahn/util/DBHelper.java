@@ -1,4 +1,4 @@
-package com.example.a09_blauzahn;
+package com.example.a09_blauzahn.util;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -166,8 +166,8 @@ extends SQLiteOpenHelper {
 		return text == null ? NULL_VALUE : text;
 	}
 
-	/** delete all data by dropping all tables and calling {@link #onCreate(SQLiteDatabase)}. */
-	protected void reset() {
+	/** delete all data by dropping all tables and calling {@link DBHelper#onCreate(SQLiteDatabase)}. */
+	public void reset() {
 		try {
 			db.execSQL("DROP TABLE " + TAB_SESSION);
 			db.execSQL("DROP TABLE " + TAB_SIGHTING);
@@ -182,7 +182,7 @@ extends SQLiteOpenHelper {
 	 * which should be identical to the row count.
 	 * @return {@link Integer}
 	 */
-	protected int getMaxSessionId() {
+	public int getMaxSessionId() {
 		init();
 		int result = -1;
 		try {
@@ -210,7 +210,7 @@ extends SQLiteOpenHelper {
 	 * which should be identical to the row count.
 	 * @return {@link Integer}
 	 */
-	protected int getMaxSightingId() {
+	public int getMaxSightingId() {
 		init();
 		int result = -1;
 		try {
@@ -239,7 +239,7 @@ extends SQLiteOpenHelper {
 	 * @param session {@link Session}
 	 * @return {@link Long}
 	 */
-	protected long insertSession(Session session) {
+	public long insertSession(Session session) {
 		init();
 		long result = -1;
 		try {

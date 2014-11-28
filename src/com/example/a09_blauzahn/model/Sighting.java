@@ -2,8 +2,6 @@ package com.example.a09_blauzahn.model;
 
 import java.util.Date;
 
-import com.example.a09_blauzahn.DBHelper;
-
 public class Sighting {
 
 	private long id;

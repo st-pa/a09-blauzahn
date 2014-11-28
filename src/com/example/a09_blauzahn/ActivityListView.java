@@ -12,9 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.a09_blauzahn.model.AdapterDevice;
-import com.example.a09_blauzahn.model.AdapterSession;
-import com.example.a09_blauzahn.model.AdapterSighting;
+import com.example.a09_blauzahn.view.AdapterDevice;
+import com.example.a09_blauzahn.view.AdapterSession;
+import com.example.a09_blauzahn.view.AdapterSighting;
 
 /**
  * activity for displaying simple lists. the

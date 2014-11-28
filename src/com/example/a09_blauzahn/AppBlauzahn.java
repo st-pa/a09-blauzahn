@@ -12,6 +12,7 @@ import android.content.Context;
 import android.net.NetworkInfo;
 
 import com.example.a09_blauzahn.model.Session;
+import com.example.a09_blauzahn.util.DBHelper;
 import com.example.aTTS.AppTTS;
 
 /**

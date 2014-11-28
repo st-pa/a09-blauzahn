@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.example.a09_blauzahn.DBHelper;
+import com.example.a09_blauzahn.util.DBHelper;
 
 public class Session {
 

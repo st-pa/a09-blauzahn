@@ -1,4 +1,4 @@
-package com.example.a09_blauzahn.model;
+package com.example.a09_blauzahn.view;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
+import com.example.a09_blauzahn.model.Session;
 
 /**
  * for displaying {@link Session}-information in a customized {@link ListView}.
