@@ -68,7 +68,12 @@ extends ArrayAdapter<Sighting> {
 				s.getRssi()
 			)
 		);
-		holder.name.setText(s.getName());
+		String name = s.getName();
+		if (name != null && name.length() > 0) {
+			holder.name.setText(s.getName());
+		} else {
+			holder.name.setVisibility(View.GONE);
+		}
 		// and give back the modified view
 		return convertView;
 	}
