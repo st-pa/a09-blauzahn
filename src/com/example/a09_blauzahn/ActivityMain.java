@@ -65,7 +65,8 @@ implements OnClickListener {
 	private Button btRefresh;
 	private Button btShowNetInfo;
 	private Button btResetDb;
-	private Button btShowSightingsComplete;
+	private Button btShowSightings;
+	private Button btShowDevices;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -82,14 +83,15 @@ implements OnClickListener {
 			app.ba.setName(BT_NAME);
 		}
 
-		tvLabel = (TextView) findViewById(R.id.tvLabel);
-		tvLog = (TextView) findViewById(R.id.tvLog);
-		btConnect = (Button) findViewById(R.id.btConnect);
+		tvLabel   = (TextView) findViewById(R.id.tvLabel);
+		tvLog      = (TextView) findViewById(R.id.tvLog);
+		btConnect   = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
-		btRefresh = (Button) findViewById(R.id.btRefresh);
-		btResetDb = (Button) findViewById(R.id.btResetDb);
-		btShowNetInfo = (Button) findViewById(R.id.btShowNetInfo);
-		btShowSightingsComplete = (Button) findViewById(R.id.btShowSightingsComplete);
+		btRefresh    = (Button) findViewById(R.id.btRefresh);
+		btResetDb     = (Button) findViewById(R.id.btResetDb);
+		btShowNetInfo  = (Button) findViewById(R.id.btShowNetInfo);
+		btShowSightings = (Button) findViewById(R.id.btShowSightings);
+		btShowDevices   = (Button) findViewById(R.id.btShowDevices);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
@@ -97,7 +99,8 @@ implements OnClickListener {
 		btShowNetInfo.setOnClickListener(this);
 		btResetDb.setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
-		btShowSightingsComplete.setOnClickListener(this);
+		btShowSightings.setOnClickListener(this);
+		btShowDevices.setOnClickListener(this);
 
 		showStatus();
 		if (app.isLogEmpty()) {
@@ -268,16 +271,35 @@ implements OnClickListener {
 			clickedBtResetDb();
 		} else if (v == btShowNetInfo) {
 			clickedBtShowNetInfo();
-		} else if (v == btShowSightingsComplete) {
-			clickedBtShowSightingsComplete();
+		} else if (v == btShowSightings) {
+			clickedBtShowSightings();
+		} else if (v == btShowDevices) {
+			clickedBtShowDevices();
 		}
 	}
 
-	/** react to click on {@link #btShowSightingsComplete}. */
-	private void clickedBtShowSightingsComplete() {
+	/** react to click on {@link #btShowSightings}. */
+	private void clickedBtShowDevices() {
 		Intent intent = new Intent(
 			ActivityMain.this,
-			ActivitySightingList.class
+			ActivityListView.class
+		);
+		intent.putExtra(
+			AppBlauzahn.EXTRA_LIST_TYPE,
+			AppBlauzahn.LIST_TYPE_DEVICES
+		);
+		startActivity(intent);
+	}
+
+	/** react to click on {@link #btShowSightings}. */
+	private void clickedBtShowSightings() {
+		Intent intent = new Intent(
+			ActivityMain.this,
+			ActivityListView.class
+		);
+		intent.putExtra(
+			AppBlauzahn.EXTRA_LIST_TYPE,
+			AppBlauzahn.LIST_TYPE_SIGHTINGS
 		);
 		startActivity(intent);
 	}

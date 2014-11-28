@@ -1,5 +1,6 @@
 package com.example.a09_blauzahn.model;
 
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -17,26 +18,28 @@ import com.example.a09_blauzahn.R;
  * for displaying {@link Sighting}-information in a customized {@link ListView}.
  * @author stpa
  */
-public class AdapterSightingComplete
-extends ArrayAdapter<Sighting> {
+public class AdapterDevice
+extends ArrayAdapter<Device> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
-		TextView label,name;
+		TextView label1;
+		TextView label2;
+		TextView id;
 	}
 
 	/** for convenience, store the {@link LayoutInflater}. */
 	private static LayoutInflater inflater;
 
 	/** a {@link List} of the {@link Sighting} instances to be displayed. */
-	private List<Sighting> list;
+	private List<Device> list;
 
 	/** Constructor. */
-	public AdapterSightingComplete(
+	public AdapterDevice(
 		Context context,
-		List<Sighting> list
+		List<Device> list
 	) {
-		super(context,R.layout.list_sighting_complete,list);
+		super(context,R.layout.list_device,list);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.list = list;
 	}
@@ -46,34 +49,53 @@ extends ArrayAdapter<Sighting> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_sighting_complete, null);
+			convertView = inflater.inflate(R.layout.list_sighting, null);
 			holder = new ViewHolder();
-			holder.label     = (TextView) convertView.findViewById(R.id.tvList1label);
-			holder.name      = (TextView) convertView.findViewById(R.id.tvList1name);
+			holder.label1 = (TextView) convertView.findViewById(R.id.tvList2label1);
+			holder.label2 = (TextView) convertView.findViewById(R.id.tvList2label2);
+			holder.id     = (TextView) convertView.findViewById(R.id.tvList2id);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Sighting s = list.get(position);
-		holder.label.setText(
+		Device d = list.get(position);
+		holder.label1.setText(
 			String.format(
-				"#%d (%d) %s [%s] %ddb",
-				s.getId(),
-				s.getSessionId(),
-				AppBlauzahn.DATETIMESTAMP.format(
-					s.getTime()
-				),
-				s.getAddress(),
-				s.getRssi()
+				// (sessionCount) firstTime lastTime
+				"(x%d) %s %s",
+				d.getSessionCount(),
+				AppBlauzahn.DATETIMESTAMP.format(d.getFirstTime()),
+				AppBlauzahn.DATETIMESTAMP.format(d.getLastTime())
 			)
 		);
-		String name = s.getName();
-		if (name != null && name.length() > 0) {
-			holder.name.setText(s.getName());
-		} else {
-			holder.name.setVisibility(View.GONE);
+		StringBuffer names = new StringBuffer();
+		Iterator<String> iterator = d.getNames().iterator();
+		while (iterator.hasNext()) {
+			String name = iterator.next();
+			names
+			.append("\"")
+			.append(name)
+			.append("\"");
+			if (iterator.hasNext()) {
+				names.append(", ");
+			}
 		}
+		holder.label2.setText(
+			String.format(
+				// avg -db [address] name
+				"~%.2fdb [%s] %s",
+				d.getAvgRssi(),
+				d.getAddress(),
+				names
+			)
+		);
+		holder.id.setText(
+			String.format(
+				"#%d",
+				position
+			)
+		);
 		// and give back the modified view
 		return convertView;
 	}

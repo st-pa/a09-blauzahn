@@ -8,16 +8,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.a09_blauzahn.ActivitySightingList" >
+    tools:context="com.example.a09_blauzahn.ActivityListView" >
 
     <Button
-        android:id="@+id/btCloseListSightingComplete"
+        android:id="@+id/btCloseList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btCloseListSightingComplete" />
 
     <ListView
-        android:id="@+id/lv1sightingComplete"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>

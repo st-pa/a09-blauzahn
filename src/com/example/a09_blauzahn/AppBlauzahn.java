@@ -21,13 +21,22 @@ public class AppBlauzahn
 extends AppTTS {
 
 	////////////////////////////////////////////
-	// local constants
+	// global constants
 	////////////////////////////////////////////
+
+	public static final String EXTRA_LIST_TYPE = "listType";
+	public static final int LIST_TYPE_SIGHTINGS = 0;
+	public static final int LIST_TYPE_DEVICES = 1;
+
 
 	/** time-format for use in timestamps. */
 	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:MM:ss,SS ",new Locale("DE"));
 	/** date/time-format for use in timestamps. */
-	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yy-mm-dd HH:MM:ss,SS ",new Locale("DE"));
+	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("'yy.MM.dd HH:mm:ss",new Locale("DE"));
+
+	////////////////////////////////////////////
+	// local constants
+	////////////////////////////////////////////
 
 	/** String-values for Integer-constants. */
 	private static final Map<Integer,String> CONST_SCANMODE;

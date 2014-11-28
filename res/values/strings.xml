@@ -12,5 +12,6 @@
     <string name="btResetDb">reset db</string>
     <string name="btCloseListSightingComplete">close this list view</string>
     <string name="btShowSightingsComplete">sightings</string>
+    <string name="btShowDevices">devices</string>
 
 </resources>

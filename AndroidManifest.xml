@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivitySightingList"
+            android:name=".ActivityListView"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
