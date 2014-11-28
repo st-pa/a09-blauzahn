@@ -2,6 +2,7 @@ package com.example.a09_blauzahn;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -130,8 +131,13 @@ implements OnClickListener {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
-			// die blauzahn-anforderung wurde erfüllt
-			scan();
+			// the request to enable bluetooth was answered
+			if (app.ba.isEnabled()) {
+				scan();
+			} else {
+				// in this case the user declined to allow bluetooth
+				btConnect.setEnabled(true);
+			}
 			showStatus();
 		}
 	}
@@ -140,9 +146,9 @@ implements OnClickListener {
 	private void scan() {
 		if (app.ba.isEnabled()) {
 			toast("start discovery");
-			// receiver nicht mehrfach registrieren!
+			// there should only be one receiver, so check if it's there already
 			if (app.br == null) {
-				// konstruiere empfänger für signale
+				// create a receiver for bluetooth
 				app.br = new BroadcastReceiver() {
 					@Override
 					public void onReceive(Context context, Intent intent) {
@@ -154,7 +160,7 @@ implements OnClickListener {
 								log("error: double discovery session");
 							}
 							Date now = new Date();
-							app.session = new Session(-1,now,now,-1);
+							app.session = new Session(-1,now,now,null);
 							app.session.setId(app.db.insertSession(app.session));
 						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 							log("discovery finished");
@@ -172,6 +178,12 @@ implements OnClickListener {
 							BluetoothDevice device = intent
 							.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
+							StringBuffer sb = new StringBuffer();
+							Set<String> set = intent.getExtras().keySet();
+							for (String extra : set) {
+								sb.append(extra).append(";");
+							}
+							toast(sb.toString());
 							String msg = String.format(
 								LOCALE,
 								"found: %s [%s] %ddb",
@@ -208,10 +220,10 @@ implements OnClickListener {
 				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
 				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 			}
-			// starte scan
+			// start to scan for devices
 			app.ba.startDiscovery();
 		} else {
-			toast("error:expected active adapter");
+			toast("error: expected active adapter");
 		}
 	}
 

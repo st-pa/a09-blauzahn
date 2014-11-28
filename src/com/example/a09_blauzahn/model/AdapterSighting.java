@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
+import com.example.a09_blauzahn.DBHelper;
 import com.example.a09_blauzahn.R;
 
 /**
@@ -69,9 +70,9 @@ extends ArrayAdapter<Sighting> {
 				s.getRssi()
 			)
 		);
-		String name = s.getName();
+		String name = DBHelper.nullValue(s.getName());
 		if (name != null && name.length() > 0) {
-			holder.name.setText(s.getName());
+			holder.name.setText(name);
 			holder.name.setVisibility(View.VISIBLE);
 		} else {
 			holder.name.setVisibility(View.GONE);

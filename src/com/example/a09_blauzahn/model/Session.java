@@ -1,27 +1,31 @@
 package com.example.a09_blauzahn.model;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import com.example.a09_blauzahn.DBHelper;
 
 public class Session {
 
 	private long id;
 	private Date start;
 	private Date stop;
-	private long countSightings;
+	private List<Sighting> sightings;
 
 	/**
 	 * Constructor.
 	 * @param id {@link Long}
 	 * @param start {@link Date}
 	 * @param stop {@link Date}
-	 * @param countSightings {@link Long} number of sightings
+	 * @param sightings {@link List}<Sighting> optional List of sightings
 	 */
-	public Session(long id, Date start, Date stop, long countSightings) {
+	public Session(long id, Date start, Date stop, List<Sighting> sightings) {
 		super();
 		this.id = id;
 		this.start = start;
 		this.stop = stop;
-		this.countSightings = countSightings;
+		this.sightings = sightings;
 	}
 
 	/**
@@ -69,15 +73,43 @@ public class Session {
 	/**
 	 * @return the countSightings
 	 */
-	public final long getCountSightings() {
-		return countSightings;
+	public final long getSightingsCount() {
+		return (sightings == null) ? 0 : sightings.size();
 	}
 
 	/**
-	 * @param countSightings the number of sightings to set
+	 * a comma-separated {@link String} containing
+	 * the names (not the addresses!) of the sighted
+	 * devices during this session.
+	 * @return {@link String}
 	 */
-	public final void setCountSightings(long countSightings) {
-		this.countSightings = countSightings;
+	public final String getSightingsNames() {
+		StringBuffer s = new StringBuffer();
+		if (sightings != null) {
+			Iterator<Sighting> iterator = sightings.iterator();
+			while (iterator.hasNext()) {
+				Sighting sighting = iterator.next();
+				String name = sighting.getName();
+				if (name == null) {
+					s.append(DBHelper.NULL_VALUE);
+				} else {
+					s.append("\"")
+					.append(name)
+					.append("\"");
+				}
+				if (iterator.hasNext()) {
+					s.append(", ");
+				}
+			}
+		}
+		return s.toString();
+	}
+
+	/**
+	 * @param sightings the sightings to set
+	 */
+	public final void setSightings(List<Sighting> sightings) {
+		this.sightings = sightings;
 	}
 
 	/** gives {@link #stop}-time minus {@link #start}-time. */

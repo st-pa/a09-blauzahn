@@ -77,7 +77,14 @@ extends ArrayAdapter<Session> {
 				)
 			)
 		);
-		holder.names.setText("no names yet");
+		// TODO get names of sighted devices
+		holder.names.setText(
+			String.format(
+				" %d %s",
+				s.getSightingsCount(),
+				s.getSightingsNames()
+			)
+		);
 		// and give back the modified view
 		return convertView;
 	}

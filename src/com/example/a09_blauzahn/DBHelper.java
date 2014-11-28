@@ -24,6 +24,8 @@ import com.example.a09_blauzahn.model.Sighting;
 public class DBHelper
 extends SQLiteOpenHelper {
 
+	public static final String NULL_VALUE = "--";
+
 	////////////////////////////////////////////
 	// local constants
 	////////////////////////////////////////////
@@ -157,6 +159,11 @@ extends SQLiteOpenHelper {
 			}
 			vals.clear();
 		}
+	}
+
+	/** convenience function for displaying <code>null</code> values. */
+	public static final String nullValue(String text) {
+		return text == null ? NULL_VALUE : text;
 	}
 
 	/** delete all data by dropping all tables and calling {@link #onCreate(SQLiteDatabase)}. */
@@ -438,14 +445,14 @@ extends SQLiteOpenHelper {
 				null
 			);
 			while (c.moveToNext()) {
-				Long id = c.getLong(0);
-				Long count = getSightingsInSession(id);
+				long sessionId = c.getLong(0);
+				List<Sighting> sightings = getSightingsInSession(sessionId);
 				result.add(
 					new Session(
-						id,
+						sessionId,
 						new Date(c.getLong(1)),
 						new Date(c.getLong(2)),
-						count
+						sightings
 					)
 				);
 			};
@@ -457,21 +464,36 @@ extends SQLiteOpenHelper {
 	}
 
 	/** count the sightings in the given session. */
-	public long getSightingsInSession(long sessionId) {
+	public List<Sighting> getSightingsInSession(long sessionId) {
 		init();
-		long result = -1;
+		List<Sighting> result = new ArrayList<Sighting>();
 		try {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
-				.append("SELECT count(*)\n")
+				.append("SELECT \n")
+				.append(KEY_SIGHTING_ID).append(",\n\t")
+				.append(KEY_SIGHTING_TIME).append(",\n\t")
+				.append(KEY_SIGHTING_NAME).append(",\n\t")
+				.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
+				.append(KEY_SIGHTING_RSSI).append("\n")
 				.append("FROM ").append(TAB_SIGHTING).append("\n")
 				.append("WHERE ").append(KEY_SIGHTING_SESSION_ID)
-				.append(" = ").append(Long.toString(sessionId))
+				.append(" = ").append(Long.toString(sessionId)).append("\n")
+				.append("ORDER BY 2 ASC")
 				.toString(),
 				null
 			);
-			if (c.moveToFirst()) {
-				result = c.getLong(0);
+			while (c.moveToNext()) {
+				result.add(
+					new Sighting(
+						c.getLong(0),
+						sessionId,
+						new Date(c.getLong(1)),
+						c.getString(2),
+						c.getString(3),
+						c.getLong(4)
+					)
+				);
 			};
 			c.close();
 		} catch (SQLiteException e) {
