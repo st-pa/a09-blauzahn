@@ -61,7 +61,6 @@ implements OnItemClickListener, OnClickListener {
 		} else if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
 			adapter = new AdapterDevice(
 				this,
-				this.getParent(),
 				app.db.getListDevices(LIMIT)
 			);
 		}

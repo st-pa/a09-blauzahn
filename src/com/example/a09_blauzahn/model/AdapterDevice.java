@@ -34,18 +34,14 @@ extends ArrayAdapter<Device> {
 	/** a {@link List} of the {@link Sighting} instances to be displayed. */
 	private List<Device> list;
 
-	private ViewGroup parent;
-
 	/** Constructor. */
 	public AdapterDevice(
 		Context context,
-		ViewGroup parent,
 		List<Device> list
 	) {
 		super(context,R.layout.list_device,list);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.list = list;
-		this.parent = parent;
 	}
 
 	@Override
