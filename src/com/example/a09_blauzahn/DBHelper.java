@@ -1,5 +1,7 @@
 package com.example.a09_blauzahn;
 
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -289,5 +291,10 @@ extends SQLiteOpenHelper {
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
+	}
+
+	public List<Sighting> getListSightingComplete() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

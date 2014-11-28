@@ -1,16 +1,27 @@
 package com.example.a09_blauzahn;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ActivitySightingList extends ActionBarActivity {
+import com.example.a09_blauzahn.model.AdapterSightingComplete;
+
+public class ActivitySightingList
+extends ActionBarActivity {
+
+	private AppBlauzahn app;
+
+	private AdapterSightingComplete adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sighting_list);
+
+		app = (AppBlauzahn) getApplication();
+
+		adapter = new AdapterSightingComplete(getApplicationContext(), app.db.getListSightingComplete());
 	}
 
 	@Override
