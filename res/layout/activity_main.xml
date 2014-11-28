@@ -77,11 +77,19 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btShowSightingsComplete"
+                android:id="@+id/btShowSightings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
                 android:text="@string/btShowSightingsComplete"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btShowDevices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/btShowDevices"
                 android:textSize="12sp" />
 
         </LinearLayout>
