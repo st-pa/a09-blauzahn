@@ -383,11 +383,11 @@ extends SQLiteOpenHelper {
 			.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
 			.append("min(").append(KEY_SIGHTING_TIME).append("),\n\t")
 			.append("max(").append(KEY_SIGHTING_TIME).append("),\n\t")
-			.append("avg(").append(KEY_SIGHTING_RSSI).append("),\n\t")
-			.append("count(DISTINCT ").append(KEY_SIGHTING_SESSION_ID).append(")\n")
+			.append("count(DISTINCT ").append(KEY_SIGHTING_SESSION_ID).append("),\n\t")
+			.append("avg(").append(KEY_SIGHTING_RSSI).append(")\n")
 			.append("FROM ").append(TAB_SIGHTING).append("\n")
 			.append("GROUP BY ").append(KEY_SIGHTING_ADDRESS).append("\n")
-			.append("ORDER BY 1 DESC\n")
+			.append("ORDER BY 4 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
 			Cursor c = db.rawQuery(

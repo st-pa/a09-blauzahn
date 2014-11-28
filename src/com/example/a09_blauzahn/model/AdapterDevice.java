@@ -25,7 +25,7 @@ extends ArrayAdapter<Device> {
 	static class ViewHolder {
 		TextView label1;
 		TextView label2;
-		TextView id;
+		TextView names;
 	}
 
 	/** for convenience, store the {@link LayoutInflater}. */
@@ -49,11 +49,11 @@ extends ArrayAdapter<Device> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_sighting, null);
+			convertView = inflater.inflate(R.layout.list_device, null);
 			holder = new ViewHolder();
 			holder.label1 = (TextView) convertView.findViewById(R.id.tvList2label1);
 			holder.label2 = (TextView) convertView.findViewById(R.id.tvList2label2);
-			holder.id     = (TextView) convertView.findViewById(R.id.tvList2id);
+			holder.names  = (TextView) convertView.findViewById(R.id.tvList2names);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -62,14 +62,27 @@ extends ArrayAdapter<Device> {
 		Device d = list.get(position);
 		holder.label1.setText(
 			String.format(
-				// (sessionCount) firstTime lastTime
-				"(x%d) %s %s",
+				"#%d (x%d) Ø%.2fdb first:%s",
+				position,
 				d.getSessionCount(),
-				AppBlauzahn.DATETIMESTAMP.format(d.getFirstTime()),
+				d.getAvgRssi(),
+				AppBlauzahn.DATETIMESTAMP.format(d.getFirstTime())
+			)
+		);
+		holder.label2.setText(
+			String.format(
+				"[%s] last:%s",
+				d.getAddress(),
 				AppBlauzahn.DATETIMESTAMP.format(d.getLastTime())
 			)
 		);
-		StringBuffer names = new StringBuffer();
+/*		holder.id.setText(
+			String.format(
+				"#%d",
+				position
+			)
+		);
+*/		StringBuffer names = new StringBuffer();
 		Iterator<String> iterator = d.getNames().iterator();
 		while (iterator.hasNext()) {
 			String name = iterator.next();
@@ -81,23 +94,8 @@ extends ArrayAdapter<Device> {
 				names.append(", ");
 			}
 		}
-		holder.label2.setText(
-			String.format(
-				// avg -db [address] name
-				"~%.2fdb [%s] %s",
-				d.getAvgRssi(),
-				d.getAddress(),
-				names
-			)
-		);
-		holder.id.setText(
-			String.format(
-				"#%d",
-				position
-			)
-		);
+		holder.names.setText(names);
 		// and give back the modified view
 		return convertView;
 	}
-
 }

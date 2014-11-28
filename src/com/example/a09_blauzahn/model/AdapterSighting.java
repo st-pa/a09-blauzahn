@@ -71,6 +71,7 @@ extends ArrayAdapter<Sighting> {
 		String name = s.getName();
 		if (name != null && name.length() > 0) {
 			holder.name.setText(s.getName());
+			holder.name.setVisibility(View.VISIBLE);
 		} else {
 			holder.name.setVisibility(View.GONE);
 		}
