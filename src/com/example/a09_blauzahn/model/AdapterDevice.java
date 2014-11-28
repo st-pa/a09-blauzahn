@@ -86,10 +86,14 @@ extends ArrayAdapter<Device> {
 		Iterator<String> iterator = d.getNames().iterator();
 		while (iterator.hasNext()) {
 			String name = iterator.next();
-			names
-			.append("\"")
-			.append(name)
-			.append("\"");
+			if (name == null) {
+				names.append("--");
+			} else {
+				names
+				.append("'")
+				.append(name)
+				.append("'");
+			}
 			if (iterator.hasNext()) {
 				names.append(", ");
 			}
