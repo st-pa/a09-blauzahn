@@ -32,7 +32,7 @@ extends AppTTS {
 	/** time-format for use in timestamps. */
 	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:MM:ss,SS ",new Locale("DE"));
 	/** date/time-format for use in timestamps. */
-	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("'yy.MM.dd HH:mm:ss",new Locale("DE"));
+	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss",new Locale("DE"));
 
 	////////////////////////////////////////////
 	// local constants
