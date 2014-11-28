@@ -17,7 +17,7 @@ import com.example.a09_blauzahn.R;
  * for displaying {@link Sighting}-information in a customized {@link ListView}.
  * @author stpa
  */
-public class AdapterSightingComplete
+public class AdapterSighting
 extends ArrayAdapter<Sighting> {
 
 	/** inner convenience class for speeding up list display. */
@@ -32,11 +32,11 @@ extends ArrayAdapter<Sighting> {
 	private List<Sighting> list;
 
 	/** Constructor. */
-	public AdapterSightingComplete(
+	public AdapterSighting(
 		Context context,
 		List<Sighting> list
 	) {
-		super(context,R.layout.list_sighting_complete,list);
+		super(context,R.layout.list_sighting,list);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.list = list;
 	}
@@ -46,10 +46,10 @@ extends ArrayAdapter<Sighting> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_sighting_complete, null);
+			convertView = inflater.inflate(R.layout.list_sighting, null);
 			holder = new ViewHolder();
-			holder.label     = (TextView) convertView.findViewById(R.id.tvList1label);
-			holder.name      = (TextView) convertView.findViewById(R.id.tvList1name);
+			holder.label = (TextView) convertView.findViewById(R.id.tvList1label);
+			holder.name  = (TextView) convertView.findViewById(R.id.tvList1name);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();

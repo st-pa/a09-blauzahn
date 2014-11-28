@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.a09_blauzahn.model.Device;
 import com.example.a09_blauzahn.model.Session;
 import com.example.a09_blauzahn.model.Sighting;
 
@@ -294,11 +295,12 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * gets a list of all sighted devices.
+	 * gets a list of all device sightings.
 	 * warning! this can be very long.
+	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @return {@link List}<{@link Sighting}>
 	 */
-	public List<Sighting> getListSightingComplete(int limit) {
+	public List<Sighting> getListSightings(int limit) {
 		init();
 		List<Sighting> result = new ArrayList<Sighting>();
 		try {
@@ -327,6 +329,81 @@ extends SQLiteOpenHelper {
 						c.getString(3),
 						c.getString(4),
 						c.getLong(5)
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
+	 * list all names seen for the given address.
+	 * @param address {@link String}
+	 * @return {@link List}<{@link String}>
+	 */
+	public List<String> getListDeviceNames(String address) {
+		init();
+		List<String> result = new ArrayList<String>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT DISTINCT ").append(KEY_SIGHTING_NAME).append("\n")
+			.append("FROM ").append(TAB_SIGHTING).append("\n")
+			.append("WHERE ").append(KEY_SIGHTING_ADDRESS)
+			.append(" = \"").append(address).append("\"")
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				result.add(c.getString(0));
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
+	 * gets a list of all unique sighted devices.
+	 * warning! this can be very long.
+	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @return {@link List}<{@link Sighting}>
+	 */
+	public List<Device> getListDevices(int limit) {
+		init();
+		List<Device> result = new ArrayList<Device>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT\n\t")
+			.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
+			.append("min(").append(KEY_SIGHTING_TIME).append("),\n\t")
+			.append("max(").append(KEY_SIGHTING_TIME).append("),\n\t")
+			.append("avg(").append(KEY_SIGHTING_RSSI).append("),\n\t")
+			.append("count(DISTINCT ").append(KEY_SIGHTING_SESSION_ID).append(")\n")
+			.append("FROM ").append(TAB_SIGHTING).append("\n")
+			.append("GROUP BY ").append(KEY_SIGHTING_ADDRESS).append("\n")
+			.append("ORDER BY 1 DESC\n")
+			.append("LIMIT ").append(Integer.toString(limit))
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				String address = c.getString(0);
+				result.add(
+					new Device(
+						address,
+						getListDeviceNames(address),
+						new Date(c.getLong(1)),
+						new Date(c.getLong(2)),
+						c.getLong(3),
+						c.getDouble(4)
 					)
 				);
 			};

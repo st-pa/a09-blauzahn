@@ -65,7 +65,7 @@ implements OnClickListener {
 	private Button btRefresh;
 	private Button btShowNetInfo;
 	private Button btResetDb;
-	private Button btShowSightingsComplete;
+	private Button btShowSightings;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -89,7 +89,7 @@ implements OnClickListener {
 		btRefresh = (Button) findViewById(R.id.btRefresh);
 		btResetDb = (Button) findViewById(R.id.btResetDb);
 		btShowNetInfo = (Button) findViewById(R.id.btShowNetInfo);
-		btShowSightingsComplete = (Button) findViewById(R.id.btShowSightingsComplete);
+		btShowSightings = (Button) findViewById(R.id.btShowSightingsComplete);
 		
 		btConnect.setOnClickListener(this);
 		btDisconnect.setOnClickListener(this);
@@ -97,7 +97,7 @@ implements OnClickListener {
 		btShowNetInfo.setOnClickListener(this);
 		btResetDb.setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
-		btShowSightingsComplete.setOnClickListener(this);
+		btShowSightings.setOnClickListener(this);
 
 		showStatus();
 		if (app.isLogEmpty()) {
@@ -268,16 +268,20 @@ implements OnClickListener {
 			clickedBtResetDb();
 		} else if (v == btShowNetInfo) {
 			clickedBtShowNetInfo();
-		} else if (v == btShowSightingsComplete) {
-			clickedBtShowSightingsComplete();
+		} else if (v == btShowSightings) {
+			clickedBtShowSightings();
 		}
 	}
 
-	/** react to click on {@link #btShowSightingsComplete}. */
-	private void clickedBtShowSightingsComplete() {
+	/** react to click on {@link #btShowSightings}. */
+	private void clickedBtShowSightings() {
 		Intent intent = new Intent(
 			ActivityMain.this,
-			ActivitySightingList.class
+			ActivityListView.class
+		);
+		intent.putExtra(
+			AppBlauzahn.EXTRA_LIST_TYPE,
+			AppBlauzahn.LIST_TYPE_SIGHTINGS
 		);
 		startActivity(intent);
 	}
