@@ -413,4 +413,70 @@ extends SQLiteOpenHelper {
 		}
 		return result;
 	}
+
+	/**
+	 * gets a list of all sessions.
+	 * warning! this can be very long.
+	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @return {@link List}<{@link Session}>
+	 */
+	public List<Session> getListSessions(int limit) {
+		init();
+		List<Session> result = new ArrayList<Session>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT\n\t")
+			.append(KEY_SESSION_ID).append(",\n\t")
+			.append(KEY_SESSION_START).append(",\n\t")
+			.append(KEY_SESSION_STOP).append("\n")
+			.append("FROM ").append(TAB_SESSION).append("\n")
+			.append("ORDER BY 1 DESC\n")
+			.append("LIMIT ").append(Integer.toString(limit))
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				Long id = c.getLong(0);
+				Long count = getSightingsInSession(id);
+				result.add(
+					new Session(
+						id,
+						new Date(c.getLong(1)),
+						new Date(c.getLong(2)),
+						count
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/** count the sightings in the given session. */
+	public long getSightingsInSession(long sessionId) {
+		init();
+		long result = -1;
+		try {
+			Cursor c = db.rawQuery(
+				new StringBuffer()
+				.append("SELECT count(*)\n")
+				.append("FROM ").append(TAB_SIGHTING).append("\n")
+				.append("WHERE ").append(KEY_SIGHTING_SESSION_ID)
+				.append(" = ").append(Long.toString(sessionId))
+				.toString(),
+				null
+			);
+			if (c.moveToFirst()) {
+				result = c.getLong(0);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
 }

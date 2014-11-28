@@ -14,30 +14,31 @@ import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
 
 /**
- * for displaying {@link Sighting}-information in a customized {@link ListView}.
+ * for displaying {@link Session}-information in a customized {@link ListView}.
  * @author stpa
  */
-public class AdapterSighting
-extends ArrayAdapter<Sighting> {
+public class AdapterSession
+extends ArrayAdapter<Session> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
+		TextView id;
 		TextView label;
-		TextView name;
+		TextView names;
 	}
 
 	/** for convenience, store the {@link LayoutInflater}. */
 	private static LayoutInflater inflater;
 
-	/** a {@link List} of the {@link Sighting} instances to be displayed. */
-	private List<Sighting> list;
+	/** a {@link List} of the {@link Session} instances to be displayed. */
+	private List<Session> list;
 
 	/** Constructor. */
-	public AdapterSighting(
+	public AdapterSession(
 		Context context,
-		List<Sighting> list
+		List<Session> list
 	) {
-		super(context,R.layout.list_sighting,list);
+		super(context,R.layout.list_session,list);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.list = list;
 	}
@@ -47,35 +48,36 @@ extends ArrayAdapter<Sighting> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_sighting, parent, false);
+			convertView = inflater.inflate(R.layout.list_session, parent, false);
 			holder = new ViewHolder();
-			holder.label = (TextView) convertView.findViewById(R.id.tvList1label);
-			holder.name  = (TextView) convertView.findViewById(R.id.tvList1name);
+			holder.id = (TextView) convertView.findViewById(R.id.tvList3id);
+			holder.label = (TextView) convertView.findViewById(R.id.tvList3label);
+			holder.names = (TextView) convertView.findViewById(R.id.tvList3names);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Sighting s = list.get(position);
-		holder.label.setText(
+		Session s = list.get(position);
+		holder.id.setText(
 			String.format(
-				"#%d (%d) %s [%s] %ddb",
+				"#%d (%.1f sec)",
 				s.getId(),
-				s.getSessionId(),
-				AppBlauzahn.DATETIMESTAMP.format(
-					s.getTime()
-				),
-				s.getAddress(),
-				s.getRssi()
+				s.getDuration() / 1000f
 			)
 		);
-		String name = s.getName();
-		if (name != null && name.length() > 0) {
-			holder.name.setText(s.getName());
-			holder.name.setVisibility(View.VISIBLE);
-		} else {
-			holder.name.setVisibility(View.GONE);
-		}
+		holder.label.setText(
+			String.format(
+				"start: %s\nstop: %s",
+				AppBlauzahn.DATETIMESTAMP.format(
+					s.getStart()
+				),
+				AppBlauzahn.DATETIMESTAMP.format(
+					s.getStop()
+				)
+			)
+		);
+		holder.names.setText("no names yet");
 		// and give back the modified view
 		return convertView;
 	}

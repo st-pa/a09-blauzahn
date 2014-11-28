@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.a09_blauzahn.model.AdapterDevice;
+import com.example.a09_blauzahn.model.AdapterSession;
 import com.example.a09_blauzahn.model.AdapterSighting;
 
 /**
@@ -47,12 +48,13 @@ implements OnItemClickListener, OnClickListener {
 
 		listView = (ListView) findViewById(R.id.listView);
 
-		// retrieve the type of list to be displayed
+		// retrieve the type of list to be displayed from extras bundle
 		Bundle extras = getIntent().getExtras();
 		int listType = 0;
 		if (extras != null) {
 			listType = extras.getInt(AppBlauzahn.EXTRA_LIST_TYPE);
 		}
+		// decide on which list adapter to use
 		if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
 			adapter = new AdapterSighting(
 				this,
@@ -63,7 +65,13 @@ implements OnItemClickListener, OnClickListener {
 				this,
 				app.db.getListDevices(LIMIT)
 			);
+		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
+			adapter = new AdapterSession(
+				this,
+				app.db.getListSessions(LIMIT)
+			);
 		}
+		// set the list adapter
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
 	}

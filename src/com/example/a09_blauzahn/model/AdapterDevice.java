@@ -49,7 +49,7 @@ extends ArrayAdapter<Device> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_device, parent);
+			convertView = inflater.inflate(R.layout.list_device, parent, false);
 			holder = new ViewHolder();
 			holder.label1 = (TextView) convertView.findViewById(R.id.tvList2label1);
 			holder.label2 = (TextView) convertView.findViewById(R.id.tvList2label2);

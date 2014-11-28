@@ -79,4 +79,9 @@ public class Session {
 	public final void setCountSightings(long countSightings) {
 		this.countSightings = countSightings;
 	}
+
+	/** gives {@link #stop}-time minus {@link #start}-time. */
+	public final long getDuration() {
+		return stop.getTime() - start.getTime();
+	}
 }
