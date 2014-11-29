@@ -64,7 +64,6 @@ implements OnClickListener {
 	private Button btConnect;
 	private Button btDisconnect;
 	private Button btRefresh;
-	private Button btShowNetInfo;
 	private Button btResetDb;
 	private Button btShowSightings;
 	private Button btShowDevices;
@@ -91,9 +90,8 @@ implements OnClickListener {
 		tvLog      = (TextView) findViewById(R.id.tvLog);
 		btConnect   = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
-		btRefresh    = (Button) findViewById(R.id.btRefresh);
-		btResetDb     = (Button) findViewById(R.id.btResetDb);
-		btShowNetInfo  = (Button) findViewById(R.id.btShowNetInfo);
+		btRefresh     = (Button) findViewById(R.id.btRefresh);
+		btResetDb      = (Button) findViewById(R.id.btResetDb);
 		btShowSightings = (Button) findViewById(R.id.btShowSightings);
 		btShowDevices   = (Button) findViewById(R.id.btShowDevices);
 		btShowSessions  = (Button) findViewById(R.id.btShowSessions);
@@ -101,7 +99,6 @@ implements OnClickListener {
 		btConnect      .setOnClickListener(this);
 		btDisconnect   .setOnClickListener(this);
 		btRefresh      .setOnClickListener(this);
-		btShowNetInfo  .setOnClickListener(this);
 		btResetDb      .setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
 		btShowSightings.setOnClickListener(this);
@@ -291,8 +288,6 @@ implements OnClickListener {
 			clickedBtRefresh();
 		} else if (v == btResetDb) {
 			clickedBtResetDb();
-		} else if (v == btShowNetInfo) {
-			clickedBtShowNetInfo();
 		} else if (v == btShowSightings) {
 			clickedBtShowSightings();
 		} else if (v == btShowDevices) {
