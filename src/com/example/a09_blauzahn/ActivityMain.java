@@ -2,7 +2,6 @@ package com.example.a09_blauzahn;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -178,12 +177,6 @@ implements OnClickListener {
 							BluetoothDevice device = intent
 							.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-							StringBuffer sb = new StringBuffer();
-							Set<String> set = intent.getExtras().keySet();
-							for (String extra : set) {
-								sb.append(extra).append(";");
-							}
-							toast(sb.toString());
 							String msg = String.format(
 								LOCALE,
 								"found: %s [%s] %ddb",

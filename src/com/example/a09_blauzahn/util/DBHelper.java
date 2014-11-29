@@ -33,18 +33,37 @@ extends SQLiteOpenHelper {
 	private static final String DB_NAME = "blauzahn";
 	private static final int DB_VERSION = 2;
 
-	protected static final String TAB_SESSION = "\"session\"";
-	protected static final String KEY_SESSION_ID = "\"id\"";
-	protected static final String KEY_SESSION_START = "\"start\"";
-	protected static final String KEY_SESSION_STOP = "\"stop\"";
+	/** utility class containing sql table and column names for version 1. */
+	protected static class V1 {
+		// table for bluetooth sessions
+		protected static final String TAB_SESSION = "\"session\"";
+		protected static final String KEY_SESSION_ID = "\"id\"";
+		protected static final String KEY_SESSION_START = "\"start\"";
+		protected static final String KEY_SESSION_STOP = "\"stop\"";
+		// table for bluetooth sightings
+		protected static final String TAB_SIGHTING = "\"sighting\"";
+		protected static final String KEY_SIGHTING_ID = "\"id\"";
+		protected static final String KEY_SIGHTING_SESSION_ID = "\"sessionId\"";
+		protected static final String KEY_SIGHTING_TIME = "\"time\"";
+		protected static final String KEY_SIGHTING_ADDRESS = "\"address\"";
+		protected static final String KEY_SIGHTING_NAME = "\"name\"";
+		protected static final String KEY_SIGHTING_RSSI = "\"rssi\"";
+	}
 
-	protected static final String TAB_SIGHTING = "\"sighting\"";
-	protected static final String KEY_SIGHTING_ID = "\"id\"";
-	protected static final String KEY_SIGHTING_SESSION_ID = "\"sessionId\"";
-	protected static final String KEY_SIGHTING_TIME = "\"time\"";
-	protected static final String KEY_SIGHTING_ADDRESS = "\"address\"";
-	protected static final String KEY_SIGHTING_NAME = "\"name\"";
-	protected static final String KEY_SIGHTING_RSSI = "\"rssi\"";
+	/** utility class with sql table and column names for version 3. */
+	protected static class V3 {
+		protected static final String TAB_SETTINGS = "\"settings\"";
+		protected static final String KEY_SETTINGS_ID = "\"id\"";
+		protected static final String KEY_SETTINGS_VALID_FROM = "\"validFrom\"";
+		protected static final String KEY_SETTINGS_BT_NAME = "\"btName\"";
+		protected static final String KEY_SETTINGS_BT_AUTO = "\"btAuto\"";
+		protected static final String KEY_SETTINGS_BT_INTERVAL = "\"btInterval\"";
+		protected static final String KEY_SETTINGS_BT_DISABLE = "\"btDisable\"";
+		protected static final String KEY_SETTINGS_WIFI_NAME = "\"wifiName\"";
+		protected static final String KEY_SETTINGS_WIFI_AUTO = "\"wifiAuto\"";
+		protected static final String KEY_SETTINGS_WIFI_INTERVAL = "\"wifiInterval\"";
+		protected static final String KEY_SETTINGS_WIFI_DISABLE = "\"wifiDisable\"";
+	}
 
 	////////////////////////////////////////////
 	// local fields
@@ -86,31 +105,51 @@ extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		toast("DBHelper.onCreate");
-		db.execSQL(
-			new StringBuffer()
-			.append("CREATE TABLE ")
-			.append(TAB_SESSION)
-			.append(" (\n")
-			.append(KEY_SESSION_ID)    .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
-			.append(KEY_SESSION_START) .append(" INTEGER,\n")
-			.append(KEY_SESSION_STOP)  .append(" INTEGER\n")
-			.append(")")
-			.toString()
-		);
-		db.execSQL(
-			new StringBuffer()
-			.append("CREATE TABLE ")
-			.append(TAB_SIGHTING)
-			.append(" (\n")
-			.append(KEY_SIGHTING_ID)        .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
-			.append(KEY_SIGHTING_SESSION_ID).append(" INTEGER,\n")
-			.append(KEY_SIGHTING_TIME)      .append(" INTEGER,\n")
-			.append(KEY_SIGHTING_ADDRESS)   .append(" TEXT,\n")
-			.append(KEY_SIGHTING_NAME)      .append(" TEXT,\n")
-			.append(KEY_SIGHTING_RSSI)      .append(" INTEGER\n")
-			.append(")")
-			.toString()
-		);
+		if (DB_VERSION < 4) {
+			db.execSQL(
+				new StringBuffer()
+				.append("CREATE TABLE ")
+				.append(V1.TAB_SESSION)
+				.append(" (\n")
+				.append(V1.KEY_SESSION_ID)    .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+				.append(V1.KEY_SESSION_START) .append(" INTEGER,\n")
+				.append(V1.KEY_SESSION_STOP)  .append(" INTEGER\n")
+				.append(")")
+				.toString()
+			);
+			db.execSQL(
+				new StringBuffer()
+				.append("CREATE TABLE ")
+				.append(V1.TAB_SIGHTING)
+				.append(" (\n")
+				.append(V1.KEY_SIGHTING_ID)        .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+				.append(V1.KEY_SIGHTING_SESSION_ID).append(" INTEGER,\n")
+				.append(V1.KEY_SIGHTING_TIME)      .append(" INTEGER,\n")
+				.append(V1.KEY_SIGHTING_ADDRESS)   .append(" TEXT,\n")
+				.append(V1.KEY_SIGHTING_NAME)      .append(" TEXT,\n")
+				.append(V1.KEY_SIGHTING_RSSI)      .append(" INTEGER\n")
+				.append(")")
+				.toString()
+			);
+		}
+		if (DB_VERSION >= 3) {
+			db.execSQL(
+				new StringBuffer()
+				.append("CREATE TABLE ").append(V3.TAB_SETTINGS).append(" (\n")
+				.append(V3.KEY_SETTINGS_ID)         .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+				.append(V3.KEY_SETTINGS_VALID_FROM) .append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_BT_AUTO)    .append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_BT_DISABLE) .append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_BT_INTERVAL).append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_BT_NAME)    .append(" TEXT,\n")
+				.append(V3.KEY_SETTINGS_WIFI_AUTO)  .append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_WIFI_DISABLE).append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_WIFI_INTERVAL).append(" INTEGER,\n")
+				.append(V3.KEY_SETTINGS_WIFI_NAME)   .append(" TEXT\n")
+				.append(")")
+				.toString()
+			);
+		}
 	}
 
 	@Override
@@ -120,18 +159,18 @@ extends SQLiteOpenHelper {
 		db.execSQL(
 			new StringBuffer()
 			.append("ALTER TABLE ")
-			.append(TAB_SIGHTING)
+			.append(V1.TAB_SIGHTING)
 			.append(" ADD COLUMN ")
-			.append(KEY_SIGHTING_SESSION_ID)
+			.append(V1.KEY_SIGHTING_SESSION_ID)
 			.append(" INTEGER")
 			.toString()
 		);
 		db.execSQL(
 			new StringBuffer()
 			.append("ALTER TABLE ")
-			.append(TAB_SIGHTING)
+			.append(V1.TAB_SIGHTING)
 			.append(" ADD COLUMN ")
-			.append(KEY_SIGHTING_TIME)
+			.append(V1.KEY_SIGHTING_TIME)
 			.append(" INTEGER")
 			.toString()
 		);
@@ -169,8 +208,8 @@ extends SQLiteOpenHelper {
 	/** delete all data by dropping all tables and calling {@link DBHelper#onCreate(SQLiteDatabase)}. */
 	public void reset() {
 		try {
-			db.execSQL("DROP TABLE " + TAB_SESSION);
-			db.execSQL("DROP TABLE " + TAB_SIGHTING);
+			db.execSQL("DROP TABLE " + V1.TAB_SESSION);
+			db.execSQL("DROP TABLE " + V1.TAB_SIGHTING);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -189,9 +228,9 @@ extends SQLiteOpenHelper {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT max(")
-				.append(KEY_SESSION_ID)
+				.append(V1.KEY_SESSION_ID)
 				.append(") FROM ")
-				.append(TAB_SESSION)
+				.append(V1.TAB_SESSION)
 				.toString(),
 				null
 			);
@@ -217,9 +256,9 @@ extends SQLiteOpenHelper {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT max(")
-				.append(KEY_SIGHTING_ID)
+				.append(V1.KEY_SIGHTING_ID)
 				.append(") FROM ")
-				.append(TAB_SIGHTING)
+				.append(V1.TAB_SIGHTING)
 				.toString(),
 				null
 			);
@@ -244,9 +283,9 @@ extends SQLiteOpenHelper {
 		long result = -1;
 		try {
 			vals.clear();
-			vals.put(KEY_SESSION_START,session.getStart().getTime());
-			vals.put(KEY_SESSION_STOP,-1);
-			result = db.insert(TAB_SESSION,null,vals);
+			vals.put(V1.KEY_SESSION_START,session.getStart().getTime());
+			vals.put(V1.KEY_SESSION_STOP,-1);
+			result = db.insert(V1.TAB_SESSION,null,vals);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -263,12 +302,12 @@ extends SQLiteOpenHelper {
 		long result = -1;
 		try {
 			vals.clear();
-			vals.put(KEY_SIGHTING_ADDRESS,sighting.getAddress());
-			vals.put(KEY_SIGHTING_NAME,sighting.getName());
-			vals.put(KEY_SIGHTING_RSSI,sighting.getRssi());
-			vals.put(KEY_SIGHTING_SESSION_ID,sighting.getSessionId());
-			vals.put(KEY_SIGHTING_TIME,sighting.getTime().getTime());
-			result = db.insert(TAB_SIGHTING,null,vals);
+			vals.put(V1.KEY_SIGHTING_ADDRESS,sighting.getAddress());
+			vals.put(V1.KEY_SIGHTING_NAME,sighting.getName());
+			vals.put(V1.KEY_SIGHTING_RSSI,sighting.getRssi());
+			vals.put(V1.KEY_SIGHTING_SESSION_ID,sighting.getSessionId());
+			vals.put(V1.KEY_SIGHTING_TIME,sighting.getTime().getTime());
+			result = db.insert(V1.TAB_SIGHTING,null,vals);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -285,13 +324,13 @@ extends SQLiteOpenHelper {
 			db.execSQL(
 				new StringBuffer()
 				.append("UPDATE ")
-				.append(TAB_SESSION)
+				.append(V1.TAB_SESSION)
 				.append(" SET ")
-				.append(KEY_SESSION_STOP)
+				.append(V1.KEY_SESSION_STOP)
 				.append(" = ")
 				.append(Long.toString(session.getStop().getTime()))
 				.append(" WHERE ")
-				.append(KEY_SESSION_ID)
+				.append(V1.KEY_SESSION_ID)
 				.append(" = ")
 				.append(Long.toString(session.getId()))
 				.toString()
@@ -313,14 +352,14 @@ extends SQLiteOpenHelper {
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(KEY_SIGHTING_ID).append(",\n\t")
-			.append(KEY_SIGHTING_SESSION_ID).append(",\n\t")
-			.append(KEY_SIGHTING_TIME).append(",\n\t")
-			.append(KEY_SIGHTING_NAME).append(",\n\t")
-			.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
-			.append(KEY_SIGHTING_RSSI).append("\n")
-			.append("FROM ").append(TAB_SIGHTING).append("\n")
-			.append("ORDER BY ").append(KEY_SIGHTING_ID).append(" DESC\n")
+			.append(V1.KEY_SIGHTING_ID).append(",\n\t")
+			.append(V1.KEY_SIGHTING_SESSION_ID).append(",\n\t")
+			.append(V1.KEY_SIGHTING_TIME).append(",\n\t")
+			.append(V1.KEY_SIGHTING_NAME).append(",\n\t")
+			.append(V1.KEY_SIGHTING_ADDRESS).append(",\n\t")
+			.append(V1.KEY_SIGHTING_RSSI).append("\n")
+			.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
+			.append("ORDER BY ").append(V1.KEY_SIGHTING_ID).append(" DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
 			Cursor c = db.rawQuery(
@@ -356,9 +395,9 @@ extends SQLiteOpenHelper {
 		List<String> result = new ArrayList<String>();
 		try {
 			StringBuffer s = new StringBuffer()
-			.append("SELECT DISTINCT ").append(KEY_SIGHTING_NAME).append("\n")
-			.append("FROM ").append(TAB_SIGHTING).append("\n")
-			.append("WHERE ").append(KEY_SIGHTING_ADDRESS)
+			.append("SELECT DISTINCT ").append(V1.KEY_SIGHTING_NAME).append("\n")
+			.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
+			.append("WHERE ").append(V1.KEY_SIGHTING_ADDRESS)
 			.append(" = \"").append(address).append("\"")
 			;
 			Cursor c = db.rawQuery(
@@ -387,13 +426,13 @@ extends SQLiteOpenHelper {
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
-			.append("min(").append(KEY_SIGHTING_TIME).append("),\n\t")
-			.append("max(").append(KEY_SIGHTING_TIME).append("),\n\t")
-			.append("count(DISTINCT ").append(KEY_SIGHTING_SESSION_ID).append("),\n\t")
-			.append("avg(").append(KEY_SIGHTING_RSSI).append(")\n")
-			.append("FROM ").append(TAB_SIGHTING).append("\n")
-			.append("GROUP BY ").append(KEY_SIGHTING_ADDRESS).append("\n")
+			.append(V1.KEY_SIGHTING_ADDRESS).append(",\n\t")
+			.append("min(").append(V1.KEY_SIGHTING_TIME).append("),\n\t")
+			.append("max(").append(V1.KEY_SIGHTING_TIME).append("),\n\t")
+			.append("count(DISTINCT ").append(V1.KEY_SIGHTING_SESSION_ID).append("),\n\t")
+			.append("avg(").append(V1.KEY_SIGHTING_RSSI).append(")\n")
+			.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
+			.append("GROUP BY ").append(V1.KEY_SIGHTING_ADDRESS).append("\n")
 			.append("ORDER BY 4 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
@@ -433,10 +472,10 @@ extends SQLiteOpenHelper {
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(KEY_SESSION_ID).append(",\n\t")
-			.append(KEY_SESSION_START).append(",\n\t")
-			.append(KEY_SESSION_STOP).append("\n")
-			.append("FROM ").append(TAB_SESSION).append("\n")
+			.append(V1.KEY_SESSION_ID).append(",\n\t")
+			.append(V1.KEY_SESSION_START).append(",\n\t")
+			.append(V1.KEY_SESSION_STOP).append("\n")
+			.append("FROM ").append(V1.TAB_SESSION).append("\n")
 			.append("ORDER BY 1 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
@@ -471,13 +510,13 @@ extends SQLiteOpenHelper {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT \n")
-				.append(KEY_SIGHTING_ID).append(",\n\t")
-				.append(KEY_SIGHTING_TIME).append(",\n\t")
-				.append(KEY_SIGHTING_NAME).append(",\n\t")
-				.append(KEY_SIGHTING_ADDRESS).append(",\n\t")
-				.append(KEY_SIGHTING_RSSI).append("\n")
-				.append("FROM ").append(TAB_SIGHTING).append("\n")
-				.append("WHERE ").append(KEY_SIGHTING_SESSION_ID)
+				.append(V1.KEY_SIGHTING_ID).append(",\n\t")
+				.append(V1.KEY_SIGHTING_TIME).append(",\n\t")
+				.append(V1.KEY_SIGHTING_NAME).append(",\n\t")
+				.append(V1.KEY_SIGHTING_ADDRESS).append(",\n\t")
+				.append(V1.KEY_SIGHTING_RSSI).append("\n")
+				.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
+				.append("WHERE ").append(V1.KEY_SIGHTING_SESSION_ID)
 				.append(" = ").append(Long.toString(sessionId)).append("\n")
 				.append("ORDER BY 2 ASC")
 				.toString(),
