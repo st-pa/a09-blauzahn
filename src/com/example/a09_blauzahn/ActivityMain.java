@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,8 @@ implements OnClickListener {
 	private Button btShowSightings;
 	private Button btShowDevices;
 	private Button btShowSessions;
+	private CheckBox cbWifi;
+	private CheckBox cbAuto;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -104,6 +107,11 @@ implements OnClickListener {
 		btShowSightings.setOnClickListener(this);
 		btShowDevices  .setOnClickListener(this);
 		btShowSessions .setOnClickListener(this);
+
+		cbAuto = (CheckBox) findViewById(R.id.cbAutoScan);
+		cbWifi = (CheckBox) findViewById(R.id.cbWifi);
+		cbAuto.setOnClickListener(this);
+		cbWifi.setOnClickListener(this);
 
 		showStatus();
 		if (app.isLogEmpty()) {
@@ -201,6 +209,10 @@ implements OnClickListener {
 		//					if (!ba.getBondedDevices().contains(device)) {
 		//						doPairDevice(device);
 		//					}
+						} else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+							BluetoothDevice device = intent
+							.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+							toast("ACTION_ACL_CONNECTED [" + device.getAddress() + "] " + device.getName());
 						}
 						showStatus();
 					}
@@ -287,7 +299,19 @@ implements OnClickListener {
 			clickedBtShowDevices();
 		} else if (v == btShowSessions) {
 			clickedBtShowSessions();
+		} else if (v == cbAuto) {
+			clickedCbAuto();
+		} else if (v == cbWifi) {
+			clickedCbWifi();
 		}
+	}
+
+	private void clickedCbWifi() {
+		// TODO Auto-generated method stub
+	}
+
+	private void clickedCbAuto() {
+		// TODO Auto-generated method stub
 	}
 
 	private void clickedBtShowSessions() {

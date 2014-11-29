@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -74,6 +75,8 @@ extends AppTTS {
 	protected BluetoothAdapter ba;
 	/** application-wide broadcast receiver to avoid reinitializations. */
 	protected BroadcastReceiver br;
+	/** system service for timed action execution. */
+	protected AlarmManager am;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -90,6 +93,7 @@ extends AppTTS {
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
+			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			this.context = context;
 		}
 	}
@@ -126,18 +130,6 @@ extends AppTTS {
 			.append("state = ")
 			.append(CONST_STATE.get(ba.getState()))
 			.append("\n")
-
-//			.append("LEAdvertiser : ")
-//			.append(ba.getBluetoothLeAdvertiser() == null ? "nicht " : " ")
-//			.append("vorhanden\n")
-//
-//			.append("multi-ad-support : ")
-//			.append(ba.isMultipleAdvertisementSupported() ? "ja" : "nein")
-//			.append("\n")
-//
-//			.append("offload filtering : ")
-//			.append(ba.isOffloadedFilteringSupported() ? "ja" : "nein")
-//			.append("\n")
 			;
 		} else {
 			s.append("no bluetooth adapter found.\n");

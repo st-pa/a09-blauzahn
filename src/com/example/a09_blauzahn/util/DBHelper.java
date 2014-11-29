@@ -111,9 +111,9 @@ extends SQLiteOpenHelper {
 				.append("CREATE TABLE ")
 				.append(V1.TAB_SESSION)
 				.append(" (\n")
-				.append(V1.KEY_SESSION_ID)    .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
-				.append(V1.KEY_SESSION_START) .append(" INTEGER,\n")
-				.append(V1.KEY_SESSION_STOP)  .append(" INTEGER\n")
+				.append(V1.KEY_SESSION_ID)   .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+				.append(V1.KEY_SESSION_START).append(" INTEGER,\n")
+				.append(V1.KEY_SESSION_STOP) .append(" INTEGER\n")
 				.append(")")
 				.toString()
 			);
@@ -509,7 +509,7 @@ extends SQLiteOpenHelper {
 		try {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
-				.append("SELECT \n")
+				.append("SELECT\n\t")
 				.append(V1.KEY_SIGHTING_ID).append(",\n\t")
 				.append(V1.KEY_SIGHTING_TIME).append(",\n\t")
 				.append(V1.KEY_SIGHTING_NAME).append(",\n\t")
@@ -540,4 +540,59 @@ extends SQLiteOpenHelper {
 		}
 		return result;
 	}
+
+	/**
+	 * get the currently valid settings, i.e. the settings with
+	 * the highest id. if there is none to be found, the default
+	 * settinga apply.
+	 * @return {@link Settings}
+	 *
+	public Settings getSettings() {
+		init();
+		Settings result = new Settings();
+		try {
+			Cursor c = db.rawQuery(
+				new StringBuffer()
+				.append("SELECT\n\t")
+				.append(V3.KEY_SETTINGS_ID).append(",\n\t")
+				.append(V3.KEY_SETTINGS_VALID_FROM).append(",\n\t")
+				.append(V3.KEY_SETTINGS_BT_NAME).append(",\n\t")
+				.append(V3.KEY_SETTINGS_BT_AUTO).append(",\n\t")
+				.append(V3.KEY_SETTINGS_BT_INTERVAL).append(",\n\t")
+				.append(V3.KEY_SETTINGS_BT_DISABLE).append(",\n\t")
+				.append(V3.KEY_SETTINGS_WIFI_NAME).append("\n")
+				.append(V3.KEY_SETTINGS_WIFI_AUTO).append(",\n\t")
+				.append(V3.KEY_SETTINGS_WIFI_INTERVAL).append(",\n\t")
+				.append(V3.KEY_SETTINGS_WIFI_DISABLE).append(",\n\t")
+				.append("FROM ").append(V3.TAB_SETTINGS).append("\n")
+				.append("WHERE ").append(V3.KEY_SETTINGS_ID)
+				.append(" = (\n\t")
+				.append("SELECT max(").append(V3.KEY_SETTINGS_ID).append(")\n\t")
+				.append("FROM ").append(V3.TAB_SETTINGS).append("\n")
+				.append(")")
+				.toString(),
+				null
+			);
+			if (c.moveToFirst()) {
+				result = new Settings(
+					c.getLong(0),
+					new Date(c.getLong(1)),
+					c.getString(2),
+					c.getInt(3),
+					c.getInt(4),
+					c.getInt(5),
+					c.getString(6),
+					c.getInt(7),
+					c.getInt(8),
+					c.getInt(9)
+				);
+			}
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		
+		return result;
+	}
+*/
 }

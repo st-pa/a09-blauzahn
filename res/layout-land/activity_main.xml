@@ -28,21 +28,21 @@
             <Button
                 android:id="@+id/btConnect"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="@string/btConnect"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btDisconnect"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="@string/btDisconnect"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btRefresh"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="@string/btRefresh"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -56,14 +56,14 @@
             <Button
                 android:id="@+id/btShowNetInfo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="@string/btShowNetInfo"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btResetDb"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="@string/btResetDb"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -76,7 +76,7 @@
             <Button
                 android:id="@+id/btShowSightings"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:padding="6dp"
                 android:text="@string/btShowSightingsComplete"
                 android:textSize="12sp" />
@@ -84,7 +84,7 @@
             <Button
                 android:id="@+id/btShowDevices"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:padding="6dp"
                 android:text="@string/btShowDevices"
                 android:textSize="12sp" />
@@ -92,9 +92,32 @@
             <Button
                 android:id="@+id/btShowSessions"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:padding="6dp"
                 android:text="@string/btShowSessions"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/cbWifi"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:padding="0dp"
+                android:text="@string/cbWifi"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/cbAutoScan"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:height="24dp"
+                android:padding="0dp"
+                android:text="@string/cbAutoString"
                 android:textSize="12sp" />
         </LinearLayout>
 

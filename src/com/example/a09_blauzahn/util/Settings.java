@@ -4,36 +4,33 @@ import java.util.Date;
 
 public class Settings {
 
+	private static final String NAME = "Blauzahn";
+	private static final boolean AUTO = false;
+	private static final int INTERVAL = 300;
+	private static final boolean DISABLE = true;
+
 	/** autoincremented id for these settings. */
 	private long id;
-
 	/** date/time from when on these settings are/were valid. */
 	private Date validFrom;
-
 	/** name of the wifi device (e.g. "GT-Ixxxx"). */
 	private String wifiName;
-
 	/** enable wifi automatic discovery. */
 	private boolean wifiAuto;
-
 	/** how often to scan wifi. */
 	private int wifiInterval;
-
 	/** disable wifi when not in use. */
 	private boolean wifiDisable;
-
 	/** name of the bluetooth device (e.g. "GT-Ixxxx"). */
 	private String btName;
-
 	/** enable bluetooth automatic discovery. */
 	private boolean btAuto;
-
 	/** how often to scan bluetooth. */
 	private int btInterval;
-
 	/** disable bluetooth when not in use. */
 	private boolean btDisable;
 
+	/** Constructor, using all fields. */
 	public Settings(
 		long id, Date validFrom, String wifiName, boolean wifiAuto,
 		int wifiInterval, boolean wifiDisable, String btName,
@@ -50,6 +47,21 @@ public class Settings {
 		this.btAuto = btAuto;
 		this.btInterval = btInterval;
 		this.btDisable = btDisable;
+	}
+
+	/**
+	 * Constructor, will set default settings.
+	 * @see #NAME
+	 * @see #AUTO
+	 * @see #INTERVAL
+	 * @see #DISABLE
+	 */
+	public Settings() {
+		this(
+			-1,new Date(),
+			NAME,AUTO,INTERVAL,DISABLE,
+			NAME,AUTO,INTERVAL,DISABLE
+		);
 	}
 
 	/**
