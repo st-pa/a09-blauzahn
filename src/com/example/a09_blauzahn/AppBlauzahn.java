@@ -32,7 +32,7 @@ extends AppTTS {
 	public static final int LIST_TYPE_SESSIONS  = 2;
 
 	/** time-format for use in timestamps. */
-	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:MM:ss,SS ",new Locale("DE"));
+	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:mm:ss,SS ",new Locale("DE"));
 	/** date/time-format for use in timestamps. */
 	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss",new Locale("DE"));
 
@@ -107,29 +107,12 @@ extends AppTTS {
 		StringBuffer s = new StringBuffer();
 		if (ba != null) {
 			s
-			.append("address = \"")
-			.append(ba.getAddress())
-			.append("\"\n")
-
-			.append("name = \"")
-			.append(ba.getName())
-			.append("\"\n")
-
-			.append("searching : ")
-			.append(ba.isDiscovering() ? "yes" : "no")
-			.append("\n")
-
-			.append("activated : ")
-			.append(ba.isEnabled() ? "yes" : "no")
-			.append("\n")
-
-			.append("scanMode = ")
-			.append(CONST_SCANMODE.get(ba.getScanMode()))
-			.append("\n")
-
-			.append("state = ")
-			.append(CONST_STATE.get(ba.getState()))
-			.append("\n")
+			.append("address = \"").append(ba.getAddress()).append("\"\n")
+			.append("name = \"")   .append(ba.getName())   .append("\"\n")
+			.append("searching : ").append(ba.isDiscovering() ? "yes" : "no").append("\n")
+			.append("activated : ").append(ba.isEnabled() ? "yes" : "no").append("\n")
+			.append("scanMode = ") .append(CONST_SCANMODE.get(ba.getScanMode())).append("\n")
+			.append("state = ")    .append(CONST_STATE.get(ba.getState())).append("\n")
 			;
 		} else {
 			s.append("no bluetooth adapter found.\n");
@@ -146,61 +129,20 @@ extends AppTTS {
 		StringBuffer s = new StringBuffer();
 		if (info != null) {
 			s
-			.append("describeContents = ")
-			.append(Integer.toBinaryString(info.describeContents()))
-			.append("\n")
-
-			.append("getExtraInfo = \"")
-			.append(info.getExtraInfo())
-			.append("\"\n")
-
-			.append("getReason = \"")
-			.append(info.getReason())
-			.append("\"\n")
-
-			.append("getSubType = ")
-			.append(info.getSubtype())
-			.append(", ")
-
-			.append("getSubTypeName = \"")
-			.append(info.getSubtypeName())
-			.append("\"\n")
-
-			.append("getType = ")
-			.append(info.getType())
-			.append(", ")
-
-			.append("getTypeName = \"")
-			.append(info.getTypeName())
-			.append("\"\n")
-
-			.append("getState.name = \"")
-			.append(info.getState().name())
-			.append("\"\n")
-
-			.append("getDetailedState.name = \"")
-			.append(info.getDetailedState().name())
-			.append("\"\n")
-
-			.append("isAvailable = ")
-			.append(info.isAvailable())
-			.append("\n")
-
-			.append("isConnected = ")
-			.append(info.isConnected())
-			.append("\n")
-
-			.append("isConnectedOrConnecting = ")
-			.append(info.isConnectedOrConnecting())
-			.append("\n")
-
-			.append("isFailover = ")
-			.append(info.isFailover())
-			.append("\n")
-
-			.append("isRoaming = ")
-			.append(info.isRoaming())
-			.append("\n")
+			.append("describeContents = ").append(Integer.toBinaryString(info.describeContents())).append("\n")
+			.append("getExtraInfo = \"")  .append(info.getExtraInfo()).append("\"\n")
+			.append("getReason = \"")     .append(info.getReason()).append("\"\n")
+			.append("getSubType = ")      .append(info.getSubtype()).append(", ")
+			.append("getSubTypeName = \"").append(info.getSubtypeName()).append("\"\n")
+			.append("getType = ")         .append(info.getType()).append(", ")
+			.append("getTypeName = \"")   .append(info.getTypeName()).append("\"\n")
+			.append("getState.name = \"") .append(info.getState().name()).append("\"\n")
+			.append("getDetailedState.name = \"").append(info.getDetailedState().name()).append("\"\n")
+			.append("isAvailable = ")     .append(info.isAvailable()).append("\n")
+			.append("isConnected = ")     .append(info.isConnected()).append("\n")
+			.append("isConnectedOrConnecting = ").append(info.isConnectedOrConnecting()).append("\n")
+			.append("isFailover = ")      .append(info.isFailover()).append("\n")
+			.append("isRoaming = ")       .append(info.isRoaming()).append("\n")
 			;
 		} else {
 			s.append("no network information found.");
