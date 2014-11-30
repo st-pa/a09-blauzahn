@@ -50,6 +50,7 @@ implements OnClickListener {
 	private Button btShowSightings;
 	private Button btShowDevices;
 	private Button btShowSessions;
+//	private Button btClose;
 	private CheckBox cbWifi;
 	private CheckBox cbAuto;
 
@@ -347,24 +348,8 @@ implements OnClickListener {
 	}
 
 	/** react to a click on {@link #btDisconnect}. */
-	private void clickedBtDisconnect() {
-		if (app.ba != null) {
-			app.toast("disconnect Bluetooth adapter");
-			if (app.ba.isDiscovering()) {
-				app.toast("cancel Bluetooth discovery");
-				app.ba.cancelDiscovery();
-			}
-			if (app.ba.isEnabled()) {
-				app.toast("disable Bluetooth");
-				app.ba.disable();
-			}
-		}
-		if (app.br != null) {
-			app.toast("unregister Bluetooth receiver");
-			unregisterReceiver(app.br);
-			app.br = null;
-		}
-		app.showStatus();
+	protected void clickedBtDisconnect() {
+		app.disconnect();
 		enable(true);
 	}
 

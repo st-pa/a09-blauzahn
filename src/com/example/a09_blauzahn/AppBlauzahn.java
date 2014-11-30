@@ -103,6 +103,7 @@ extends AppTTS {
 	@Override
 	public void onTerminate() {
 		db.close();
+		disconnect();
 		super.onTerminate();
 	}
 
@@ -296,5 +297,25 @@ extends AppTTS {
 			text,
 			Toast.LENGTH_SHORT
 		).show();
+	}
+
+	public void disconnect() {
+		if (ba != null) {
+			toast("disconnect Bluetooth adapter");
+			if (ba.isDiscovering()) {
+				toast("cancel Bluetooth discovery");
+				ba.cancelDiscovery();
+			}
+			if (ba.isEnabled()) {
+				toast("disable Bluetooth");
+				ba.disable();
+			}
+		}
+		if (br != null) {
+			toast("unregister Bluetooth receiver");
+			unregisterReceiver(br);
+			br = null;
+		}
+		showStatus();
 	}
 }
