@@ -30,10 +30,17 @@ extends SQLiteOpenHelper {
 	// local constants
 	////////////////////////////////////////////
 
+	/** file name the database is stored in. */
 	private static final String DB_NAME = "blauzahn";
+	/** internal version of the data model. */
 	private static final int DB_VERSION = 2;
 
-	/** utility class containing sql table and column names for version 1. */
+	/**
+	 * utility class containing sql table and column names for version 1.
+	 * deprecated because of preparations to upgrade to version three.
+	 * @author stpa
+	 */
+	@Deprecated
 	protected static class V1 {
 		// table for bluetooth sessions
 		protected static final String TAB_SESSION = "\"session\"";
@@ -50,19 +57,79 @@ extends SQLiteOpenHelper {
 		protected static final String KEY_SIGHTING_RSSI = "\"rssi\"";
 	}
 
-	/** utility class with sql table and column names for version 3. */
+	/**
+	 * utility class with sql table and column names for version 3.
+	 * @author stpa
+	 */
 	protected static class V3 {
+		// table for user defined settings of the application
 		protected static final String TAB_SETTINGS = "\"settings\"";
 		protected static final String KEY_SETTINGS_ID = "\"id\"";
 		protected static final String KEY_SETTINGS_VALID_FROM = "\"validFrom\"";
+		protected static final String KEY_SETTINGS_BT_ON = "\"btOn\"";
 		protected static final String KEY_SETTINGS_BT_NAME = "\"btName\"";
 		protected static final String KEY_SETTINGS_BT_AUTO = "\"btAuto\"";
 		protected static final String KEY_SETTINGS_BT_INTERVAL = "\"btInterval\"";
 		protected static final String KEY_SETTINGS_BT_DISABLE = "\"btDisable\"";
+		protected static final String KEY_SETTINGS_WIFI_ON = "\"wifiOn\"";
 		protected static final String KEY_SETTINGS_WIFI_NAME = "\"wifiName\"";
 		protected static final String KEY_SETTINGS_WIFI_AUTO = "\"wifiAuto\"";
 		protected static final String KEY_SETTINGS_WIFI_INTERVAL = "\"wifiInterval\"";
 		protected static final String KEY_SETTINGS_WIFI_DISABLE = "\"wifiDisable\"";
+		// table for bluetooth sessions
+		protected static final String TAB_BTSESSION = "\"btsession\"";
+		protected static final String KEY_BTSESSION_ID = "\"id\"";
+		protected static final String KEY_BTSESSION_START = "\"start\"";
+		protected static final String KEY_BTSESSION_STOP = "\"stop\"";
+		// table for bluetooth sightings
+		protected static final String TAB_BTSIGHTING = "\"btsighting\"";
+		protected static final String KEY_BTSIGHTING_ID = "\"id\"";
+		protected static final String KEY_BTSIGHTING_SESSION_ID = "\"sessionId\"";
+		protected static final String KEY_BTSIGHTING_TIME = "\"time\"";
+		protected static final String KEY_BTSIGHTING_ADDRESS = "\"address\"";
+		protected static final String KEY_BTSIGHTING_NAME = "\"name\"";
+		protected static final String KEY_BTSIGHTING_RSSI = "\"rssi\"";
+		// prepared create statements for sql.
+		protected static final String CREATE_TAB_BTSESSIONS = new StringBuffer()
+			.append("CREATE TABLE ")
+			.append(V3.TAB_BTSESSION)
+			.append(" (\n")
+			.append(V3.KEY_BTSESSION_ID)   .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+			.append(V3.KEY_BTSESSION_START).append(" INTEGER,\n")
+			.append(V3.KEY_BTSESSION_STOP) .append(" INTEGER\n")
+			.append(")")
+			.toString()
+		;
+		protected static final String CREATE_TAB_BTSIGHTINGS = new StringBuffer()
+			.append("CREATE TABLE ")
+			.append(V3.TAB_BTSIGHTING)
+			.append(" (\n")
+			.append(V3.KEY_BTSIGHTING_ID)        .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+			.append(V3.KEY_BTSIGHTING_SESSION_ID).append(" INTEGER,\n")
+			.append(V3.KEY_BTSIGHTING_TIME)      .append(" INTEGER,\n")
+			.append(V3.KEY_BTSIGHTING_ADDRESS)   .append(" TEXT,\n")
+			.append(V3.KEY_BTSIGHTING_NAME)      .append(" TEXT,\n")
+			.append(V3.KEY_BTSIGHTING_RSSI)      .append(" INTEGER\n")
+			.append(")")
+			.toString()
+		;
+		protected static final String CREATE_TAB_SETTINGS = new StringBuffer()
+			.append("CREATE TABLE ").append(V3.TAB_SETTINGS).append(" (\n")
+			.append(V3.KEY_SETTINGS_ID)         .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+			.append(V3.KEY_SETTINGS_VALID_FROM) .append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_BT_ON)      .append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_BT_AUTO)    .append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_BT_DISABLE) .append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_BT_INTERVAL).append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_BT_NAME)    .append(" TEXT,\n")
+			.append(V3.KEY_SETTINGS_WIFI_ON)    .append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_WIFI_AUTO)  .append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_WIFI_DISABLE).append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_WIFI_INTERVAL).append(" INTEGER,\n")
+			.append(V3.KEY_SETTINGS_WIFI_NAME)   .append(" TEXT\n")
+			.append(")")
+			.toString()
+		;
 	}
 
 	////////////////////////////////////////////
@@ -105,7 +172,7 @@ extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		toast("DBHelper.onCreate");
-		if (DB_VERSION < 4) {
+		if (DB_VERSION <= 2) {
 			db.execSQL(
 				new StringBuffer()
 				.append("CREATE TABLE ")
@@ -132,48 +199,54 @@ extends SQLiteOpenHelper {
 				.toString()
 			);
 		}
+		// prepare for upgrade to version three
 		if (DB_VERSION >= 3) {
-			db.execSQL(
-				new StringBuffer()
-				.append("CREATE TABLE ").append(V3.TAB_SETTINGS).append(" (\n")
-				.append(V3.KEY_SETTINGS_ID)         .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
-				.append(V3.KEY_SETTINGS_VALID_FROM) .append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_BT_AUTO)    .append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_BT_DISABLE) .append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_BT_INTERVAL).append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_BT_NAME)    .append(" TEXT,\n")
-				.append(V3.KEY_SETTINGS_WIFI_AUTO)  .append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_WIFI_DISABLE).append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_WIFI_INTERVAL).append(" INTEGER,\n")
-				.append(V3.KEY_SETTINGS_WIFI_NAME)   .append(" TEXT\n")
-				.append(")")
-				.toString()
-			);
+			db.execSQL(V3.CREATE_TAB_BTSESSIONS);
+			db.execSQL(V3.CREATE_TAB_BTSIGHTINGS);
+			db.execSQL(V3.CREATE_TAB_SETTINGS);
 		}
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		toast("DBHelper.onUpdate");
-		if (oldVersion == 1 && newVersion == 2)
-		db.execSQL(
-			new StringBuffer()
-			.append("ALTER TABLE ")
-			.append(V1.TAB_SIGHTING)
-			.append(" ADD COLUMN ")
-			.append(V1.KEY_SIGHTING_SESSION_ID)
-			.append(" INTEGER")
-			.toString()
-		);
-		db.execSQL(
-			new StringBuffer()
-			.append("ALTER TABLE ")
-			.append(V1.TAB_SIGHTING)
-			.append(" ADD COLUMN ")
-			.append(V1.KEY_SIGHTING_TIME)
-			.append(" INTEGER")
-			.toString()
-		);
+		if (oldVersion == 1 && newVersion == 2) {
+			db.execSQL(
+				new StringBuffer()
+				.append("ALTER TABLE ")
+				.append(V1.TAB_SIGHTING)
+				.append(" ADD COLUMN ")
+				.append(V1.KEY_SIGHTING_SESSION_ID)
+				.append(" INTEGER")
+				.toString()
+			);
+			db.execSQL(
+				new StringBuffer()
+				.append("ALTER TABLE ")
+				.append(V1.TAB_SIGHTING)
+				.append(" ADD COLUMN ")
+				.append(V1.KEY_SIGHTING_TIME)
+				.append(" INTEGER")
+				.toString()
+			);
+		} else if (oldVersion == 2 && newVersion == 3) {
+			// create new table for user defined settings
+			db.execSQL(V3.CREATE_TAB_SETTINGS);
+			// rename bluetooth sessions table
+			db.execSQL(
+				new StringBuffer()
+				.append("ALTER TABLE ").append(V1.TAB_SESSION).append("\n")
+				.append("RENAME TO ").append(V3.TAB_BTSESSION)
+				.toString()
+			);
+			// rename bluetooth sightings table
+			db.execSQL(
+				new StringBuffer()
+				.append("ALTER TABLE ").append(V1.TAB_SIGHTING).append("\n")
+				.append("RENAME TO ").append(V3.TAB_BTSIGHTING)
+				.toString()
+			);
+		}
 	}
 
 	/**
@@ -278,7 +351,7 @@ extends SQLiteOpenHelper {
 	 * @param session {@link Session}
 	 * @return {@link Long}
 	 */
-	public long insertSession(Session session) {
+	public long addSession(Session session) {
 		init();
 		long result = -1;
 		try {
@@ -297,7 +370,7 @@ extends SQLiteOpenHelper {
 	 * @param sighting {@link Sighting}
 	 * @return {@link Long}
 	 */
-	public long insertSighting(Sighting sighting) {
+	public long addSighting(Sighting sighting) {
 		init();
 		long result = -1;
 		try {
@@ -318,7 +391,7 @@ extends SQLiteOpenHelper {
 	 * updates the stop time of the given session.
 	 * @param sighting {@link Session}
 	 */
-	public void updateSession(Session session) {
+	public void setSession(Session session) {
 		init();
 		try {
 			db.execSQL(
@@ -546,7 +619,7 @@ extends SQLiteOpenHelper {
 	 * the highest id. if there is none to be found, the default
 	 * settinga apply.
 	 * @return {@link Settings}
-	 *
+	 */
 	public Settings getSettings() {
 		init();
 		Settings result = new Settings();
@@ -556,10 +629,12 @@ extends SQLiteOpenHelper {
 				.append("SELECT\n\t")
 				.append(V3.KEY_SETTINGS_ID).append(",\n\t")
 				.append(V3.KEY_SETTINGS_VALID_FROM).append(",\n\t")
+				.append(V3.KEY_SETTINGS_BT_ON).append(",\n\t")
 				.append(V3.KEY_SETTINGS_BT_NAME).append(",\n\t")
 				.append(V3.KEY_SETTINGS_BT_AUTO).append(",\n\t")
 				.append(V3.KEY_SETTINGS_BT_INTERVAL).append(",\n\t")
 				.append(V3.KEY_SETTINGS_BT_DISABLE).append(",\n\t")
+				.append(V3.KEY_SETTINGS_WIFI_ON).append("\n")
 				.append(V3.KEY_SETTINGS_WIFI_NAME).append("\n")
 				.append(V3.KEY_SETTINGS_WIFI_AUTO).append(",\n\t")
 				.append(V3.KEY_SETTINGS_WIFI_INTERVAL).append(",\n\t")
@@ -577,22 +652,51 @@ extends SQLiteOpenHelper {
 				result = new Settings(
 					c.getLong(0),
 					new Date(c.getLong(1)),
-					c.getString(2),
-					c.getInt(3),
-					c.getInt(4),
+					c.getInt(2) != 0,
+					c.getString(3),
+					c.getInt(4) != 0,
 					c.getInt(5),
-					c.getString(6),
-					c.getInt(7),
-					c.getInt(8),
-					c.getInt(9)
+					c.getInt(6) != 0,
+					c.getInt(7) != 0,
+					c.getString(8),
+					c.getInt(9) != 0,
+					c.getInt(10),
+					c.getInt(11) != 0
 				);
 			}
 			c.close();
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
-		
 		return result;
 	}
-*/
+
+	/**
+	 * adds a new row to the settings-table
+	 * and returns the autoinced id.
+	 * @param settings {@link Settings}
+	 * @return {@link Long}
+	 */
+	public long addSettings(Settings settings) {
+		init();
+		long result = -1;
+		try {
+			vals.clear();
+			vals.put(V3.KEY_SETTINGS_BT_ON,        settings.isBtOn());
+			vals.put(V3.KEY_SETTINGS_BT_AUTO,      settings.isBtAuto());
+			vals.put(V3.KEY_SETTINGS_BT_DISABLE,   settings.isBtDisable());
+			vals.put(V3.KEY_SETTINGS_BT_INTERVAL,  settings.getBtInterval());
+			vals.put(V3.KEY_SETTINGS_BT_NAME,      settings.getBtName());
+			vals.put(V3.KEY_SETTINGS_VALID_FROM,   settings.getValidFrom().getTime());
+			vals.put(V3.KEY_SETTINGS_WIFI_ON,      settings.isWifiAuto());
+			vals.put(V3.KEY_SETTINGS_WIFI_AUTO,    settings.isWifiAuto());
+			vals.put(V3.KEY_SETTINGS_WIFI_DISABLE, settings.isWifiDisable());
+			vals.put(V3.KEY_SETTINGS_WIFI_INTERVAL,settings.getWifiInterval());
+			vals.put(V3.KEY_SETTINGS_WIFI_NAME,    settings.getWifiName());
+			result = db.insert(V3.TAB_SETTINGS,null,vals);
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}	
 }

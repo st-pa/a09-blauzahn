@@ -6,43 +6,51 @@ public class Settings {
 
 	private static final String NAME = "Blauzahn";
 	private static final boolean AUTO = false;
-	private static final int INTERVAL = 300;
+	private static final int INTERVAL = 300000;
 	private static final boolean DISABLE = true;
 
 	/** autoincremented id for these settings. */
 	private long id;
 	/** date/time from when on these settings are/were valid. */
 	private Date validFrom;
+	/** whether or not to scan for wifi. */
+	private boolean wifiOn;
 	/** name of the wifi device (e.g. "GT-Ixxxx"). */
 	private String wifiName;
 	/** enable wifi automatic discovery. */
 	private boolean wifiAuto;
 	/** how often to scan wifi. */
-	private int wifiInterval;
+	private long wifiInterval;
 	/** disable wifi when not in use. */
 	private boolean wifiDisable;
+	/** whether or not to scan for bluetooth. */
+	private boolean btOn;
 	/** name of the bluetooth device (e.g. "GT-Ixxxx"). */
 	private String btName;
 	/** enable bluetooth automatic discovery. */
 	private boolean btAuto;
 	/** how often to scan bluetooth. */
-	private int btInterval;
+	private long btInterval;
 	/** disable bluetooth when not in use. */
 	private boolean btDisable;
 
 	/** Constructor, using all fields. */
 	public Settings(
-		long id, Date validFrom, String wifiName, boolean wifiAuto,
-		int wifiInterval, boolean wifiDisable, String btName,
+		long id, Date validFrom,
+		boolean wifiOn, String wifiName, boolean wifiAuto,
+		int wifiInterval, boolean wifiDisable,
+		boolean btOn, String btName,
 		boolean btAuto, int btInterval, boolean btDisable
 	) {
 		super();
 		this.id = id;
 		this.validFrom = validFrom;
+		this.wifiOn = wifiOn;
 		this.wifiName = wifiName;
 		this.wifiAuto = wifiAuto;
 		this.wifiInterval = wifiInterval;
 		this.wifiDisable = wifiDisable;
+		this.btOn = btOn;
 		this.btName = btName;
 		this.btAuto = btAuto;
 		this.btInterval = btInterval;
@@ -59,8 +67,8 @@ public class Settings {
 	public Settings() {
 		this(
 			-1,new Date(),
-			NAME,AUTO,INTERVAL,DISABLE,
-			NAME,AUTO,INTERVAL,DISABLE
+			false,NAME,AUTO,INTERVAL,DISABLE,
+			true,NAME,AUTO,INTERVAL,DISABLE
 		);
 	}
 
@@ -95,7 +103,7 @@ public class Settings {
 	/**
 	 * @return the wifiInterval
 	 */
-	public final int getWifiInterval() {
+	public final long getWifiInterval() {
 		return wifiInterval;
 	}
 
@@ -123,7 +131,7 @@ public class Settings {
 	/**
 	 * @return the btInterval
 	 */
-	public final int getBtInterval() {
+	public final long getBtInterval() {
 		return btInterval;
 	}
 
@@ -165,7 +173,7 @@ public class Settings {
 	/**
 	 * @param wifiInterval the wifiInterval to set
 	 */
-	public final void setWifiInterval(int wifiInterval) {
+	public final void setWifiInterval(long wifiInterval) {
 		this.wifiInterval = wifiInterval;
 	}
 
@@ -193,7 +201,7 @@ public class Settings {
 	/**
 	 * @param btInterval the btInterval to set
 	 */
-	public final void setBtInterval(int btInterval) {
+	public final void setBtInterval(long btInterval) {
 		this.btInterval = btInterval;
 	}
 
@@ -202,6 +210,34 @@ public class Settings {
 	 */
 	public final void setBtDisable(boolean btDisable) {
 		this.btDisable = btDisable;
+	}
+
+	/**
+	 * @return the wifiOn
+	 */
+	public final boolean isWifiOn() {
+		return wifiOn;
+	}
+
+	/**
+	 * @return the btOn
+	 */
+	public final boolean isBtOn() {
+		return btOn;
+	}
+
+	/**
+	 * @param wifiOn the wifiOn to set
+	 */
+	public final void setWifiOn(boolean wifiOn) {
+		this.wifiOn = wifiOn;
+	}
+
+	/**
+	 * @param btOn the btOn to set
+	 */
+	public final void setBtOn(boolean btOn) {
+		this.btOn = btOn;
 	}
 
 }
