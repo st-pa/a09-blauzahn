@@ -42,9 +42,9 @@ extends AppTTS {
 	public static final int LIST_TYPE_SESSIONS  = 2;
 
 	/** tag for LogCat-messages. */
-	private static final String TAG = "Blauzahn";
+	public static final String TAG = "Blauzahn";
 	/** predefined {@link Locale} for use in {@link String#format(Locale,String,Object...)}. */
-	private static final Locale LOCALE = new Locale("DE");
+	public static final Locale LOCALE = new Locale("DE");
 	/** time-format for use in timestamps. */
 	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:mm:ss,SS ",LOCALE);
 	/** date/time-format for use in timestamps. */
@@ -185,20 +185,25 @@ extends AppTTS {
 	}
 
 	/** make a formatted timestamp. */
-	private String now() {
+	public static final String timestamp() {
 		return TIMESTAMP.format(new Date());
+	}
+
+	/** make a formatted date-timestamp. */
+	public static final String datetimestamp() {
+		return DATETIMESTAMP.format(new Date());
 	}
 
 	/** insert a message to the top of the log. */
 	public void log(String text) {
-		this.log.insert(
-			0,
-			new StringBuffer()
-			.append(now())
-			.append(text)
-			.append("\n")
-			.toString()
-		);
+		String timestamped = new StringBuffer()
+		.append(timestamp())
+		.append(text)
+		.append("\n")
+		.toString();
+		System.out.println(timestamped);
+		this.log.insert(0,timestamped);
+		
 	}
 
 	/** returns the contents of the app's log. */

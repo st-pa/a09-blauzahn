@@ -1,5 +1,11 @@
 package com.example.a09_blauzahn.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,9 +18,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.model.Device;
 import com.example.a09_blauzahn.model.Session;
 import com.example.a09_blauzahn.model.Sighting;
@@ -735,10 +743,44 @@ extends SQLiteOpenHelper {
 	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
 	 */
 	public void exportDB() {
-/*		StringBuffer target = new StringBuffer()
+		String separator = System.getProperty("path.separator");
+		StringBuffer target = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
-		.append(System.getProperty("path.separator"))
-		.append();
+		.append(separator)
+		.append(DB_NAME);
 		StringBuffer source = new StringBuffer()
-*/	}
+		.append(Environment.getDataDirectory().getAbsolutePath())
+		.append(separator)
+		.append("data")
+		.append(separator)
+		.append(AppBlauzahn.class.getPackage().getName())
+		.append(separator)
+		.append("databases")
+		.append(separator)
+		.append(AppBlauzahn.datetimestamp())
+		.append("-")
+		.append(DB_NAME);
+		System.out.println(
+			"trying to copy database from\n" +
+			source.toString() + " to\n" +
+			target.toString()
+		);
+		try {
+			FileInputStream fis = new FileInputStream(new File(source.toString()));
+			FileOutputStream fos = new FileOutputStream(new File(target.toString()));
+			FileChannel src = fis.getChannel();
+			FileChannel dst = fos.getChannel();
+			dst.transferFrom(src, 0, src.size());
+			fis.close();
+			fos.close();
+			src.close();
+			dst.close();
+			System.out.println("database copied.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }
