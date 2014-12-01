@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import android.app.AlarmManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -737,14 +738,56 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * TODO set a new system time and change all timestamps accordingly.
+	 * handle with care!
+	 * set a new system time and change all timestamps accordingly.
 	 * @param c {@link Calendar} with the new date/time to set systemwide
 	 */
 	public void setSystemTime(Calendar c) {
-//		Calendar c = Calendar.getInstance();
-//		c.set(2010, 1, 1, 12, 00, 00);
-//		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-//		am.setTime(c.getTimeInMillis());
+		// get "old" current time
+		Date t0 = new Date();
+		// adjust system time
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am.setTime(c.getTimeInMillis());
+		// get "new" current time
+		Date t1 = new Date();
+		// calculate difference
+		long dt = t1.getTime() - t0.getTime();
+		// update all time related table columns
+		try {
+			db.execSQL(
+				new StringBuffer()
+				.append("UPDATE ").append(V3.TAB_BTSESSION).append("\n")
+				.append("SET\n\t")
+				.append(V3.KEY_BTSESSION_START).append(" = ")
+				.append(V3.KEY_BTSESSION_START).append(" + ")
+				.append(Long.toString(dt))
+				.append(",\n\t")
+				.append(V3.KEY_BTSESSION_STOP).append(" = ")
+				.append(V3.KEY_BTSESSION_STOP).append(" + ")
+				.append(Long.toString(dt))
+				.toString()
+			);
+			db.execSQL(
+				new StringBuffer()
+				.append("UPDATE ").append(V3.TAB_BTSIGHTING).append("\n")
+				.append("SET ")
+				.append(V3.KEY_BTSIGHTING_TIME).append(" = ")
+				.append(V3.KEY_BTSIGHTING_TIME).append(" + ")
+				.append(Long.toString(dt))
+				.toString()
+			);
+			db.execSQL(
+				new StringBuffer()
+				.append("UPDATE ").append(V3.TAB_SETTINGS).append("\n")
+				.append("SET ")
+				.append(V3.KEY_SETTINGS_VALID_FROM).append(" = ")
+				.append(V3.KEY_SETTINGS_VALID_FROM).append(" + ")
+				.append(Long.toString(dt))
+				.toString()
+			);
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
 	}
 
 	/**

@@ -8,8 +8,9 @@
         android:id="@+id/tvList2label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_margin="2sp"
-        android:gravity="right"
+        android:gravity="right|center_vertical"
         android:paddingRight="4dp"
         android:text="firstTime (sessionCount)\n&lt;br>second line of info text"
         android:textSize="10sp" />

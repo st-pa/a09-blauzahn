@@ -93,9 +93,9 @@ public class Session {
 				if (name == null) {
 					s.append(DBHelper.NULL_VALUE);
 				} else {
-					s.append("\"")
+					s.append("\'")
 					.append(name)
-					.append("\"");
+					.append("\'");
 				}
 				if (iterator.hasNext()) {
 					s.append(", ");
