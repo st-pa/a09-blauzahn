@@ -12,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.a09_blauzahn.model.Device;
+import com.example.a09_blauzahn.model.Session;
+import com.example.a09_blauzahn.model.Sighting;
 import com.example.a09_blauzahn.view.AdapterDevice;
 import com.example.a09_blauzahn.view.AdapterSession;
 import com.example.a09_blauzahn.view.AdapterSighting;
@@ -36,6 +39,8 @@ implements OnItemClickListener, OnClickListener {
 
 	private ArrayAdapter<?> adapter;
 
+	private int listType = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,9 +55,8 @@ implements OnItemClickListener, OnClickListener {
 
 		// retrieve the type of list to be displayed from extras bundle
 		Bundle extras = getIntent().getExtras();
-		int listType = 0;
 		if (extras != null) {
-			listType = extras.getInt(AppBlauzahn.EXTRA_LIST_TYPE);
+			listType  = extras.getInt(AppBlauzahn.EXTRA_LIST_TYPE);
 		}
 		// decide on which list adapter to use
 		if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
@@ -100,6 +104,24 @@ implements OnItemClickListener, OnClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
+			itemClickDevice((Device) adapter.getItem(position));
+		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
+			itemClickSession((Session) adapter.getItem(position));
+		} else if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
+			itemClickSighting((Sighting) adapter.getItem(position));
+		}
+	}
+
+	private void itemClickSighting(Sighting item) {
+		// TODO Auto-generated method stub
+	}
+
+	private void itemClickSession(Session item) {
+		// TODO Auto-generated method stub
+	}
+
+	private void itemClickDevice(Device item) {
 		// TODO Auto-generated method stub
 	}
 
