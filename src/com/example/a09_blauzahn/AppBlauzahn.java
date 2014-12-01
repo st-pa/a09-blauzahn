@@ -48,7 +48,7 @@ extends AppTTS {
 	/** time-format for use in timestamps. */
 	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:mm:ss,SS ",LOCALE);
 	/** date/time-format for use in timestamps. */
-	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss",LOCALE);
+	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss",LOCALE);
 
 	////////////////////////////////////////////
 	// local constants

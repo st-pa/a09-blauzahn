@@ -679,16 +679,16 @@ extends SQLiteOpenHelper {
 				result = new Settings(
 					c.getLong(0),
 					new Date(c.getLong(1)),
-					c.getInt(2) != 0,
+					c.getInt(2) == 0,
 					c.getString(3),
-					c.getInt(4) != 0,
+					c.getInt(4) == 0,
 					c.getInt(5),
-					c.getInt(6) != 0,
-					c.getInt(7) != 0,
+					c.getInt(6) == 0,
+					c.getInt(7) == 0,
 					c.getString(8),
-					c.getInt(9) != 0,
+					c.getInt(9) == 0,
 					c.getInt(10),
-					c.getInt(11) != 0
+					c.getInt(11) == 0
 				);
 			}
 			c.close();
@@ -743,10 +743,12 @@ extends SQLiteOpenHelper {
 	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
 	 */
 	public void exportDB() {
-		String separator = System.getProperty("path.separator");
+		String separator = System.getProperty("file.separator");
 		StringBuffer target = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
 		.append(separator)
+		.append(AppBlauzahn.datetimestamp())
+		.append("-")
 		.append(DB_NAME);
 		StringBuffer source = new StringBuffer()
 		.append(Environment.getDataDirectory().getAbsolutePath())
@@ -757,8 +759,6 @@ extends SQLiteOpenHelper {
 		.append(separator)
 		.append("databases")
 		.append(separator)
-		.append(AppBlauzahn.datetimestamp())
-		.append("-")
 		.append(DB_NAME);
 		System.out.println(
 			"trying to copy database from\n" +
