@@ -779,7 +779,7 @@ extends SQLiteOpenHelper {
 			fos.close();
 			src.close();
 			dst.close();
-			System.out.println("database copied.");
+			toast("database exported successfully.");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

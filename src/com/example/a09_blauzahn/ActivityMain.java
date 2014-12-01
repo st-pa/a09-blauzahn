@@ -284,9 +284,14 @@ implements OnClickListener {
 		app.showStatus();
 	}
 
-	/** react to a click on {@link #btResetDb}. */
+	/**
+	 * react to a click on {@link #btResetDb} by
+	 * deleting and recreating all tables and
+	 * then writing current settings back to db.
+	 */
 	private void clickedBtResetDb() {
 		app.db.reset();
+		app.updateSettings();
 	}
 
 	/** react to a click on {@link #btDisconnect}. */
