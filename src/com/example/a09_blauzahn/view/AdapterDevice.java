@@ -4,10 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,7 +19,7 @@ import com.example.a09_blauzahn.model.Sighting;
  * @author stpa
  */
 public class AdapterDevice
-extends ArrayAdapter<Device> {
+extends AbstractAdapter<Device> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -30,20 +28,13 @@ extends ArrayAdapter<Device> {
 		TextView names;
 	}
 
-	/** for convenience, store the {@link LayoutInflater}. */
-	private static LayoutInflater inflater;
-
-	/** a {@link List} of the {@link Sighting} instances to be displayed. */
-	private List<Device> list;
-
 	/** Constructor. */
 	public AdapterDevice(
 		Context context,
+		int layout,
 		List<Device> list
 	) {
-		super(context,R.layout.list_device,list);
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.list = list;
+		super(context,layout,list);
 	}
 
 	@Override
@@ -51,7 +42,7 @@ extends ArrayAdapter<Device> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_device, parent, false);
+			convertView = inflater.inflate(layout, parent, false);
 			holder = new ViewHolder();
 			holder.label1 = (TextView) convertView.findViewById(R.id.tvList2label1);
 			holder.label2 = (TextView) convertView.findViewById(R.id.tvList2label2);

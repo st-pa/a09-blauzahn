@@ -58,16 +58,19 @@ implements OnItemClickListener, OnClickListener {
 		if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
 			adapter = new AdapterSighting(
 				this,
+				R.layout.list_sighting,
 				app.db.getListBTSightings(LIMIT)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
 			adapter = new AdapterDevice(
 				this,
+				R.layout.list_device,
 				app.db.getListBTDevices(LIMIT)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
 			adapter = new AdapterSession(
 				this,
+				R.layout.list_session,
 				app.db.getListBTSessions(LIMIT)
 			);
 		}

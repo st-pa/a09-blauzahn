@@ -3,10 +3,8 @@ package com.example.a09_blauzahn.view;
 import java.util.List;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +18,7 @@ import com.example.a09_blauzahn.util.DBHelper;
  * @author stpa
  */
 public class AdapterSighting
-extends ArrayAdapter<Sighting> {
+extends AbstractAdapter<Sighting> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -28,20 +26,13 @@ extends ArrayAdapter<Sighting> {
 		TextView name;
 	}
 
-	/** for convenience, store the {@link LayoutInflater}. */
-	private static LayoutInflater inflater;
-
-	/** a {@link List} of the {@link Sighting} instances to be displayed. */
-	private List<Sighting> list;
-
 	/** Constructor. */
 	public AdapterSighting(
 		Context context,
+		int layout,
 		List<Sighting> list
 	) {
-		super(context,R.layout.list_sighting,list);
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.list = list;
+		super(context,layout,list);
 	}
 
 	@Override
@@ -49,7 +40,7 @@ extends ArrayAdapter<Sighting> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_sighting, parent, false);
+			convertView = inflater.inflate(layout, parent, false);
 			holder = new ViewHolder();
 			holder.label = (TextView) convertView.findViewById(R.id.tvList1label);
 			holder.name  = (TextView) convertView.findViewById(R.id.tvList1name);

@@ -3,10 +3,8 @@ package com.example.a09_blauzahn.view;
 import java.util.List;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,7 +17,7 @@ import com.example.a09_blauzahn.model.Session;
  * @author stpa
  */
 public class AdapterSession
-extends ArrayAdapter<Session> {
+extends AbstractAdapter<Session> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -28,20 +26,13 @@ extends ArrayAdapter<Session> {
 		TextView names;
 	}
 
-	/** for convenience, store the {@link LayoutInflater}. */
-	private static LayoutInflater inflater;
-
-	/** a {@link List} of the {@link Session} instances to be displayed. */
-	private List<Session> list;
-
 	/** Constructor. */
 	public AdapterSession(
 		Context context,
+		int layout,
 		List<Session> list
 	) {
-		super(context,R.layout.list_session,list);
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.list = list;
+		super(context,layout,list);
 	}
 
 	@Override
@@ -49,7 +40,7 @@ extends ArrayAdapter<Session> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.list_session, parent, false);
+			convertView = inflater.inflate(layout, parent, false);
 			holder = new ViewHolder();
 			holder.id = (TextView) convertView.findViewById(R.id.tvList3id);
 			holder.label = (TextView) convertView.findViewById(R.id.tvList3label);
@@ -89,5 +80,4 @@ extends ArrayAdapter<Session> {
 		// and give back the modified view
 		return convertView;
 	}
-
 }
