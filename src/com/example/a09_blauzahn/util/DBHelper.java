@@ -1,6 +1,7 @@
 package com.example.a09_blauzahn.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -294,8 +295,9 @@ extends SQLiteOpenHelper {
 	/** delete all data by dropping all tables and calling {@link DBHelper#onCreate(SQLiteDatabase)}. */
 	public void reset() {
 		try {
-			db.execSQL("DROP TABLE " + V1.TAB_SESSION);
-			db.execSQL("DROP TABLE " + V1.TAB_SIGHTING);
+			db.execSQL("DROP TABLE " + V3.TAB_BTSESSION);
+			db.execSQL("DROP TABLE " + V3.TAB_BTSIGHTING);
+			db.execSQL("DROP TABLE " + V3.TAB_SETTINGS);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -314,9 +316,9 @@ extends SQLiteOpenHelper {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT max(")
-				.append(V1.KEY_SESSION_ID)
+				.append(V3.KEY_BTSESSION_ID)
 				.append(") FROM ")
-				.append(V1.TAB_SESSION)
+				.append(V3.TAB_BTSESSION)
 				.toString(),
 				null
 			);
@@ -342,9 +344,9 @@ extends SQLiteOpenHelper {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT max(")
-				.append(V1.KEY_SIGHTING_ID)
+				.append(V3.KEY_BTSIGHTING_ID)
 				.append(") FROM ")
-				.append(V1.TAB_SIGHTING)
+				.append(V3.TAB_BTSIGHTING)
 				.toString(),
 				null
 			);
@@ -369,9 +371,9 @@ extends SQLiteOpenHelper {
 		long result = -1;
 		try {
 			vals.clear();
-			vals.put(V1.KEY_SESSION_START,session.getStart().getTime());
-			vals.put(V1.KEY_SESSION_STOP,-1);
-			result = db.insert(V1.TAB_SESSION,null,vals);
+			vals.put(V3.KEY_BTSESSION_START,session.getStart().getTime());
+			vals.put(V3.KEY_BTSESSION_STOP,-1);
+			result = db.insert(V3.TAB_BTSESSION,null,vals);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -388,12 +390,12 @@ extends SQLiteOpenHelper {
 		long result = -1;
 		try {
 			vals.clear();
-			vals.put(V1.KEY_SIGHTING_ADDRESS,sighting.getAddress());
-			vals.put(V1.KEY_SIGHTING_NAME,sighting.getName());
-			vals.put(V1.KEY_SIGHTING_RSSI,sighting.getRssi());
-			vals.put(V1.KEY_SIGHTING_SESSION_ID,sighting.getSessionId());
-			vals.put(V1.KEY_SIGHTING_TIME,sighting.getTime().getTime());
-			result = db.insert(V1.TAB_SIGHTING,null,vals);
+			vals.put(V3.KEY_BTSIGHTING_ADDRESS,sighting.getAddress());
+			vals.put(V3.KEY_BTSIGHTING_NAME,sighting.getName());
+			vals.put(V3.KEY_BTSIGHTING_RSSI,sighting.getRssi());
+			vals.put(V3.KEY_BTSIGHTING_SESSION_ID,sighting.getSessionId());
+			vals.put(V3.KEY_BTSIGHTING_TIME,sighting.getTime().getTime());
+			result = db.insert(V3.TAB_BTSIGHTING,null,vals);
 		} catch (SQLiteException e) {
 			Log.e("SQL",e.toString());
 		}
@@ -410,13 +412,13 @@ extends SQLiteOpenHelper {
 			db.execSQL(
 				new StringBuffer()
 				.append("UPDATE ")
-				.append(V1.TAB_SESSION)
+				.append(V3.TAB_BTSESSION)
 				.append(" SET ")
-				.append(V1.KEY_SESSION_STOP)
+				.append(V3.KEY_BTSESSION_STOP)
 				.append(" = ")
 				.append(Long.toString(session.getStop().getTime()))
 				.append(" WHERE ")
-				.append(V1.KEY_SESSION_ID)
+				.append(V3.KEY_BTSESSION_ID)
 				.append(" = ")
 				.append(Long.toString(session.getId()))
 				.toString()
@@ -438,14 +440,14 @@ extends SQLiteOpenHelper {
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(V1.KEY_SIGHTING_ID).append(",\n\t")
-			.append(V1.KEY_SIGHTING_SESSION_ID).append(",\n\t")
-			.append(V1.KEY_SIGHTING_TIME).append(",\n\t")
-			.append(V1.KEY_SIGHTING_NAME).append(",\n\t")
-			.append(V1.KEY_SIGHTING_ADDRESS).append(",\n\t")
-			.append(V1.KEY_SIGHTING_RSSI).append("\n")
-			.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
-			.append("ORDER BY ").append(V1.KEY_SIGHTING_ID).append(" DESC\n")
+			.append(V3.KEY_BTSIGHTING_ID).append(",\n\t")
+			.append(V3.KEY_BTSIGHTING_SESSION_ID).append(",\n\t")
+			.append(V3.KEY_BTSIGHTING_TIME).append(",\n\t")
+			.append(V3.KEY_BTSIGHTING_NAME).append(",\n\t")
+			.append(V3.KEY_BTSIGHTING_ADDRESS).append(",\n\t")
+			.append(V3.KEY_BTSIGHTING_RSSI).append("\n")
+			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n")
+			.append("ORDER BY ").append(V3.KEY_BTSIGHTING_ID).append(" DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
 			Cursor c = db.rawQuery(
@@ -481,9 +483,9 @@ extends SQLiteOpenHelper {
 		List<String> result = new ArrayList<String>();
 		try {
 			StringBuffer s = new StringBuffer()
-			.append("SELECT DISTINCT ").append(V1.KEY_SIGHTING_NAME).append("\n")
-			.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
-			.append("WHERE ").append(V1.KEY_SIGHTING_ADDRESS)
+			.append("SELECT DISTINCT ").append(V3.KEY_BTSIGHTING_NAME).append("\n")
+			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n")
+			.append("WHERE ").append(V3.KEY_BTSIGHTING_ADDRESS)
 			.append(" = \"").append(address).append("\"")
 			;
 			Cursor c = db.rawQuery(
@@ -512,13 +514,13 @@ extends SQLiteOpenHelper {
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(V1.KEY_SIGHTING_ADDRESS).append(",\n\t")
-			.append("min(").append(V1.KEY_SIGHTING_TIME).append("),\n\t")
-			.append("max(").append(V1.KEY_SIGHTING_TIME).append("),\n\t")
-			.append("count(DISTINCT ").append(V1.KEY_SIGHTING_SESSION_ID).append("),\n\t")
-			.append("avg(").append(V1.KEY_SIGHTING_RSSI).append(")\n")
-			.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
-			.append("GROUP BY ").append(V1.KEY_SIGHTING_ADDRESS).append("\n")
+			.append(V3.KEY_BTSIGHTING_ADDRESS).append(",\n\t")
+			.append("min(").append(V3.KEY_BTSIGHTING_TIME).append("),\n\t")
+			.append("max(").append(V3.KEY_BTSIGHTING_TIME).append("),\n\t")
+			.append("count(DISTINCT ").append(V3.KEY_BTSIGHTING_SESSION_ID).append("),\n\t")
+			.append("avg(").append(V3.KEY_BTSIGHTING_RSSI).append(")\n")
+			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n")
+			.append("GROUP BY ").append(V3.KEY_BTSIGHTING_ADDRESS).append("\n")
 			.append("ORDER BY 4 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
@@ -558,10 +560,10 @@ extends SQLiteOpenHelper {
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(V1.KEY_SESSION_ID).append(",\n\t")
-			.append(V1.KEY_SESSION_START).append(",\n\t")
-			.append(V1.KEY_SESSION_STOP).append("\n")
-			.append("FROM ").append(V1.TAB_SESSION).append("\n")
+			.append(V3.KEY_BTSESSION_ID).append(",\n\t")
+			.append(V3.KEY_BTSESSION_START).append(",\n\t")
+			.append(V3.KEY_BTSESSION_STOP).append("\n")
+			.append("FROM ").append(V3.TAB_BTSESSION).append("\n")
 			.append("ORDER BY 1 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
@@ -600,13 +602,13 @@ extends SQLiteOpenHelper {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT\n\t")
-				.append(V1.KEY_SIGHTING_ID).append(",\n\t")
-				.append(V1.KEY_SIGHTING_TIME).append(",\n\t")
-				.append(V1.KEY_SIGHTING_NAME).append(",\n\t")
-				.append(V1.KEY_SIGHTING_ADDRESS).append(",\n\t")
-				.append(V1.KEY_SIGHTING_RSSI).append("\n")
-				.append("FROM ").append(V1.TAB_SIGHTING).append("\n")
-				.append("WHERE ").append(V1.KEY_SIGHTING_SESSION_ID)
+				.append(V3.KEY_BTSIGHTING_ID).append(",\n\t")
+				.append(V3.KEY_BTSIGHTING_TIME).append(",\n\t")
+				.append(V3.KEY_BTSIGHTING_NAME).append(",\n\t")
+				.append(V3.KEY_BTSIGHTING_ADDRESS).append(",\n\t")
+				.append(V3.KEY_BTSIGHTING_RSSI).append("\n")
+				.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n")
+				.append("WHERE ").append(V3.KEY_BTSIGHTING_SESSION_ID)
 				.append(" = ").append(Long.toString(sessionId)).append("\n")
 				.append("ORDER BY 2 ASC")
 				.toString(),
@@ -719,8 +721,9 @@ extends SQLiteOpenHelper {
 
 	/**
 	 * TODO set a new system time and change all timestamps accordingly.
+	 * @param c {@link Calendar} with the new date/time to set systemwide
 	 */
-	public void setSystemTime() {
+	public void setSystemTime(Calendar c) {
 //		Calendar c = Calendar.getInstance();
 //		c.set(2010, 1, 1, 12, 00, 00);
 //		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
