@@ -17,5 +17,6 @@
     <string name="cbAutoString">background scan</string>
     <string name="cbWifi">wifi</string>
     <string name="btExport">export</string>
+    <string name="btExit">exit</string>
 
 </resources>

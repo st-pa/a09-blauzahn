@@ -51,6 +51,7 @@ implements OnClickListener {
 	private Button btShowDevices;
 	private Button btShowSessions;
 	private Button btExport;
+	private Button btExit;
 	private CheckBox cbWifi;
 	private CheckBox cbAuto;
 
@@ -73,6 +74,7 @@ implements OnClickListener {
 		btShowDevices   = (Button) findViewById(R.id.btShowDevices);
 		btShowSessions  = (Button) findViewById(R.id.btShowSessions);
 		btExport       = (Button) findViewById(R.id.btExport);
+		btExit        = (Button) findViewById(R.id.btExit);
 
 		app = (AppBlauzahn) getApplication();
 		app.init(this,tvLabel,btConnect);
@@ -89,6 +91,7 @@ implements OnClickListener {
 		btShowDevices  .setOnClickListener(this);
 		btShowSessions .setOnClickListener(this);
 		btExport       .setOnClickListener(this);
+		btExit         .setOnClickListener(this);
 
 		// reference checkboxes
 		cbAuto = (CheckBox) findViewById(R.id.cbAutoScan);
@@ -200,7 +203,17 @@ implements OnClickListener {
 			clickedCbWifi();
 		} else if (v == btExport) {
 			clickedBtExport();
+		} else if (v == btExit) {
+			clickedBtExit();
 		}
+	}
+
+	/**
+	 * react to click on {@link #btExit} by ending this activiy
+	 * (and thus, hopefully, the whole app).
+	 */
+	private void clickedBtExit() {
+		finish();
 	}
 
 	/**
@@ -208,6 +221,7 @@ implements OnClickListener {
 	 * the entire database to external storage.
 	 */
 	private void clickedBtExport() {
+		// TODO ask for user permission to export entire database to external storage
 		app.dbExport();
 	}
 
@@ -326,6 +340,7 @@ implements OnClickListener {
 	/**
 	 * add a timestamped message to the app's log.
 	 * @param text {@link String}
+	 * FIXME sometimes log messages are not visible in textview
 	 */
 	protected void log(String text) {
 		app.log(text);

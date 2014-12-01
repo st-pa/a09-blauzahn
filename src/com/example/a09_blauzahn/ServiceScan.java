@@ -9,11 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
+/**
+ * this inheritor of {@link Service} shall run in the background
+ * while the app is not terminated and perform periodic scans
+ * for discoverable bluetooth devices.
+ * @author stpa
+ */
 public class ServiceScan
 extends Service {
 
 	private static Timer timer = new Timer();
 	private Context context;
+	/** convenience reference to the Application instance. */
 	private AppBlauzahn app;
 
 	@Override
@@ -67,20 +74,20 @@ extends Service {
 	}
 /*
 public class LocalService extends Service {
-    private void startService()   {           
+    private void startService() {
         timer.scheduleAtFixedRate(new mainTask(), 0, 5000);
     }
-    private class mainTask extends TimerTask   { 
-        public void run()      {
+    private class mainTask extends TimerTask { 
+        public void run() {
             toastHandler.sendEmptyMessage(0);
         }
-    }    
-    private final Handler toastHandler = new Handler()    {
+    }
+    private final Handler toastHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg)      {
+        public void handleMessage(Message msg) {
             Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_SHORT).show();
         }
-    };    
+    };
 }
 */
 }
