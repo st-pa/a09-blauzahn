@@ -197,6 +197,7 @@ extends SQLiteOpenHelper {
 		super.close();
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		toast("DBHelper.onCreate");
@@ -259,8 +260,9 @@ extends SQLiteOpenHelper {
 			);
 		} else if (oldVersion == 2 && newVersion == 3) {
 			// create new table for user defined settings
-			// TODO insert default settings when settings table is created
 			db.execSQL(V3.CREATE_TAB_SETTINGS);
+			// insert default settings when settings table is created
+			addSettings(new Settings());
 			// rename bluetooth sessions table
 			db.execSQL(
 				new StringBuffer()
@@ -766,7 +768,8 @@ extends SQLiteOpenHelper {
 	 * export the entire sqlite-database to the given destination folder.
 	 * creates a file with a datetimestamped name at that folder.
 	 * @param targetFolder {@link String} should end with a {@link #SEPARATOR}.
-	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
+	 * @see <a href="http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database"
+	 * >http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database</a>
 	 */
 	public void dbExport(String targetFolder) {
 		StringBuffer target = new StringBuffer()
@@ -807,12 +810,13 @@ extends SQLiteOpenHelper {
 	 * file, replacing the existing database without
 	 * any consistency check whatsoever.
 	 * @param sourcePath {@link String}
-	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
+	 * @see <a href="http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database"
+	 * >http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database</a>
 	 */
 	public void dbImport(String sourcePath) {
 		// first step: close the currently connected db
 		this.close();
-		// TODO second step: import db
+		// second step: import db
 		StringBuffer target = getDBSourcePath();
 		try {
 			FileInputStream fis = new FileInputStream(new File(sourcePath));
@@ -830,7 +834,6 @@ extends SQLiteOpenHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		// third step: reopen database connection
 		this.init();
 	}

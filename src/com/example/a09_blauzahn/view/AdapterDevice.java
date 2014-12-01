@@ -24,8 +24,7 @@ extends AbstractAdapter<Device> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
-		TextView label1;
-		TextView label2;
+		TextView label;
 		TextView names;
 	}
 
@@ -49,8 +48,7 @@ extends AbstractAdapter<Device> {
 				false
 			);
 			holder = new ViewHolder();
-			holder.label1 = (TextView) convertView.findViewById(R.id.tvList2label1);
-			holder.label2 = (TextView) convertView.findViewById(R.id.tvList2label2);
+			holder.label = (TextView) convertView.findViewById(R.id.tvList2label);
 			holder.names  = (TextView) convertView.findViewById(R.id.tvList2names);
 			convertView.setTag(holder);
 		} else {
@@ -58,29 +56,18 @@ extends AbstractAdapter<Device> {
 		}
 		// now set the view holder's values
 		Device d = this.getItem(position);
-		holder.label1.setText(
+		holder.label.setText(
 			String.format(
-				"#%d (x%d) Ø%.2fdb first:%s",
+				"#%d (x%d) Ø%.2fdb first:%s\n[%s] last:%s",
 				position,
 				d.getSessionCount(),
 				d.getAvgRssi(),
-				AppBlauzahn.DATETIMESTAMP.format(d.getFirstTime())
-			)
-		);
-		holder.label2.setText(
-			String.format(
-				"[%s] last:%s",
+				AppBlauzahn.DATETIMESTAMP.format(d.getFirstTime()),
 				d.getAddress(),
 				AppBlauzahn.DATETIMESTAMP.format(d.getLastTime())
 			)
 		);
-/*		holder.id.setText(
-			String.format(
-				"#%d",
-				position
-			)
-		);
-*/		StringBuffer names = new StringBuffer();
+		StringBuffer names = new StringBuffer();
 		Iterator<String> iterator = d.getNames().iterator();
 		while (iterator.hasNext()) {
 			String name = iterator.next();
