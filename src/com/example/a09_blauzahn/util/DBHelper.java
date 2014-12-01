@@ -38,16 +38,16 @@ extends SQLiteOpenHelper {
 	////////////////////////////////////////////
 
 	public static final String NULL_VALUE = "--";
+	/** the file system's default file separator (e.g. '/' or '\'). */
 	public static final String SEPARATOR = System.getProperty("file.separator");
+	/** file name the database is stored in. */
+	public static final String DB_NAME = "blauzahn";
 
 	////////////////////////////////////////////
 	// local constants
 	////////////////////////////////////////////
-
-	/** file name the database is stored in. */
-	private static final String DB_NAME = "blauzahn";
 	/** internal version of the data model. */
-	private static final int DB_VERSION = 3;
+	protected static final int DB_VERSION = 3;
 
 	/**
 	 * utility class containing sql table and column names for version 1.
@@ -763,17 +763,14 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * export the entire sqlite-database to external storage.
+	 * export the entire sqlite-database to the given destination folder.
+	 * creates a file with a datetimestamped name at that folder.
+	 * @param targetFolder {@link String} should end with a {@link #SEPARATOR}.
 	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
 	 */
-	public void dbExport() {
-		StringBuffer targetFolder = new StringBuffer()
-		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
-		.append(SEPARATOR)
-		.append(DB_NAME);
+	public void dbExport(String targetFolder) {
 		StringBuffer target = new StringBuffer()
 		.append(targetFolder)
-		.append(SEPARATOR)
 		.append(AppBlauzahn.datetimestamp())
 		.append("-")
 		.append(DB_NAME);
@@ -784,7 +781,7 @@ extends SQLiteOpenHelper {
 			target.toString()
 		);
 		try {
-			File folder = new File(targetFolder.toString());
+			File folder = new File(targetFolder);
 			if (!folder.exists()) {
 				folder.mkdirs();
 			}
@@ -810,8 +807,31 @@ extends SQLiteOpenHelper {
 	 * file, replacing the existing database without
 	 * any consistency check whatsoever.
 	 * @param sourcePath {@link String}
+	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
 	 */
 	public void dbImport(String sourcePath) {
-		// TODO import db
+		// first step: close the currently connected db
+		this.close();
+		// TODO second step: import db
+		StringBuffer target = getDBSourcePath();
+		try {
+			FileInputStream fis = new FileInputStream(new File(sourcePath));
+			FileOutputStream fos = new FileOutputStream(new File(target.toString()));
+			FileChannel src = fis.getChannel();
+			FileChannel dst = fos.getChannel();
+			dst.transferFrom(src, 0, src.size());
+			fis.close();
+			fos.close();
+			src.close();
+			dst.close();
+			toast("database imported successfully.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// third step: reopen database connection
+		this.init();
 	}
 }

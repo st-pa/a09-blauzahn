@@ -1,5 +1,9 @@
 package com.example.a09_blauzahn;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -15,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,6 +45,14 @@ extends AppTTS {
 	public static final int LIST_TYPE_SIGHTINGS = 0;
 	public static final int LIST_TYPE_DEVICES   = 1;
 	public static final int LIST_TYPE_SESSIONS  = 2;
+	public static final String TARGET_FOLDER = new StringBuffer()
+		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
+		.append(DBHelper.SEPARATOR)
+		.append(DBHelper.DB_NAME)
+		.append(DBHelper.SEPARATOR)
+		.toString()
+	;
+
 
 	/** tag for LogCat-messages. */
 	public static final String TAG = "Blauzahn";
@@ -125,6 +138,7 @@ extends AppTTS {
 		this.btConnect = btConnect;
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
+			dbImportFromAssets("2012.01.31-21.44.08-blauzahn.sqlite");
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (settings == null) settings = db.getSettings();
@@ -344,5 +358,36 @@ extends AppTTS {
 		this.settings.setId(
 			this.db.addSettings(this.settings)
 		);
+	}
+
+	/**
+	 * copy the given file or folder from app's assets to sd card.
+	 * @param source {@link String} the source file's name in the app's assets
+	 * @param target {@link String} complete target path on sd card.
+	 */
+	private void copyAssetToSD(String source,String target) {
+		try {
+			InputStream is = this.getAssets().open(source);
+			OutputStream os = new FileOutputStream(target);
+			byte[] buffer = new byte[1024];
+			int read;
+			while ((read = is.read(buffer)) != -1) {
+				os.write(buffer,0,read);
+			}
+			is.close();
+			os.flush();
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void dbExport() {
+		db.dbExport(TARGET_FOLDER);
+	}
+
+	private void dbImportFromAssets(String fileName) {
+		copyAssetToSD(fileName,TARGET_FOLDER + fileName);
+		db.dbImport(fileName);
 	}
 }
