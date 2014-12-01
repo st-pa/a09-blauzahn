@@ -50,7 +50,7 @@ extends AbstractAdapter<Session> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Session s = list.get(position);
+		Session s = this.getItem(position);
 		holder.id.setText(
 			String.format(
 				"#%d (%.1f sec)",

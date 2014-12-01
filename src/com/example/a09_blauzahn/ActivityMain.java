@@ -50,7 +50,7 @@ implements OnClickListener {
 	private Button btShowSightings;
 	private Button btShowDevices;
 	private Button btShowSessions;
-//	private Button btClose;
+	private Button btExport;
 	private CheckBox cbWifi;
 	private CheckBox cbAuto;
 
@@ -72,6 +72,7 @@ implements OnClickListener {
 		btShowSightings = (Button) findViewById(R.id.btShowSightings);
 		btShowDevices   = (Button) findViewById(R.id.btShowDevices);
 		btShowSessions  = (Button) findViewById(R.id.btShowSessions);
+		btExport       = (Button) findViewById(R.id.btExport);
 
 		app = (AppBlauzahn) getApplication();
 		app.init(this,tvLabel,btConnect);
@@ -87,6 +88,7 @@ implements OnClickListener {
 		btShowSightings.setOnClickListener(this);
 		btShowDevices  .setOnClickListener(this);
 		btShowSessions .setOnClickListener(this);
+		btExport       .setOnClickListener(this);
 
 		cbAuto = (CheckBox) findViewById(R.id.cbAutoScan);
 		cbWifi = (CheckBox) findViewById(R.id.cbWifi);
@@ -191,14 +193,30 @@ implements OnClickListener {
 			clickedCbAuto();
 		} else if (v == cbWifi) {
 			clickedCbWifi();
+		} else if (v == btExport) {
+			clickedBtExport();
 		}
 	}
 
-	private void clickedCbWifi() {
+	/**
+	 * react to click on {@link #btExport} by exporting
+	 * the entire database to external storage.
+	 */
+	private void clickedBtExport() {
 		// TODO Auto-generated method stub
 	}
 
+	/** react to click on {@link #cbWifi} by updating settings. */
+	private void clickedCbWifi() {
+		this.app.settings.setWifiOn(this.cbWifi.isChecked());
+		this.app.updateSettings();
+		// TODO Auto-generated method stub
+	}
+
+	/** react to click on {@link #cbAuto} by updating settings. */
 	private void clickedCbAuto() {
+		this.app.settings.setBtAuto(this.cbAuto.isChecked());
+		this.app.updateSettings();
 		// TODO Auto-generated method stub
 	}
 

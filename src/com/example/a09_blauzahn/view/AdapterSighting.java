@@ -49,7 +49,7 @@ extends AbstractAdapter<Sighting> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Sighting s = list.get(position);
+		Sighting s = this.getItem(position);
 		holder.label.setText(
 			String.format(
 				"#%d (%d) %s [%s] %ddb",

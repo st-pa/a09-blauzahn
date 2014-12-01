@@ -10,6 +10,7 @@ import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -76,6 +77,7 @@ extends AppTTS {
 	// local fields
 	////////////////////////////////////////////
 
+	protected ComponentName service;
 	/** for easier access to the database. */
 	protected DBHelper db;
 	/** for convenience. */
@@ -94,6 +96,7 @@ extends AppTTS {
 	protected Settings settings;
 	/** label for showing status of bluetooth and wifi. */
 	protected TextView tvLabel;
+	/** utility pointer to the main activity's connect button. */
 	protected Button btConnect;
 
 	////////////////////////////////////////////
@@ -101,9 +104,16 @@ extends AppTTS {
 	////////////////////////////////////////////
 
 	@Override
+	public void onCreate() {
+		super.onCreate();
+		service = startService(new Intent(this,ServiceScan.class));
+	}
+
+	@Override
 	public void onTerminate() {
 		db.close();
 		disconnect();
+		stopService(new Intent(this,ServiceScan.class));
 		super.onTerminate();
 	}
 
@@ -317,5 +327,17 @@ extends AppTTS {
 			br = null;
 		}
 		showStatus();
+	}
+
+	/**
+	 * calls {@link Settings#setValidFrom(Date)} with the current
+	 * time and writes the settings to the database and updates
+	 * the id value of the settings.
+	 */
+	public void updateSettings() {
+		this.settings.setValidFrom(new Date());
+		this.settings.setId(
+			this.db.addSettings(this.settings)
+		);
 	}
 }

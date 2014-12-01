@@ -105,12 +105,27 @@
                 android:text="@string/cbAutoString" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/btExport"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:height="24dp"
+                android:padding="6dp"
+                android:text="@string/btExport"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"

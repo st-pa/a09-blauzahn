@@ -18,14 +18,17 @@
         <CheckBox
             android:id="@+id/cbWifi"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cbWifi" />
+            android:layout_height="32dp"
+            android:height="32dp"
+            android:text="@string/cbWifi"
+            android:textSize="12sp" />
 
         <CheckBox
             android:id="@+id/cbAutoScan"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cbAutoString" />
+            android:layout_height="32dp"
+            android:text="@string/cbAutoString"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -38,7 +41,7 @@
             android:layout_width="148dp"
             android:layout_height="wrap_content"
             android:text="@string/tvLog"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -115,6 +118,16 @@
                 android:padding="6dp"
                 android:text="@string/btShowSessions"
                 android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btExport"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:height="24dp"
+                android:padding="6dp"
+                android:text="@string/btExport"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
     </LinearLayout>

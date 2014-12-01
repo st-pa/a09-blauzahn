@@ -6,8 +6,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 
-import com.example.a09_blauzahn.model.Sighting;
-
 /**
  * abstract ancestor of listview adapters,
  * in order to avoid code duplication.
@@ -23,9 +21,6 @@ extends ArrayAdapter<T> {
 	/** for convenience, store the {@link LayoutInflater}. */
 	protected static LayoutInflater inflater;
 
-	/** a {@link List} of the {@link Sighting} instances to be displayed. */
-	protected List<T> list;
-
 	/** R.id of the layout for this adapter. */
 	protected int layout;
 
@@ -37,8 +32,5 @@ extends ArrayAdapter<T> {
 	) {
 		super(context,layout,list);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.list = list;
 	}
-
-
 }

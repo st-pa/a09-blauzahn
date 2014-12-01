@@ -18,6 +18,7 @@ extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		this.app.toast("service bound");
 		return null;
 	}
 
@@ -26,12 +27,14 @@ extends Service {
 		super.onCreate();
 		this.context = this;
 		this.app = (AppBlauzahn) getApplication();
+		this.app.toast("service created");
 	}
 
 	/**
 	 * start scanning.
 	 */
 	protected void start() {
+		this.app.toast("service started");
 		if (app.settings.isBtOn()) {
 			if (app.settings.isBtAuto()) {
 				timer.scheduleAtFixedRate(
@@ -45,6 +48,11 @@ extends Service {
 		}
 	}
 
+	protected void stop() {
+		timer.cancel();
+		this.app.toast("service stopped");
+	}
+
 	private class TaskScanBluetooth extends TimerTask {
 		@Override
 		public void run() {
@@ -54,15 +62,11 @@ extends Service {
 
 	@Override
 	public void onDestroy() {
+		this.app.toast("service destroyed");
 		super.onDestroy();
 	}
 /*
 public class LocalService extends Service {
-    public void onCreate() {
-          super.onCreate();
-          ctx = this; 
-          startService();
-    }
     private void startService()   {           
         timer.scheduleAtFixedRate(new mainTask(), 0, 5000);
     }

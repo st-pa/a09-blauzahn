@@ -52,7 +52,7 @@ extends AbstractAdapter<Device> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Device d = list.get(position);
+		Device d = this.getItem(position);
 		holder.label1.setText(
 			String.format(
 				"#%d (x%d) Ø%.2fdb first:%s",

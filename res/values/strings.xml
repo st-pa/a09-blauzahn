@@ -16,5 +16,6 @@
     <string name="btShowSessions">sessions</string>
     <string name="cbAutoString">background scan</string>
     <string name="cbWifi">wifi</string>
+    <string name="btExport">export</string>
 
 </resources>

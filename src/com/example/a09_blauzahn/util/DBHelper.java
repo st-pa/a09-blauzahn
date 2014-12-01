@@ -89,17 +89,6 @@ extends SQLiteOpenHelper {
 		protected static final String KEY_BTSIGHTING_ADDRESS = "\"address\"";
 		protected static final String KEY_BTSIGHTING_NAME = "\"name\"";
 		protected static final String KEY_BTSIGHTING_RSSI = "\"rssi\"";
-		// table for bluetooth sessions
-		protected static final String TAB_WIFISESSION = "\"wifiSession\"";
-		protected static final String KEY_WIFISESSION_ID = "\"id\"";
-		protected static final String KEY_WIFISESSION_START = "\"start\"";
-		protected static final String KEY_WIFISESSION_STOP = "\"stop\"";
-		// table for bluetooth sightings
-		protected static final String TAB_WIFISIGHTING = "\"wifiSighting\"";
-		protected static final String KEY_WIFISIGHTING_ID = "\"id\"";
-		protected static final String KEY_WIFISIGHTING_SESSION_ID = "\"sessionId\"";
-		protected static final String KEY_WIFISIGHTING_TIME = "\"time\"";
-		// TODO add columns appropriate to wifi measurements
 		// prepared create statements for sql.
 		protected static final String CREATE_TAB_BTSESSIONS = new StringBuffer()
 			.append("CREATE TABLE ")
@@ -141,6 +130,19 @@ extends SQLiteOpenHelper {
 			.append(")")
 			.toString()
 		;
+	}
+	protected class V4 {
+		// table for wifi sessions
+		protected static final String TAB_WIFISESSION = "\"wifiSession\"";
+		protected static final String KEY_WIFISESSION_ID = "\"id\"";
+		protected static final String KEY_WIFISESSION_START = "\"start\"";
+		protected static final String KEY_WIFISESSION_STOP = "\"stop\"";
+		// table for wifi sightings
+		protected static final String TAB_WIFISIGHTING = "\"wifiSighting\"";
+		protected static final String KEY_WIFISIGHTING_ID = "\"id\"";
+		protected static final String KEY_WIFISIGHTING_SESSION_ID = "\"sessionId\"";
+		protected static final String KEY_WIFISIGHTING_TIME = "\"time\"";
+		// TODO add columns appropriate to wifi measurements
 	}
 
 	////////////////////////////////////////////
@@ -649,11 +651,11 @@ extends SQLiteOpenHelper {
 				.append(V3.KEY_SETTINGS_BT_AUTO).append(",\n\t")
 				.append(V3.KEY_SETTINGS_BT_INTERVAL).append(",\n\t")
 				.append(V3.KEY_SETTINGS_BT_DISABLE).append(",\n\t")
-				.append(V3.KEY_SETTINGS_WIFI_ON).append("\n")
-				.append(V3.KEY_SETTINGS_WIFI_NAME).append("\n")
+				.append(V3.KEY_SETTINGS_WIFI_ON).append(",\n\t")
+				.append(V3.KEY_SETTINGS_WIFI_NAME).append(",\n\t")
 				.append(V3.KEY_SETTINGS_WIFI_AUTO).append(",\n\t")
 				.append(V3.KEY_SETTINGS_WIFI_INTERVAL).append(",\n\t")
-				.append(V3.KEY_SETTINGS_WIFI_DISABLE).append(",\n\t")
+				.append(V3.KEY_SETTINGS_WIFI_DISABLE).append("\n")
 				.append("FROM ").append(V3.TAB_SETTINGS).append("\n")
 				.append("WHERE ").append(V3.KEY_SETTINGS_ID)
 				.append(" = (\n\t")
@@ -697,15 +699,15 @@ extends SQLiteOpenHelper {
 		long result = -1;
 		try {
 			vals.clear();
-			vals.put(V3.KEY_SETTINGS_BT_ON,        settings.isBtOn());
-			vals.put(V3.KEY_SETTINGS_BT_AUTO,      settings.isBtAuto());
-			vals.put(V3.KEY_SETTINGS_BT_DISABLE,   settings.isBtDisable());
+			vals.put(V3.KEY_SETTINGS_BT_ON,        settings.isBtOn() ? 0 : 1);
+			vals.put(V3.KEY_SETTINGS_BT_AUTO,      settings.isBtAuto() ? 0 : 1);
+			vals.put(V3.KEY_SETTINGS_BT_DISABLE,   settings.isBtDisable() ? 0 : 1);
 			vals.put(V3.KEY_SETTINGS_BT_INTERVAL,  settings.getBtInterval());
 			vals.put(V3.KEY_SETTINGS_BT_NAME,      settings.getBtName());
 			vals.put(V3.KEY_SETTINGS_VALID_FROM,   settings.getValidFrom().getTime());
-			vals.put(V3.KEY_SETTINGS_WIFI_ON,      settings.isWifiAuto());
-			vals.put(V3.KEY_SETTINGS_WIFI_AUTO,    settings.isWifiAuto());
-			vals.put(V3.KEY_SETTINGS_WIFI_DISABLE, settings.isWifiDisable());
+			vals.put(V3.KEY_SETTINGS_WIFI_ON,      settings.isWifiAuto() ? 0 : 1);
+			vals.put(V3.KEY_SETTINGS_WIFI_AUTO,    settings.isWifiAuto() ? 0 : 1);
+			vals.put(V3.KEY_SETTINGS_WIFI_DISABLE, settings.isWifiDisable() ? 0 : 1);
 			vals.put(V3.KEY_SETTINGS_WIFI_INTERVAL,settings.getWifiInterval());
 			vals.put(V3.KEY_SETTINGS_WIFI_NAME,    settings.getWifiName());
 			result = db.insert(V3.TAB_SETTINGS,null,vals);
@@ -713,5 +715,15 @@ extends SQLiteOpenHelper {
 			Log.e("SQL",e.toString());
 		}
 		return result;
-	}	
+	}
+
+	/**
+	 * TODO set a new system time and change all timestamps accordingly.
+	 */
+	public void setSystemTime() {
+//		Calendar c = Calendar.getInstance();
+//		c.set(2010, 1, 1, 12, 00, 00);
+//		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//		am.setTime(c.getTimeInMillis());
+	}
 }
