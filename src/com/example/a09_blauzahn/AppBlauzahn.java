@@ -1,5 +1,6 @@
 package com.example.a09_blauzahn;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -367,6 +368,10 @@ extends AppTTS {
 	 */
 	private void copyAssetToSD(String source,String target) {
 		try {
+			// make sure the target folder(s) exist
+			File targetFolder = new File(target);
+			targetFolder.mkdirs();
+			// copy from source to target
 			InputStream is = this.getAssets().open(source);
 			OutputStream os = new FileOutputStream(target);
 			byte[] buffer = new byte[1024];
@@ -374,6 +379,7 @@ extends AppTTS {
 			while ((read = is.read(buffer)) != -1) {
 				os.write(buffer,0,read);
 			}
+			// wrap up nice and neat
 			is.close();
 			os.flush();
 			os.close();
@@ -388,6 +394,6 @@ extends AppTTS {
 
 	private void dbImportFromAssets(String fileName) {
 		copyAssetToSD(fileName,TARGET_FOLDER + fileName);
-		db.dbImport(fileName);
+		db.dbImport(TARGET_FOLDER + fileName);
 	}
 }
