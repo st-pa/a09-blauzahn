@@ -13,6 +13,7 @@ import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
 import com.example.a09_blauzahn.model.Device;
 import com.example.a09_blauzahn.model.Sighting;
+import com.example.a09_blauzahn.util.DBHelper;
 
 /**
  * for displaying {@link Sighting}-information in a customized {@link ListView}.
@@ -42,7 +43,11 @@ extends AbstractAdapter<Device> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(layout, parent, false);
+			convertView = inflater.inflate(
+				this.layout,
+				parent,
+				false
+			);
 			holder = new ViewHolder();
 			holder.label1 = (TextView) convertView.findViewById(R.id.tvList2label1);
 			holder.label2 = (TextView) convertView.findViewById(R.id.tvList2label2);
@@ -79,10 +84,14 @@ extends AbstractAdapter<Device> {
 		Iterator<String> iterator = d.getNames().iterator();
 		while (iterator.hasNext()) {
 			String name = iterator.next();
-			names
-			.append("'")
-			.append(name)
-			.append("'");
+			if (name == null) {
+				names.append(DBHelper.NULL_VALUE);
+			} else {
+				names
+				.append("'")
+				.append(name)
+				.append("'");
+			}
 			if (iterator.hasNext()) {
 				names.append(", ");
 			}

@@ -28,7 +28,7 @@ implements OnClickListener {
 	/** used as result code of the enable-bluetooth-request-action, unique value in this app. */
 	private static final int REQUEST_ENABLE_BT = 42;
 	/** whether or not the button {@link #btResetDb} should be clickable. */
-	private static final boolean ENABLE_RESET  = true;
+	private static final boolean ENABLE_RESET  = false;
 
 	////////////////////////////////////////////
 	// local fields

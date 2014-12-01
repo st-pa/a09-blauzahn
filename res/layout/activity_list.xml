@@ -11,8 +11,9 @@
     <Button
         android:id="@+id/btCloseList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btCloseListSightingComplete" />
+        android:layout_height="32dp"
+        android:text="@string/btCloseListSightingComplete"
+        android:textSize="12sp" />
 
     <ListView
         android:id="@+id/listView"

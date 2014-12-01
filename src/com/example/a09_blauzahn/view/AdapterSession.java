@@ -40,7 +40,11 @@ extends AbstractAdapter<Session> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(layout, parent, false);
+			convertView = inflater.inflate(
+				this.layout,
+				parent,
+				false
+			);
 			holder = new ViewHolder();
 			holder.id = (TextView) convertView.findViewById(R.id.tvList3id);
 			holder.label = (TextView) convertView.findViewById(R.id.tvList3label);
