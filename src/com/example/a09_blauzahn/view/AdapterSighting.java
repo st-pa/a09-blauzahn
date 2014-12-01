@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
-import com.example.a09_blauzahn.model.Sighting;
+import com.example.a09_blauzahn.model.BTSighting;
 import com.example.a09_blauzahn.util.DBHelper;
 
 /**
- * for displaying {@link Sighting}-information in a customized {@link ListView}.
+ * for displaying {@link BTSighting}-information in a customized {@link ListView}.
  * @author stpa
  */
 public class AdapterSighting
-extends AbstractAdapter<Sighting> {
+extends AbstractAdapter<BTSighting> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -30,7 +30,7 @@ extends AbstractAdapter<Sighting> {
 	public AdapterSighting(
 		Context context,
 		int layout,
-		List<Sighting> list
+		List<BTSighting> list
 	) {
 		super(context,layout,list);
 	}
@@ -49,12 +49,12 @@ extends AbstractAdapter<Sighting> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Sighting s = this.getItem(position);
+		BTSighting s = this.getItem(position);
 		holder.label.setText(
 			String.format(
 				"#%d (%d) %s [%s] %ddb",
 				s.getId(),
-				s.getSessionId(),
+				s.getBTSessionId(),
 				AppBlauzahn.DATETIMESTAMP.format(
 					s.getTime()
 				),

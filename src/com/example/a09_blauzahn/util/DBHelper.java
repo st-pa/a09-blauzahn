@@ -25,8 +25,8 @@ import android.widget.Toast;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.model.Device;
-import com.example.a09_blauzahn.model.Session;
-import com.example.a09_blauzahn.model.Sighting;
+import com.example.a09_blauzahn.model.BTSession;
+import com.example.a09_blauzahn.model.BTSighting;
 
 /**
  * @author stpa
@@ -381,10 +381,10 @@ extends SQLiteOpenHelper {
 	/**
 	 * adds a new row to the bluetooth session-table
 	 * using only the start time value and returns the autoinced id.
-	 * @param session {@link Session}
+	 * @param session {@link BTSession}
 	 * @return {@link Long}
 	 */
-	public long addBTSession(Session session) {
+	public long addBTSession(BTSession session) {
 		init();
 		long result = -1;
 		try {
@@ -400,10 +400,10 @@ extends SQLiteOpenHelper {
 
 	/**
 	 * adds a new row to the bluetooth sightings-table and returns the autoinced id.
-	 * @param sighting {@link Sighting}
+	 * @param sighting {@link BTSighting}
 	 * @return {@link Long}
 	 */
-	public long addBTSighting(Sighting sighting) {
+	public long addBTSighting(BTSighting sighting) {
 		init();
 		long result = -1;
 		try {
@@ -411,7 +411,7 @@ extends SQLiteOpenHelper {
 			vals.put(V3.KEY_BTSIGHTING_ADDRESS,sighting.getAddress());
 			vals.put(V3.KEY_BTSIGHTING_NAME,sighting.getName());
 			vals.put(V3.KEY_BTSIGHTING_RSSI,sighting.getRssi());
-			vals.put(V3.KEY_BTSIGHTING_SESSION_ID,sighting.getSessionId());
+			vals.put(V3.KEY_BTSIGHTING_SESSION_ID,sighting.getBTSessionId());
 			vals.put(V3.KEY_BTSIGHTING_TIME,sighting.getTime().getTime());
 			result = db.insert(V3.TAB_BTSIGHTING,null,vals);
 		} catch (SQLiteException e) {
@@ -422,9 +422,9 @@ extends SQLiteOpenHelper {
 
 	/**
 	 * updates the stop time of the given bluetooth session.
-	 * @param sighting {@link Session}
+	 * @param sighting {@link BTSession}
 	 */
-	public void setBTSession(Session session) {
+	public void setBTSession(BTSession session) {
 		init();
 		try {
 			db.execSQL(
@@ -450,11 +450,11 @@ extends SQLiteOpenHelper {
 	 * gets a list of all bluetooth device sightings.
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
-	 * @return {@link List}<{@link Sighting}>
+	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<Sighting> getListBTSightings(int limit) {
+	public List<BTSighting> getListBTSightings(int limit) {
 		init();
-		List<Sighting> result = new ArrayList<Sighting>();
+		List<BTSighting> result = new ArrayList<BTSighting>();
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
@@ -474,7 +474,7 @@ extends SQLiteOpenHelper {
 			);
 			while (c.moveToNext()) {
 				result.add(
-					new Sighting(
+					new BTSighting(
 						c.getLong(0),
 						c.getLong(1),
 						new Date(c.getLong(2)),
@@ -524,7 +524,7 @@ extends SQLiteOpenHelper {
 	 * gets a list of all unique sighted bluetooth devices (addresses).
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
-	 * @return {@link List}<{@link Sighting}>
+	 * @return {@link List}<{@link BTSighting}>
 	 */
 	public List<Device> getListBTDevices(int limit) {
 		init();
@@ -570,11 +570,11 @@ extends SQLiteOpenHelper {
 	 * gets a list of all bluetooth sessions.
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
-	 * @return {@link List}<{@link Session}>
+	 * @return {@link List}<{@link BTSession}>
 	 */
-	public List<Session> getListBTSessions(int limit) {
+	public List<BTSession> getListBTSessions(int limit) {
 		init();
-		List<Session> result = new ArrayList<Session>();
+		List<BTSession> result = new ArrayList<BTSession>();
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
@@ -591,9 +591,9 @@ extends SQLiteOpenHelper {
 			);
 			while (c.moveToNext()) {
 				long sessionId = c.getLong(0);
-				List<Sighting> sightings = getBTSightingsInSession(sessionId);
+				List<BTSighting> sightings = getBTSightingsInSession(sessionId);
 				result.add(
-					new Session(
+					new BTSession(
 						sessionId,
 						new Date(c.getLong(1)),
 						new Date(c.getLong(2)),
@@ -611,11 +611,11 @@ extends SQLiteOpenHelper {
 	/**
 	 * count the bluetooth sightings in the given bluetooth session.
 	 * @param sessionId {@loink Long}
-	 * @return {@link List}<{@link Sighting}>
+	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<Sighting> getBTSightingsInSession(long sessionId) {
+	public List<BTSighting> getBTSightingsInSession(long sessionId) {
 		init();
-		List<Sighting> result = new ArrayList<Sighting>();
+		List<BTSighting> result = new ArrayList<BTSighting>();
 		try {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
@@ -634,7 +634,7 @@ extends SQLiteOpenHelper {
 			);
 			while (c.moveToNext()) {
 				result.add(
-					new Sighting(
+					new BTSighting(
 						c.getLong(0),
 						sessionId,
 						new Date(c.getLong(1)),

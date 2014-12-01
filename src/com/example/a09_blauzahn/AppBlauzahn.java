@@ -26,8 +26,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a09_blauzahn.model.Session;
-import com.example.a09_blauzahn.model.Sighting;
+import com.example.a09_blauzahn.model.BTSession;
+import com.example.a09_blauzahn.model.BTSighting;
 import com.example.a09_blauzahn.util.DBHelper;
 import com.example.a09_blauzahn.util.Settings;
 import com.example.aTTS.AppTTS;
@@ -100,7 +100,7 @@ extends AppTTS {
 	/** for collecting log messages. */
 	protected StringBuffer log = new StringBuffer();
 	/** informationen about the currently running bluetooth-session. */
-	protected Session session;
+	protected BTSession session;
 	/** application-wide bluetooth adapter to avoid reinitializations. */
 	protected BluetoothAdapter ba;
 	/** application-wide broadcast receiver to avoid reinitializations. */
@@ -250,7 +250,7 @@ extends AppTTS {
 								log("error: double discovery session");
 							}
 							Date now = new Date();
-							session = new Session(-1,now,now,null);
+							session = new BTSession(-1,now,now,null);
 							session.setId(db.addBTSession(session));
 						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 							log("discovery finished");
@@ -275,7 +275,7 @@ extends AppTTS {
 								device.getName(),
 								rssi
 							);
-							Sighting s = new Sighting(
+							BTSighting s = new BTSighting(
 								-1,
 								session.getId(),
 								now,

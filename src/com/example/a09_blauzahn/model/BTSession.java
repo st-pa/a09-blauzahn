@@ -6,26 +6,26 @@ import java.util.List;
 
 import com.example.a09_blauzahn.util.DBHelper;
 
-public class Session {
+public class BTSession {
 
 	private long id;
 	private Date start;
 	private Date stop;
-	private List<Sighting> sightings;
+	private List<BTSighting> btSightings;
 
 	/**
 	 * Constructor.
 	 * @param id {@link Long}
 	 * @param start {@link Date}
 	 * @param stop {@link Date}
-	 * @param sightings {@link List}<Sighting> optional List of sightings
+	 * @param btSightings {@link List}<Sighting> optional List of bluetooth sightings
 	 */
-	public Session(long id, Date start, Date stop, List<Sighting> sightings) {
+	public BTSession(long id, Date start, Date stop, List<BTSighting> btSightings) {
 		super();
 		this.id = id;
 		this.start = start;
 		this.stop = stop;
-		this.sightings = sightings;
+		this.btSightings = btSightings;
 	}
 
 	/**
@@ -71,24 +71,24 @@ public class Session {
 	}
 
 	/**
-	 * @return the countSightings
+	 * @return the number of bluetooth sightings
 	 */
-	public final long getSightingsCount() {
-		return (sightings == null) ? 0 : sightings.size();
+	public final long getBTSightingsCount() {
+		return (btSightings == null) ? 0 : btSightings.size();
 	}
 
 	/**
 	 * a comma-separated {@link String} containing
 	 * the names (not the addresses!) of the sighted
-	 * devices during this session.
+	 * devices during this bluetooth session.
 	 * @return {@link String}
 	 */
-	public final String getSightingsNames() {
+	public final String getBTSightingsNames() {
 		StringBuffer s = new StringBuffer();
-		if (sightings != null) {
-			Iterator<Sighting> iterator = sightings.iterator();
+		if (btSightings != null) {
+			Iterator<BTSighting> iterator = btSightings.iterator();
 			while (iterator.hasNext()) {
-				Sighting sighting = iterator.next();
+				BTSighting sighting = iterator.next();
 				String name = sighting.getName();
 				if (name == null) {
 					s.append(DBHelper.NULL_VALUE);
@@ -106,10 +106,10 @@ public class Session {
 	}
 
 	/**
-	 * @param sightings the sightings to set
+	 * @param btSightings the bluetooth sightings to set
 	 */
-	public final void setSightings(List<Sighting> sightings) {
-		this.sightings = sightings;
+	public final void setBTSightings(List<BTSighting> btSightings) {
+		this.btSightings = btSightings;
 	}
 
 	/** gives {@link #stop}-time minus {@link #start}-time. */

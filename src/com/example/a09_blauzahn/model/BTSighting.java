@@ -2,20 +2,20 @@ package com.example.a09_blauzahn.model;
 
 import java.util.Date;
 
-public class Sighting {
+public class BTSighting {
 
 	private long id;
-	private long sessionId;
+	private long btSessionId;
 	private Date time;
 	private String name;
 	private String address;
 	private long rssi;
 
 	/** constructor. */
-	public Sighting(long id, long sessionId, Date time, String name, String address, long rssi) {
+	public BTSighting(long id, long btSessionId, Date time, String name, String address, long rssi) {
 		super();
 		this.id = id;
-		this.sessionId = sessionId;
+		this.btSessionId = btSessionId;
 		this.time = time;
 		this.name = name;
 		this.address = address;
@@ -32,8 +32,8 @@ public class Sighting {
 	/**
 	 * @return the id
 	 */
-	public final long getSessionId() {
-		return sessionId;
+	public final long getBTSessionId() {
+		return btSessionId;
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class Sighting {
 	/**
 	 * @param id the id to set
 	 */
-	public final void setSessionId(long sessionId) {
-		this.sessionId = sessionId;
+	public final void setBTSessionId(long btSessionId) {
+		this.btSessionId = btSessionId;
 	}
 
 	/**

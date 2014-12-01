@@ -10,14 +10,14 @@ import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
-import com.example.a09_blauzahn.model.Session;
+import com.example.a09_blauzahn.model.BTSession;
 
 /**
- * for displaying {@link Session}-information in a customized {@link ListView}.
+ * for displaying {@link BTSession}-information in a customized {@link ListView}.
  * @author stpa
  */
 public class AdapterSession
-extends AbstractAdapter<Session> {
+extends AbstractAdapter<BTSession> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -30,7 +30,7 @@ extends AbstractAdapter<Session> {
 	public AdapterSession(
 		Context context,
 		int layout,
-		List<Session> list
+		List<BTSession> list
 	) {
 		super(context,layout,list);
 	}
@@ -54,7 +54,7 @@ extends AbstractAdapter<Session> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Session s = this.getItem(position);
+		BTSession s = this.getItem(position);
 		holder.id.setText(
 			String.format(
 				"#%d (%.1f sec)",
@@ -77,8 +77,8 @@ extends AbstractAdapter<Session> {
 		holder.names.setText(
 			String.format(
 				" %d %s",
-				s.getSightingsCount(),
-				s.getSightingsNames()
+				s.getBTSightingsCount(),
+				s.getBTSightingsNames()
 			)
 		);
 		// and give back the modified view

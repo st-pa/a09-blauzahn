@@ -13,8 +13,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.a09_blauzahn.model.Device;
-import com.example.a09_blauzahn.model.Session;
-import com.example.a09_blauzahn.model.Sighting;
+import com.example.a09_blauzahn.model.BTSession;
+import com.example.a09_blauzahn.model.BTSighting;
 import com.example.a09_blauzahn.view.AdapterDevice;
 import com.example.a09_blauzahn.view.AdapterSession;
 import com.example.a09_blauzahn.view.AdapterSighting;
@@ -107,17 +107,17 @@ implements OnItemClickListener, OnClickListener {
 		if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
 			itemClickDevice((Device) adapter.getItem(position));
 		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
-			itemClickSession((Session) adapter.getItem(position));
+			itemClickSession((BTSession) adapter.getItem(position));
 		} else if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
-			itemClickSighting((Sighting) adapter.getItem(position));
+			itemClickSighting((BTSighting) adapter.getItem(position));
 		}
 	}
 
-	private void itemClickSighting(Sighting item) {
+	private void itemClickSighting(BTSighting item) {
 		// TODO Auto-generated method stub
 	}
 
-	private void itemClickSession(Session item) {
+	private void itemClickSession(BTSession item) {
 		// TODO Auto-generated method stub
 	}
 
