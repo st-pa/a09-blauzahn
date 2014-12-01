@@ -31,6 +31,7 @@ extends ArrayAdapter<T> {
 		List<T> list
 	) {
 		super(context,layout,list);
-		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		AbstractAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.layout = layout;
 	}
 }

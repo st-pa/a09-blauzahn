@@ -46,6 +46,8 @@ extends AppTTS {
 	public static final int LIST_TYPE_SIGHTINGS = 0;
 	public static final int LIST_TYPE_DEVICES   = 1;
 	public static final int LIST_TYPE_SESSIONS  = 2;
+
+	/** folder on the sd card used for exporting the sql database. */
 	public static final String TARGET_FOLDER = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
 		.append(DBHelper.SEPARATOR)
@@ -53,7 +55,6 @@ extends AppTTS {
 		.append(DBHelper.SEPARATOR)
 		.toString()
 	;
-
 
 	/** tag for LogCat-messages. */
 	public static final String TAG = "Blauzahn";
@@ -139,7 +140,7 @@ extends AppTTS {
 		this.btConnect = btConnect;
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
-			dbImportFromAssets("2012.01.31-21.44.08-blauzahn.sqlite");
+//			dbImportFromAssets("2012.01.31-21.44.08-blauzahn.sqlite");
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (settings == null) settings = db.getSettings();
@@ -388,11 +389,20 @@ extends AppTTS {
 		}
 	}
 
+	/**
+	 * export the current database to {@link #TARGET_FOLDER}.
+	 */
 	public void dbExport() {
 		db.dbExport(TARGET_FOLDER);
 	}
 
-	private void dbImportFromAssets(String fileName) {
+	/**
+	 * import the given database file from the app's assets folder
+	 * by first copying it to {@link #TARGET_FOLDER} and from there
+	 * to the location of the current database.
+	 * @param fileName {@link String} a file name in the app's assets folder.
+	 */
+	protected void dbImportFromAssets(String fileName) {
 		copyAssetToSD(fileName,TARGET_FOLDER + fileName);
 		db.dbImport(TARGET_FOLDER + fileName);
 	}
