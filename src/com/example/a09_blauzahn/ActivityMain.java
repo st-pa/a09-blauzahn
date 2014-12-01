@@ -208,7 +208,7 @@ implements OnClickListener {
 	 * the entire database to external storage.
 	 */
 	private void clickedBtExport() {
-		app.db.exportDB();
+		app.db.dbExport();
 	}
 
 	/** react to click on {@link #cbWifi} by updating settings. */

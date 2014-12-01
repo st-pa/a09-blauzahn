@@ -259,6 +259,7 @@ extends SQLiteOpenHelper {
 			);
 		} else if (oldVersion == 2 && newVersion == 3) {
 			// create new table for user defined settings
+			// TODO insert default settings when settings table is created
 			db.execSQL(V3.CREATE_TAB_SETTINGS);
 			// rename bluetooth sessions table
 			db.execSQL(
@@ -745,10 +746,27 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * returns the path to the file wherein the database is stored.
+	 * @return {@link StringBuffer}
+	 */
+	private StringBuffer getDBSourcePath() {
+		return new StringBuffer()
+		.append(Environment.getDataDirectory().getAbsolutePath())
+		.append(SEPARATOR)
+		.append("data")
+		.append(SEPARATOR)
+		.append(AppBlauzahn.class.getPackage().getName())
+		.append(SEPARATOR)
+		.append("databases")
+		.append(SEPARATOR)
+		.append(DB_NAME);
+	}
+
+	/**
 	 * export the entire sqlite-database to external storage.
 	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
 	 */
-	public void exportDB() {
+	public void dbExport() {
 		StringBuffer targetFolder = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
 		.append(SEPARATOR)
@@ -787,16 +805,13 @@ extends SQLiteOpenHelper {
 		}
 	}
 
-	private StringBuffer getDBSourcePath() {
-		return new StringBuffer()
-		.append(Environment.getDataDirectory().getAbsolutePath())
-		.append(SEPARATOR)
-		.append("data")
-		.append(SEPARATOR)
-		.append(AppBlauzahn.class.getPackage().getName())
-		.append(SEPARATOR)
-		.append("databases")
-		.append(SEPARATOR)
-		.append(DB_NAME);
+	/**
+	 * handle with care! this will try to copy the given
+	 * file, replacing the existing database without
+	 * any consistency check whatsoever.
+	 * @param sourcePath {@link String}
+	 */
+	public void dbImport(String sourcePath) {
+		// TODO import db
 	}
 }
