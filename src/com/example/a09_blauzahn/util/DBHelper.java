@@ -33,7 +33,12 @@ import com.example.a09_blauzahn.model.Sighting;
 public class DBHelper
 extends SQLiteOpenHelper {
 
+	////////////////////////////////////////////
+	// global constants
+	////////////////////////////////////////////
+
 	public static final String NULL_VALUE = "--";
+	public static final String SEPARATOR = System.getProperty("file.separator");
 
 	////////////////////////////////////////////
 	// local constants
@@ -48,6 +53,7 @@ extends SQLiteOpenHelper {
 	 * utility class containing sql table and column names for version 1.
 	 * deprecated because of preparations to upgrade to version three.
 	 * @author stpa
+	 * @Deprecated use {@link V3} instead.
 	 */
 	@Deprecated
 	protected static class V1 {
@@ -739,33 +745,31 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * TODO export the entire sqlite-database to external storage.
+	 * export the entire sqlite-database to external storage.
 	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
 	 */
 	public void exportDB() {
-		String separator = System.getProperty("file.separator");
-		StringBuffer target = new StringBuffer()
+		StringBuffer targetFolder = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
-		.append(separator)
+		.append(SEPARATOR)
+		.append(DB_NAME);
+		StringBuffer target = new StringBuffer()
+		.append(targetFolder)
+		.append(SEPARATOR)
 		.append(AppBlauzahn.datetimestamp())
 		.append("-")
 		.append(DB_NAME);
-		StringBuffer source = new StringBuffer()
-		.append(Environment.getDataDirectory().getAbsolutePath())
-		.append(separator)
-		.append("data")
-		.append(separator)
-		.append(AppBlauzahn.class.getPackage().getName())
-		.append(separator)
-		.append("databases")
-		.append(separator)
-		.append(DB_NAME);
+		StringBuffer source = getDBSourcePath();
 		System.out.println(
 			"trying to copy database from\n" +
 			source.toString() + " to\n" +
 			target.toString()
 		);
 		try {
+			File folder = new File(targetFolder.toString());
+			if (!folder.exists()) {
+				folder.mkdirs();
+			}
 			FileInputStream fis = new FileInputStream(new File(source.toString()));
 			FileOutputStream fos = new FileOutputStream(new File(target.toString()));
 			FileChannel src = fis.getChannel();
@@ -781,6 +785,18 @@ extends SQLiteOpenHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+
+	private StringBuffer getDBSourcePath() {
+		return new StringBuffer()
+		.append(Environment.getDataDirectory().getAbsolutePath())
+		.append(SEPARATOR)
+		.append("data")
+		.append(SEPARATOR)
+		.append(AppBlauzahn.class.getPackage().getName())
+		.append(SEPARATOR)
+		.append("databases")
+		.append(SEPARATOR)
+		.append(DB_NAME);
 	}
 }

@@ -3,7 +3,6 @@ package com.example.a09_blauzahn;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +28,7 @@ implements OnClickListener {
 	/** used as result code of the enable-bluetooth-request-action, unique value in this app. */
 	private static final int REQUEST_ENABLE_BT = 42;
 	/** whether or not the button {@link #btResetDb} should be clickable. */
-	private static final boolean ENABLE_RESET  = false;
+	private static final boolean ENABLE_RESET  = true;
 
 	////////////////////////////////////////////
 	// local fields
@@ -216,14 +215,12 @@ implements OnClickListener {
 	private void clickedCbWifi() {
 		this.app.settings.setWifiOn(this.cbWifi.isChecked());
 		this.app.updateSettings();
-		// TODO Auto-generated method stub
 	}
 
 	/** react to click on {@link #cbAuto} by updating settings. */
 	private void clickedCbAuto() {
 		this.app.settings.setBtAuto(this.cbAuto.isChecked());
 		this.app.updateSettings();
-		// TODO Auto-generated method stub
 	}
 
 	private void clickedBtShowSessions() {
@@ -325,7 +322,7 @@ implements OnClickListener {
 	 * add a timestamped message to the app's log.
 	 * @param text {@link String}
 	 */
-	private void log(String text) {
+	protected void log(String text) {
 		app.log(text);
 		tvLog.setText(app.getLog());
 	}
@@ -334,7 +331,7 @@ implements OnClickListener {
 	 * convenience method to call {@link #log(String)}.
 	 * @param s {@link StringBuffer} should not be <code>null</code>.
 	 */
-	private void log(StringBuffer s) {
+	protected void log(StringBuffer s) {
 		log(s.toString());
 	}
 }
