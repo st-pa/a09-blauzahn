@@ -3,6 +3,7 @@ package com.example.a09_blauzahn;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -90,8 +91,13 @@ implements OnClickListener {
 		btShowSessions .setOnClickListener(this);
 		btExport       .setOnClickListener(this);
 
+		// reference checkboxes
 		cbAuto = (CheckBox) findViewById(R.id.cbAutoScan);
 		cbWifi = (CheckBox) findViewById(R.id.cbWifi);
+		// check the checkboxes according to user settings
+		cbAuto.setChecked(this.app.settings.isBtAuto());
+		cbWifi.setChecked(this.app.settings.isWifiOn());
+		// register click listeners AFTER checking to avoid mayhem
 		cbAuto.setOnClickListener(this);
 		cbWifi.setOnClickListener(this);
 
@@ -203,7 +209,7 @@ implements OnClickListener {
 	 * the entire database to external storage.
 	 */
 	private void clickedBtExport() {
-		// TODO Auto-generated method stub
+		app.db.exportDB();
 	}
 
 	/** react to click on {@link #cbWifi} by updating settings. */

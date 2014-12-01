@@ -8,9 +8,14 @@
         android:minSdkVersion="10"
         android:targetSdkVersion="11" />
 
+    <!-- for querying network information. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- for discovering bluetooth devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- for connecting bluetooth devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- for writing database backups to external storage. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".AppBlauzahn"

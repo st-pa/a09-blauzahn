@@ -34,7 +34,7 @@ extends SQLiteOpenHelper {
 	/** file name the database is stored in. */
 	private static final String DB_NAME = "blauzahn";
 	/** internal version of the data model. */
-	private static final int DB_VERSION = 2;
+	private static final int DB_VERSION = 3;
 
 	/**
 	 * utility class containing sql table and column names for version 1.
@@ -729,4 +729,16 @@ extends SQLiteOpenHelper {
 //		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 //		am.setTime(c.getTimeInMillis());
 	}
+
+	/**
+	 * TODO export the entire sqlite-database to external storage.
+	 * @see http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database
+	 */
+	public void exportDB() {
+/*		StringBuffer target = new StringBuffer()
+		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
+		.append(System.getProperty("path.separator"))
+		.append();
+		StringBuffer source = new StringBuffer()
+*/	}
 }
