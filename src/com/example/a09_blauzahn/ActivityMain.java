@@ -97,8 +97,8 @@ implements OnClickListener {
 		if (app.isLogEmpty()) {
 			// the very first log entry
 			log(
-				"there were " + app.db.getMaxSessionId() +
-				" sessions with " + app.db.getMaxSightingId() +
+				"there were " + app.db.getMaxBTSessionId() +
+				" sessions with " + app.db.getMaxBTSightingId() +
 				" sightings so far"
 			);
 		} else {
@@ -121,85 +121,6 @@ implements OnClickListener {
 			app.showStatus();
 		}
 	}
-
-//	/** discover bluetooth devices. */
-//	private void scan() {
-//		if (app.ba.isEnabled()) {
-//			toast("start discovery");
-//			// there should only be one receiver, so check if it's there already
-//			if (app.br == null) {
-//				// create a receiver for bluetooth
-//				app.br = new BroadcastReceiver() {
-//					@Override
-//					public void onReceive(Context context, Intent intent) {
-//						String action = intent.getAction();
-//						log(action);
-//						if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-//							log("discovery started");
-//							if (app.session != null) {
-//								log("error: double discovery session");
-//							}
-//							Date now = new Date();
-//							app.session = new Session(-1,now,now,null);
-//							app.session.setId(app.db.addSession(app.session));
-//						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-//							log("discovery finished");
-//							if (app.session != null) {
-//								Date now = new Date();
-//								app.session.setStop(now);
-//								app.db.setSession(app.session);
-//								app.session = null;
-//							} else log("error: missing discovery session");
-//							btConnect.setEnabled(true);
-//						} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-//							showStatus();
-//						} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-//							Date now = new Date();
-//							BluetoothDevice device = intent
-//							.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
-//							String msg = String.format(
-//								LOCALE,
-//								"found: %s [%s] %ddb",
-//								device.getAddress(),
-//								device.getName(),
-//								rssi
-//							);
-//							Sighting s = new Sighting(
-//								-1,
-//								app.session.getId(),
-//								now,
-//								device.getName(),
-//								device.getAddress(),
-//								rssi
-//							);
-//							s.setId(app.db.addSighting(s));
-//							toast(msg);
-//							Log.d(
-//								TAG,
-//								msg
-//							);
-//		//					if (!ba.getBondedDevices().contains(device)) {
-//		//						doPairDevice(device);
-//		//					}
-//						}
-//						showStatus();
-//					}
-//				};
-//				registerReceiver(app.br,new IntentFilter(BluetoothDevice.ACTION_FOUND));
-////				registerReceiver(app.br,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
-////				registerReceiver(app.br,new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED));
-//				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-//				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-//				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-////				registerReceiver(app.br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
-//			}
-//			// start to scan for devices
-//			app.ba.startDiscovery();
-//		} else {
-//			toast("error: expected active adapter");
-//		}
-//	}
 
 	@Override
 	public void onDestroy() {

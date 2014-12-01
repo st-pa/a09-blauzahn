@@ -77,18 +77,29 @@ extends SQLiteOpenHelper {
 		protected static final String KEY_SETTINGS_WIFI_INTERVAL = "\"wifiInterval\"";
 		protected static final String KEY_SETTINGS_WIFI_DISABLE = "\"wifiDisable\"";
 		// table for bluetooth sessions
-		protected static final String TAB_BTSESSION = "\"btsession\"";
+		protected static final String TAB_BTSESSION = "\"btSession\"";
 		protected static final String KEY_BTSESSION_ID = "\"id\"";
 		protected static final String KEY_BTSESSION_START = "\"start\"";
 		protected static final String KEY_BTSESSION_STOP = "\"stop\"";
 		// table for bluetooth sightings
-		protected static final String TAB_BTSIGHTING = "\"btsighting\"";
+		protected static final String TAB_BTSIGHTING = "\"btSighting\"";
 		protected static final String KEY_BTSIGHTING_ID = "\"id\"";
 		protected static final String KEY_BTSIGHTING_SESSION_ID = "\"sessionId\"";
 		protected static final String KEY_BTSIGHTING_TIME = "\"time\"";
 		protected static final String KEY_BTSIGHTING_ADDRESS = "\"address\"";
 		protected static final String KEY_BTSIGHTING_NAME = "\"name\"";
 		protected static final String KEY_BTSIGHTING_RSSI = "\"rssi\"";
+		// table for bluetooth sessions
+		protected static final String TAB_WIFISESSION = "\"wifiSession\"";
+		protected static final String KEY_WIFISESSION_ID = "\"id\"";
+		protected static final String KEY_WIFISESSION_START = "\"start\"";
+		protected static final String KEY_WIFISESSION_STOP = "\"stop\"";
+		// table for bluetooth sightings
+		protected static final String TAB_WIFISIGHTING = "\"wifiSighting\"";
+		protected static final String KEY_WIFISIGHTING_ID = "\"id\"";
+		protected static final String KEY_WIFISIGHTING_SESSION_ID = "\"sessionId\"";
+		protected static final String KEY_WIFISIGHTING_TIME = "\"time\"";
+		// TODO add columns appropriate to wifi measurements
 		// prepared create statements for sql.
 		protected static final String CREATE_TAB_BTSESSIONS = new StringBuffer()
 			.append("CREATE TABLE ")
@@ -290,11 +301,11 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * gets the maximum id value in the session table,
+	 * gets the maximum id value in the bluetooth session table,
 	 * which should be identical to the row count.
 	 * @return {@link Integer}
 	 */
-	public int getMaxSessionId() {
+	public int getMaxBTSessionId() {
 		init();
 		int result = -1;
 		try {
@@ -318,11 +329,11 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * gets the maximum id value in the sighting table,
+	 * gets the maximum id value in the bluetooth sighting table,
 	 * which should be identical to the row count.
 	 * @return {@link Integer}
 	 */
-	public int getMaxSightingId() {
+	public int getMaxBTSightingId() {
 		init();
 		int result = -1;
 		try {
@@ -346,12 +357,12 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * adds a new row to the session-table using only the start time value
-	 * and returns the autoinced id.
+	 * adds a new row to the bluetooth session-table
+	 * using only the start time value and returns the autoinced id.
 	 * @param session {@link Session}
 	 * @return {@link Long}
 	 */
-	public long addSession(Session session) {
+	public long addBTSession(Session session) {
 		init();
 		long result = -1;
 		try {
@@ -366,11 +377,11 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * adds a new row to the sightings-table and returns the autoinced id.
+	 * adds a new row to the bluetooth sightings-table and returns the autoinced id.
 	 * @param sighting {@link Sighting}
 	 * @return {@link Long}
 	 */
-	public long addSighting(Sighting sighting) {
+	public long addBTSighting(Sighting sighting) {
 		init();
 		long result = -1;
 		try {
@@ -388,10 +399,10 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * updates the stop time of the given session.
+	 * updates the stop time of the given bluetooth session.
 	 * @param sighting {@link Session}
 	 */
-	public void setSession(Session session) {
+	public void setBTSession(Session session) {
 		init();
 		try {
 			db.execSQL(
@@ -414,12 +425,12 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * gets a list of all device sightings.
+	 * gets a list of all bluetooth device sightings.
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @return {@link List}<{@link Sighting}>
 	 */
-	public List<Sighting> getListSightings(int limit) {
+	public List<Sighting> getListBTSightings(int limit) {
 		init();
 		List<Sighting> result = new ArrayList<Sighting>();
 		try {
@@ -463,7 +474,7 @@ extends SQLiteOpenHelper {
 	 * @param address {@link String}
 	 * @return {@link List}<{@link String}>
 	 */
-	public List<String> getListDeviceNames(String address) {
+	public List<String> getListBTDeviceNames(String address) {
 		init();
 		List<String> result = new ArrayList<String>();
 		try {
@@ -488,12 +499,12 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * gets a list of all unique sighted devices.
+	 * gets a list of all unique sighted bluetooth devices (addresses).
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @return {@link List}<{@link Sighting}>
 	 */
-	public List<Device> getListDevices(int limit) {
+	public List<Device> getListBTDevices(int limit) {
 		init();
 		List<Device> result = new ArrayList<Device>();
 		try {
@@ -518,7 +529,7 @@ extends SQLiteOpenHelper {
 				result.add(
 					new Device(
 						address,
-						getListDeviceNames(address),
+						getListBTDeviceNames(address),
 						new Date(c.getLong(1)),
 						new Date(c.getLong(2)),
 						c.getLong(3),
@@ -534,12 +545,12 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * gets a list of all sessions.
+	 * gets a list of all bluetooth sessions.
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @return {@link List}<{@link Session}>
 	 */
-	public List<Session> getListSessions(int limit) {
+	public List<Session> getListBTSessions(int limit) {
 		init();
 		List<Session> result = new ArrayList<Session>();
 		try {
@@ -558,7 +569,7 @@ extends SQLiteOpenHelper {
 			);
 			while (c.moveToNext()) {
 				long sessionId = c.getLong(0);
-				List<Sighting> sightings = getSightingsInSession(sessionId);
+				List<Sighting> sightings = getBTSightingsInSession(sessionId);
 				result.add(
 					new Session(
 						sessionId,
@@ -575,8 +586,12 @@ extends SQLiteOpenHelper {
 		return result;
 	}
 
-	/** count the sightings in the given session. */
-	public List<Sighting> getSightingsInSession(long sessionId) {
+	/**
+	 * count the bluetooth sightings in the given bluetooth session.
+	 * @param sessionId {@loink Long}
+	 * @return {@link List}<{@link Sighting}>
+	 */
+	public List<Sighting> getBTSightingsInSession(long sessionId) {
 		init();
 		List<Sighting> result = new ArrayList<Sighting>();
 		try {

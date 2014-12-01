@@ -220,13 +220,13 @@ extends AppTTS {
 							}
 							Date now = new Date();
 							session = new Session(-1,now,now,null);
-							session.setId(db.addSession(session));
+							session.setId(db.addBTSession(session));
 						} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 							log("discovery finished");
 							if (session != null) {
 								Date now = new Date();
 								session.setStop(now);
-								db.setSession(session);
+								db.setBTSession(session);
 								session = null;
 							} else log("error: missing discovery session");
 							btConnect.setEnabled(true);
@@ -252,7 +252,7 @@ extends AppTTS {
 								device.getAddress(),
 								rssi
 							);
-							s.setId(db.addSighting(s));
+							s.setId(db.addBTSighting(s));
 							toast(msg);
 							Log.d(
 								TAG,

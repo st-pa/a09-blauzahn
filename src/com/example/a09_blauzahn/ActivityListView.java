@@ -58,17 +58,17 @@ implements OnItemClickListener, OnClickListener {
 		if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
 			adapter = new AdapterSighting(
 				this,
-				app.db.getListSightings(LIMIT)
+				app.db.getListBTSightings(LIMIT)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
 			adapter = new AdapterDevice(
 				this,
-				app.db.getListDevices(LIMIT)
+				app.db.getListBTDevices(LIMIT)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
 			adapter = new AdapterSession(
 				this,
-				app.db.getListSessions(LIMIT)
+				app.db.getListBTSessions(LIMIT)
 			);
 		}
 		// set the list adapter
