@@ -393,9 +393,10 @@ extends AppTTS {
 
 	/**
 	 * export the current database to {@link #TARGET_FOLDER}.
+	 * @param string 
 	 */
-	public void dbExport() {
-		db.dbExport(TARGET_FOLDER);
+	public void dbExport(String targetName) {
+		db.dbExport(TARGET_FOLDER,targetName);
 	}
 
 	/**

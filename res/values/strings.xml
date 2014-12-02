@@ -20,6 +20,7 @@
     <string name="btExit">exit</string>
     <string name="btExportYes">yes</string>
     <string name="btExportNo">no, cancel the export</string>
-    <string name="tvExportConfirmation">This will dump the entire database to the SD card as a timestamped .sqlite-file, do you wish to proceed?</string>
+    <string name="tvExportConfirmation">This will dump the entire database to the SD card using the file name you enter below, automatically adding a timestamp and the suffix .sqlite, do you wish to proceed?</string>
+    <string name="etExportTargetHint">enter target file name here</string>
 
 </resources>

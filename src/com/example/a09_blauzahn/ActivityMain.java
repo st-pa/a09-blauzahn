@@ -1,5 +1,7 @@
 package com.example.a09_blauzahn;
 
+import com.example.a09_blauzahn.util.DBHelper;
+
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -55,6 +58,7 @@ implements OnClickListener {
 	private Button btExit;
 	private CheckBox cbWifi;
 	private CheckBox cbAuto;
+	private Dialog dialog;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -219,17 +223,33 @@ implements OnClickListener {
 
 	/**
 	 * react to click on {@link #btExport} by exporting
-	 * the entire database to external storage.
+	 * the entire database to external storage with
+	 * user confirmation dialog.
 	 */
 	private void clickedBtExport() {
-		Dialog dialog = new Dialog(this);
+		// ask for user permission to export entire database to external storage
+		dialog = new Dialog(this);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.setContentView(R.layout.dialog_export);
-		
-		// TODO ask for user permission to export entire database to external storage
-		
+		final Button btExportYes = (Button) dialog.findViewById(R.id.btExportYes);
+		final Button btExportNo = (Button) dialog.findViewById(R.id.btExportNo);
+		final EditText etExportTarget = (EditText) dialog.findViewById(R.id.etExportTarget);
+		etExportTarget.setText(DBHelper.DB_NAME);
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (v == btExportYes) {
+					app.dbExport(
+						etExportTarget.getText().toString()
+					);
+				}
+				dialog.dismiss();
+				dialog = null;
+			}
+		};
+		btExportNo.setOnClickListener(listener);
+		btExportYes.setOnClickListener(listener);
 		dialog.show();
-		app.dbExport();
 	}
 
 	/** react to click on {@link #cbWifi} by updating settings. */

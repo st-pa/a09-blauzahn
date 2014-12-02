@@ -814,12 +814,12 @@ extends SQLiteOpenHelper {
 	 * @see <a href="http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database"
 	 * >http://stackoverflow.com/questions/6540906/android-simple-export-and-import-of-sqlite-database</a>
 	 */
-	public void dbExport(String targetFolder) {
+	public void dbExport(String targetFolder, String targetName) {
 		StringBuffer target = new StringBuffer()
 		.append(targetFolder)
 		.append(AppBlauzahn.datetimestamp())
 		.append("-")
-		.append(DB_NAME);
+		.append(targetName);
 		StringBuffer source = getDBSourcePath();
 		System.out.println(
 			"trying to copy database from\n" +
