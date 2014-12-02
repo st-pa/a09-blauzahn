@@ -136,7 +136,11 @@ implements OnItemClickListener, OnClickListener {
 		// TODO Auto-generated method stub
 	}
 
-	/** react to a click on a listed bluetooth session. */
+	/**
+	 * react to a click on a listed bluetooth session by displaying a dialog with some option buttons.
+	 * @see <a href="http://stackoverflow.com/questions/2644134/android-how-to-create-a-dialog-without-a-title"
+	 * >http://stackoverflow.com/questions/2644134/android-how-to-create-a-dialog-without-a-title</a>
+	 */
 	private void itemClickBTSession(final BTSession item) {
 		dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -190,7 +194,11 @@ implements OnItemClickListener, OnClickListener {
 		dialog.show();
 	}
 
-	/** react to a click on a listed bluetooth device. */
+	/**
+	 * react to a click on a listed bluetooth device by displaying a dialog with some option buttons.
+	 * @see <a href="http://stackoverflow.com/questions/2644134/android-how-to-create-a-dialog-without-a-title"
+	 * >http://stackoverflow.com/questions/2644134/android-how-to-create-a-dialog-without-a-title</a>
+	 */
 	private void itemClickBTDevice(final BTDevice item) {
 		dialog = new Dialog(this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -261,7 +261,7 @@ extends AppTTS {
 		.toString();
 		System.out.println(timestamped);
 		this.log.insert(0,timestamped);
-		
+		tvLabel.setText(log);
 	}
 
 	/** returns the contents of the app's log. */

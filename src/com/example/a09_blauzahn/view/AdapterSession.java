@@ -73,7 +73,7 @@ extends AbstractAdapter<BTSession> {
 				)
 			)
 		);
-		// TODO get names of sighted devices
+		// get names of sighted devices
 		holder.names.setText(
 			String.format(
 				" %d %s",
