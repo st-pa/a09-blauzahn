@@ -457,9 +457,10 @@ extends SQLiteOpenHelper {
 	 * otherwise returns only sightings of the given device
 	 * @param session {@link BTSession} optional filter, can be left <code>null</code>,
 	 * otherwise returns only sightings during the given session
+	 * @param sighting {@link BTSighting}
 	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<BTSighting> getListBTSightings(int limit, BTDevice device, BTSession session) {
+	public List<BTSighting> getListBTSightings(int limit, BTDevice device, BTSession session, BTSighting sighting) {
 		init();
 		List<BTSighting> result = new ArrayList<BTSighting>();
 		try {
@@ -472,12 +473,16 @@ extends SQLiteOpenHelper {
 			.append(V3.KEY_BTSIGHTING_ADDRESS).append(",\n\t")
 			.append(V3.KEY_BTSIGHTING_RSSI).append("\n")
 			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n");
+			// at most one of the three parameters should be different from null
 			if (device != null) {
 				s.append("WHERE ").append(V3.KEY_BTSIGHTING_ADDRESS)
 				.append(" = \"").append(device.getAddress()).append("\"\n");
 			} else if (session != null) {
 				s.append("WHERE ").append(V3.KEY_BTSIGHTING_SESSION_ID)
 				.append(" = ").append(Long.toString(session.getId())).append("\n");
+			} else if (sighting != null) {
+				s.append("WHERE ").append(V3.KEY_BTSIGHTING_ADDRESS)
+				.append(" = \"").append(sighting.getAddress()).append("\"\n");
 			}
 			s.append("ORDER BY ").append(V3.KEY_BTSIGHTING_ID).append(" DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
@@ -592,9 +597,10 @@ extends SQLiteOpenHelper {
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @param device {@link BTDevice} optional filter, can be left <code>null</code>,
 	 * otherwise returns only sessions containing the given device
+	 * @param sighting {@link BTSighting}
 	 * @return {@link List}<{@link BTSession}>
 	 */
-	public List<BTSession> getListBTSessions(int limit,BTDevice device) {
+	public List<BTSession> getListBTSessions(int limit,BTDevice device, BTSighting sighting) {
 		init();
 		List<BTSession> result = new ArrayList<BTSession>();
 		try {
@@ -604,12 +610,18 @@ extends SQLiteOpenHelper {
 			.append("a.").append(V3.KEY_BTSESSION_START).append(",\n\t")
 			.append("a.").append(V3.KEY_BTSESSION_STOP).append("\n")
 			.append("FROM ").append(V3.TAB_BTSESSION).append(" AS a\n");
+			String address = null;
 			if (device != null) {
+				address = device.getAddress();
+			} else if (sighting != null) {
+				address = sighting.getAddress();
+			}
+			if (address != null) {
 				s.append("INNER JOIN ").append(V3.TAB_BTSIGHTING).append(" AS b\n")
 				.append("ON a.").append(V3.KEY_BTSESSION_ID)
 				.append(" = b.").append(V3.KEY_BTSIGHTING_SESSION_ID).append("\n")
 				.append("WHERE b.").append(V3.KEY_BTSIGHTING_ADDRESS)
-				.append(" = \"").append(device.getAddress()).append("\"\n")
+				.append(" = \"").append(address).append("\"\n")
 				.append("GROUP BY 1,2,3\n");
 			}
 			s.append("ORDER BY 1 DESC\n")

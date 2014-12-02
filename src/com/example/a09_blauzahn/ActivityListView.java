@@ -74,10 +74,12 @@ implements OnItemClickListener, OnClickListener {
 			BTDevice device = (BTDevice) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTDEVICE);
 			// retrieve an optional session from bundled intent extras to filter the resulting list
 			BTSession session = (BTSession) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSESSION);
+			// retrieve an optional session from bundled intent extras to filter the resulting list
+			BTSighting sighting = (BTSighting) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSIGHTING);
 			adapter = new AdapterSighting(
 				this,
 				R.layout.list_btsighting,
-				app.db.getListBTSightings(LIMIT,device,session)
+				app.db.getListBTSightings(LIMIT,device,session,sighting)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_BTDEVICES) {
 			// retrieve an optional session from bundled intent extras to filter the resulting list
@@ -90,10 +92,12 @@ implements OnItemClickListener, OnClickListener {
 		} else if (listType == AppBlauzahn.LIST_TYPE_BTSESSIONS) {
 			// retrieve an optional device from bundled intent extras to filter the resulting list
 			BTDevice device = (BTDevice) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTDEVICE);
+			// retrieve an optional sighting from bundled intent extras to filter the resulting list
+			BTSighting sighting = (BTSighting) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSIGHTING);
 			adapter = new AdapterSession(
 				this,
 				R.layout.list_btsession,
-				app.db.getListBTSessions(LIMIT,device)
+				app.db.getListBTSessions(LIMIT,device,sighting)
 			);
 		}
 		// set the list adapter
@@ -132,7 +136,57 @@ implements OnItemClickListener, OnClickListener {
 	}
 
 	/** react to a click on a listed bluetooth sighting. */
-	private void itemClickBTSighting(BTSighting item) {
+	private void itemClickBTSighting(final BTSighting item) {
+		dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.dialog_listitem_btsighting);
+		// display some information about the selected sighting
+		TextView tvBTSightingLabel = (TextView) dialog.findViewById(R.id.tvBTSightingLabel);
+		tvBTSightingLabel.setText(AppBlauzahn.getDescription(item));
+		// define click-behaviour for dialog buttons
+		final Button btBTSightingExit = (Button) dialog.findViewById(R.id.btBTSightingExit);
+		final Button btBTSightingSessions = (Button) dialog.findViewById(R.id.btBTSightingSessions);
+		final Button btBTSightingSightings = (Button) dialog.findViewById(R.id.btBTSightingSightings);
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (v == btBTSightingSessions) {
+					// list all the sessions containing the sighted device
+					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
+					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSESSIONS);
+					intent.putExtra(AppBlauzahn.EXTRA_LIST_BTSIGHTING,item);
+					intent.putExtra(
+						AppBlauzahn.EXTRA_LIST_LABEL,
+						String.format(
+							getString(R.string.labelListBTSessionsDevice),
+							item.getAddress()
+						)
+					);
+					startActivity(intent);
+				} else if (v == btBTSightingSightings) {
+					// list all the sessions containing the sighted device
+					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
+					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSIGHTINGS);
+					intent.putExtra(AppBlauzahn.EXTRA_LIST_BTSIGHTING,item);
+					intent.putExtra(
+						AppBlauzahn.EXTRA_LIST_LABEL,
+						String.format(
+							getString(R.string.labelListBTSightingsDevice),
+							item.getAddress()
+						)
+					);
+					startActivity(intent);
+				}
+				// close the dialog no matter which button was clicked
+				dialog.dismiss();
+				dialog = null;
+			}
+		};
+		btBTSightingExit.setOnClickListener(listener);
+		btBTSightingSessions.setOnClickListener(listener);
+		btBTSightingSightings.setOnClickListener(listener);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
 		// TODO react to a click on a listed bluetooth sighting
 	}
 

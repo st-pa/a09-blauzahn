@@ -49,6 +49,7 @@ extends AppTTS {
 	public static final String EXTRA_LIST_LABEL   = "listLabel";
 	public static final String EXTRA_LIST_BTDEVICE = "listBTDevice";
 	public static final String EXTRA_LIST_BTSESSION = "listBTSession";
+	public static final String EXTRA_LIST_BTSIGHTING = "listBTSighting";
 	public static final int LIST_TYPE_BTSIGHTINGS = 0;
 	public static final int LIST_TYPE_BTDEVICES   = 1;
 	public static final int LIST_TYPE_BTSESSIONS  = 2;
@@ -251,6 +252,21 @@ extends AppTTS {
 		.toString();
 	}
 
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param sighting {@link BTSighting}
+	 * @return {@link String}
+	 */
+	public static String getDescription(BTSighting sighting) {
+		return new StringBuffer()
+		.append("sighting id = ").append(Long.toString(sighting.getId())).append("\n")
+		.append("session id = ").append(Long.toString(sighting.getBTSessionId())).append("\n")
+		.append("time = ").append(DATETIMESTAMP.format(sighting.getTime())).append("\n")
+		.append("name = ").append(DBHelper.nullValue(sighting.getName())).append("\n")
+		.append("address = ").append(sighting.getAddress()).append("\n")
+		.append("rssi = ").append(Long.toString(sighting.getRssi())).append("db\n")
+		.toString();
+	}
 
 	/** make a formatted timestamp. */
 	public static final String timestamp() {
