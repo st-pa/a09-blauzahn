@@ -1,9 +1,9 @@
 package com.example.a09_blauzahn;
 
-import com.example.a09_blauzahn.util.DBHelper;
-
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.a09_blauzahn.util.DBHelper;
 
 /**
  * @author stpa
@@ -215,10 +217,24 @@ implements OnClickListener {
 
 	/**
 	 * react to click on {@link #btExit} by ending this activiy
-	 * (and thus, hopefully, the whole app).
+	 * (and thus, hopefully, the whole app) after asking for
+	 * user confirmation.
 	 */
 	private void clickedBtExit() {
-		finish();
+		AlertDialog.Builder adb = new AlertDialog.Builder(this);
+		adb.setMessage(R.string.dialogExitMessage);
+		adb.setTitle(R.string.dialogExitTitle);
+		adb.setNegativeButton(R.string.dialogExitNo,null);
+		adb.setPositiveButton(
+			R.string.dialogExitYes,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			}
+		);
+		adb.create().show();
 	}
 
 	/**

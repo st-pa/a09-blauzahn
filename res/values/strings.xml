@@ -22,5 +22,9 @@
     <string name="btExportNo">no, cancel the export</string>
     <string name="tvExportConfirmation">This will dump the entire database to the SD card using the file name you enter below, automatically adding a timestamp and the suffix .sqlite, do you wish to proceed?</string>
     <string name="etExportTargetHint">enter target file name here</string>
-
+    <string name="dialogExitMessage">This will close the application. If background scanning was enabled, it will be stopped as well. Do you really wish to leave?</string>
+    <string name="dialogExitTitle">Exit Confirmation</string>
+    <string name="dialogExitYes">yes, please</string>
+    <string name="dialogExitNo">no, not yet</string>
+    
 </resources>

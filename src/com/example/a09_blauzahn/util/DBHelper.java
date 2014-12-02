@@ -819,7 +819,8 @@ extends SQLiteOpenHelper {
 		.append(targetFolder)
 		.append(AppBlauzahn.datetimestamp())
 		.append("-")
-		.append(targetName);
+		.append(targetName)
+		.append(".sqlite");
 		StringBuffer source = getDBSourcePath();
 		System.out.println(
 			"trying to copy database from\n" +
