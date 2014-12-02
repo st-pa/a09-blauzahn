@@ -59,22 +59,22 @@ implements OnItemClickListener, OnClickListener {
 			listType  = extras.getInt(AppBlauzahn.EXTRA_LIST_TYPE);
 		}
 		// decide on which list adapter to use
-		if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
+		if (listType == AppBlauzahn.LIST_TYPE_BTSIGHTINGS) {
 			adapter = new AdapterSighting(
 				this,
-				R.layout.list_sighting,
+				R.layout.list_btsighting,
 				app.db.getListBTSightings(LIMIT)
 			);
-		} else if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
+		} else if (listType == AppBlauzahn.LIST_TYPE_BTDEVICES) {
 			adapter = new AdapterDevice(
 				this,
-				R.layout.list_device,
+				R.layout.list_btdevice,
 				app.db.getListBTDevices(LIMIT)
 			);
-		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
+		} else if (listType == AppBlauzahn.LIST_TYPE_BTSESSIONS) {
 			adapter = new AdapterSession(
 				this,
-				R.layout.list_session,
+				R.layout.list_btsession,
 				app.db.getListBTSessions(LIMIT)
 			);
 		}
@@ -104,24 +104,24 @@ implements OnItemClickListener, OnClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		if (listType == AppBlauzahn.LIST_TYPE_DEVICES) {
-			itemClickDevice((Device) adapter.getItem(position));
-		} else if (listType == AppBlauzahn.LIST_TYPE_SESSIONS) {
-			itemClickSession((BTSession) adapter.getItem(position));
-		} else if (listType == AppBlauzahn.LIST_TYPE_SIGHTINGS) {
-			itemClickSighting((BTSighting) adapter.getItem(position));
+		if (listType == AppBlauzahn.LIST_TYPE_BTDEVICES) {
+			itemClickBTDevice((Device) adapter.getItem(position));
+		} else if (listType == AppBlauzahn.LIST_TYPE_BTSESSIONS) {
+			itemClickBTSession((BTSession) adapter.getItem(position));
+		} else if (listType == AppBlauzahn.LIST_TYPE_BTSIGHTINGS) {
+			itemClickBTSighting((BTSighting) adapter.getItem(position));
 		}
 	}
 
-	private void itemClickSighting(BTSighting item) {
+	private void itemClickBTSighting(BTSighting item) {
 		// TODO Auto-generated method stub
 	}
 
-	private void itemClickSession(BTSession item) {
+	private void itemClickBTSession(BTSession item) {
 		// TODO Auto-generated method stub
 	}
 
-	private void itemClickDevice(Device item) {
+	private void itemClickBTDevice(Device item) {
 		// TODO Auto-generated method stub
 	}
 

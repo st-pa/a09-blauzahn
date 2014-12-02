@@ -43,9 +43,9 @@ extends AppTTS {
 	////////////////////////////////////////////
 
 	public static final String EXTRA_LIST_TYPE  = "listType";
-	public static final int LIST_TYPE_SIGHTINGS = 0;
-	public static final int LIST_TYPE_DEVICES   = 1;
-	public static final int LIST_TYPE_SESSIONS  = 2;
+	public static final int LIST_TYPE_BTSIGHTINGS = 0;
+	public static final int LIST_TYPE_BTDEVICES   = 1;
+	public static final int LIST_TYPE_BTSESSIONS  = 2;
 
 	/** folder on the sd card used for exporting the sql database. */
 	public static final String TARGET_FOLDER = new StringBuffer()

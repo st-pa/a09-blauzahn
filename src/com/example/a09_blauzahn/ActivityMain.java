@@ -287,7 +287,7 @@ implements OnClickListener {
 		);
 		intent.putExtra(
 			AppBlauzahn.EXTRA_LIST_TYPE,
-			AppBlauzahn.LIST_TYPE_SESSIONS
+			AppBlauzahn.LIST_TYPE_BTSESSIONS
 		);
 		startActivity(intent);
 	}
@@ -300,7 +300,7 @@ implements OnClickListener {
 		);
 		intent.putExtra(
 			AppBlauzahn.EXTRA_LIST_TYPE,
-			AppBlauzahn.LIST_TYPE_DEVICES
+			AppBlauzahn.LIST_TYPE_BTDEVICES
 		);
 		startActivity(intent);
 	}
@@ -313,7 +313,7 @@ implements OnClickListener {
 		);
 		intent.putExtra(
 			AppBlauzahn.EXTRA_LIST_TYPE,
-			AppBlauzahn.LIST_TYPE_SIGHTINGS
+			AppBlauzahn.LIST_TYPE_BTSIGHTINGS
 		);
 		startActivity(intent);
 	}
