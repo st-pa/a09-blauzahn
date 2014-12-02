@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,9 +26,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.a09_blauzahn.AppBlauzahn;
-import com.example.a09_blauzahn.model.Device;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.Device;
 
 /**
  * @author stpa
@@ -819,7 +821,7 @@ extends SQLiteOpenHelper {
 		.append(targetFolder)
 		.append(AppBlauzahn.datetimestamp())
 		.append("-")
-		.append(targetName)
+		.append(escape(targetName))
 		.append(".sqlite");
 		StringBuffer source = getDBSourcePath();
 		System.out.println(
@@ -847,6 +849,21 @@ extends SQLiteOpenHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * make the intended file name safe to use with the file system.
+	 * @see <a href="http://stackoverflow.com/questions/1184176/how-can-i-safely-encode-a-string-in-java-to-use-as-a-filename"
+	 * >http://stackoverflow.com/questions/1184176/how-can-i-safely-encode-a-string-in-java-to-use-as-a-filename</a>
+	 */
+	private String escape(String targetName) {
+		try {
+			return URLEncoder.encode(targetName, "UTF-8"); // the conversion option
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		// fall back to the filtering option if conversion fails
+		return targetName.replaceAll("\\W+", "");
 	}
 
 	/**

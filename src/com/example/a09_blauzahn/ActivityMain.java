@@ -374,7 +374,7 @@ implements OnClickListener {
 				startActivityForResult(enableBluetoothIntent,REQUEST_ENABLE_BT);
 			}
 		} else {
-			app.toast("no bluetooth found.");
+			log("no bluetooth found.");
 		}
 		app.showStatus();
 		enable(false);
