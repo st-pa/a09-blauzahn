@@ -190,7 +190,7 @@ implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 //		toast(String.format("button %s clicked.",((Button) v).getText()));
-		app.log("clicked on " + ((TextView) v).getText());
+//		app.log("clicked on " + ((TextView) v).getText());
 		if (v == btConnect) {
 			clickedBtConnect();
 		} else if (v == btDisconnect) {
@@ -379,7 +379,7 @@ implements OnClickListener {
 	/**
 	 * add a timestamped message to the app's log.
 	 * @param text {@link String}
-	 * FIXME sometimes log messages are not visible in textview
+	 * TODO sometimes log messages are not visible in textview
 	 */
 	protected void log(String text) {
 		app.log(text);
