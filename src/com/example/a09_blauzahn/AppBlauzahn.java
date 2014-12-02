@@ -37,6 +37,9 @@ import com.example.aTTS.AppTTS;
 
 /**
  * @author stpa
+ * @see for further reading, 99 pages of "Bluetooth for Programmers"
+ * <a href="http://people.csail.mit.edu/rudolph/Teaching/Articles/BTBook-march.pdf"
+ * >http://people.csail.mit.edu/rudolph/Teaching/Articles/BTBook-march.pdf</a>
  */
 public class AppBlauzahn
 extends AppTTS {
