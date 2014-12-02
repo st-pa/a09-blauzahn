@@ -84,7 +84,7 @@ implements OnClickListener {
 		btExit        = (Button) findViewById(R.id.btExit);
 
 		app = (AppBlauzahn) getApplication();
-		app.init(this,tvLabel,btConnect);
+		app.init(this,tvLabel,tvLog,btConnect);
 		if (app.ba != null) {
 			app.ba.setName(BT_NAME);
 		}
@@ -190,6 +190,7 @@ implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 //		toast(String.format("button %s clicked.",((Button) v).getText()));
+		app.log("clicked on " + ((TextView) v).getText());
 		if (v == btConnect) {
 			clickedBtConnect();
 		} else if (v == btDisconnect) {
@@ -254,6 +255,7 @@ implements OnClickListener {
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				app.log("clicked on " + ((Button) v).getText());
 				if (v == btExportYes) {
 					app.dbExport(
 						etExportTarget.getText().toString()

@@ -117,6 +117,8 @@ extends AppTTS {
 	protected Settings settings;
 	/** label for showing status of bluetooth and wifi. */
 	protected TextView tvLabel;
+	/** label for displaying the log. */
+	protected TextView tvLog;
 	/** utility pointer to the main activity's connect button. */
 	protected Button btConnect;
 
@@ -139,11 +141,19 @@ extends AppTTS {
 	}
 
 	/**
-	 * try to initialize the database. 
+	 * try to initialize the database.
+	 * @param context 
 	 * @param btConnect 
 	 * @param tvLabel
+	 * @param tvLog
 	 */
-	protected void init(Context context, TextView tvLabel, Button btConnect) {
+	protected void init(
+		Context context,
+		TextView tvLabel,
+		TextView tvLog,
+		Button btConnect
+	) {
+		this.tvLog = tvLog;
 		this.tvLabel = tvLabel;
 		this.btConnect = btConnect;
 		if (context != null) {
@@ -261,7 +271,7 @@ extends AppTTS {
 		.toString();
 		System.out.println(timestamped);
 		this.log.insert(0,timestamped);
-		tvLabel.setText(log);
+		tvLog.setText(log);
 	}
 
 	/** returns the contents of the app's log. */

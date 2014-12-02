@@ -214,6 +214,7 @@ implements OnItemClickListener, OnClickListener {
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				app.log("clicked on " + ((Button) v).getText());
 				if (v == btBTDevicePairing) {
 					// TODO try pairing with the bluetooth device
 					app.toast("no bluetooth pairing as of yet, sorry.");
@@ -259,6 +260,7 @@ implements OnItemClickListener, OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		app.log("clicked on " + ((Button) v).getText());
 		if (v == btCloseListView) {
 			finish();
 		}
