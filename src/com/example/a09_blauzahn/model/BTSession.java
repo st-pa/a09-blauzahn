@@ -1,11 +1,9 @@
 package com.example.a09_blauzahn.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-
-import com.example.a09_blauzahn.util.DBHelper;
 
 public class BTSession
 implements Serializable {
@@ -83,31 +81,18 @@ implements Serializable {
 	}
 
 	/**
-	 * a comma-separated {@link String} containing
 	 * the names (not the addresses!) of the sighted
 	 * devices during this bluetooth session.
-	 * @return {@link String}
+	 * @return {@link List}<{@link String}>
 	 */
-	public final String getBTSightingsNames() {
-		StringBuffer s = new StringBuffer();
+	public final List<String> getBTSightingsNames() {
+		List<String> list = new ArrayList<String>();
 		if (btSightings != null) {
-			Iterator<BTSighting> iterator = btSightings.iterator();
-			while (iterator.hasNext()) {
-				BTSighting sighting = iterator.next();
-				String name = sighting.getName();
-				if (name == null) {
-					s.append(DBHelper.NULL_VALUE);
-				} else {
-					s.append("\'")
-					.append(name)
-					.append("\'");
-				}
-				if (iterator.hasNext()) {
-					s.append(", ");
-				}
+			for (BTSighting sighting : btSightings) {
+				list.add(sighting.getName());
 			}
 		}
-		return s.toString();
+		return list;
 	}
 
 	/**

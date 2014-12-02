@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -126,10 +127,12 @@ implements OnItemClickListener, OnClickListener {
 		}
 	}
 
+	/** react to a click on a listed bluetooth sighting. */
 	private void itemClickBTSighting(BTSighting item) {
 		// TODO Auto-generated method stub
 	}
 
+	/** react to a click on a listed bluetooth session. */
 	private void itemClickBTSession(BTSession item) {
 		// TODO Auto-generated method stub
 	}
@@ -137,7 +140,12 @@ implements OnItemClickListener, OnClickListener {
 	/** react to a click on a listed bluetooth device. */
 	private void itemClickBTDevice(final BTDevice item) {
 		dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.dialog_listitem_btdevice);
+		// display some information about the selected device
+		TextView tvBTDeviceLabel = (TextView) dialog.findViewById(R.id.tvBTDeviceLabel);
+		tvBTDeviceLabel.setText(AppBlauzahn.getDescription(item));
+		// define click-behaviour for dialog buttons
 		final Button btBTDeviceExit = (Button) dialog.findViewById(R.id.btBTDeviceExit);
 		final Button btBTDevicePairing = (Button) dialog.findViewById(R.id.btBTDevicePairing);
 		final Button btBTDeviceSessions = (Button) dialog.findViewById(R.id.btBTDeviceSessions);

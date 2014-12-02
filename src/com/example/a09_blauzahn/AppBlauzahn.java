@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,6 +28,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
 import com.example.a09_blauzahn.util.DBHelper;
@@ -65,7 +68,7 @@ extends AppTTS {
 	/** time-format for use in timestamps. */
 	public static final SimpleDateFormat TIMESTAMP = new SimpleDateFormat("HH:mm:ss,SS ",LOCALE);
 	/** date/time-format for use in timestamps. */
-	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss",LOCALE);
+	public static final SimpleDateFormat DATETIMESTAMP = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss",LOCALE);
 
 	////////////////////////////////////////////
 	// local constants
@@ -202,6 +205,22 @@ extends AppTTS {
 			s.append("no network information found.");
 		}
 		return s.toString();
+	}
+
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param device {@link BTDevice}
+	 * @return {@link String}
+	 */
+	public static final String getDescription(BTDevice device) {
+		return new StringBuffer()
+		.append(String.format("average signal strength = %.1fdb\n",device.getAvgRssi()))
+		.append("number of sessions = ").append(device.getSessionCount()).append("\n")
+		.append("known names = ").append(AppBlauzahn.getNameListAsText(device.getNames())).append("\n")
+		.append("address = [").append(device.getAddress()).append("]\n")
+		.append("first encounter = ").append(DATETIMESTAMP.format(device.getFirstTime())).append("\n")
+		.append("last encounter = ").append(DATETIMESTAMP.format(device.getLastTime())).append("\n")
+		.toString();
 	}
 
 	/** make a formatted timestamp. */
@@ -410,5 +429,33 @@ extends AppTTS {
 	protected void dbImportFromAssets(String fileName) {
 		copyAssetToSD(fileName,TARGET_FOLDER + fileName);
 		db.dbImport(TARGET_FOLDER + fileName);
+	}
+
+	/**
+	 * a comma-separated {@link String} containing
+	 * the names (not the addresses!) of the sighted
+	 * devices during this bluetooth session.
+	 * @param names {@link List}<{@link String}> list of names that can be <code>null</code>
+	 * @return {@link String}
+	 */
+	public static String getNameListAsText(List<String> names) {
+		StringBuffer s = new StringBuffer();
+		if (names != null) {
+			Iterator<String> iterator = names.iterator();
+			while (iterator.hasNext()) {
+				String name = iterator.next();
+				if (name == null || name.length() == 0) {
+					s.append(DBHelper.NULL_VALUE);
+				} else {
+					s.append("\'")
+					.append(name)
+					.append("\'");
+				}
+				if (iterator.hasNext()) {
+					s.append(", ");
+				}
+			}
+		}
+		return s.toString();
 	}
 }

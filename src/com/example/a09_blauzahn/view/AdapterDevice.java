@@ -1,6 +1,5 @@
 package com.example.a09_blauzahn.view;
 
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -13,7 +12,6 @@ import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSighting;
-import com.example.a09_blauzahn.util.DBHelper;
 
 /**
  * for displaying {@link BTSighting}-information in a customized {@link ListView}.
@@ -67,23 +65,11 @@ extends AbstractAdapter<BTDevice> {
 				AppBlauzahn.DATETIMESTAMP.format(d.getLastTime())
 			)
 		);
-		StringBuffer names = new StringBuffer();
-		Iterator<String> iterator = d.getNames().iterator();
-		while (iterator.hasNext()) {
-			String name = iterator.next();
-			if (name == null) {
-				names.append(DBHelper.NULL_VALUE);
-			} else {
-				names
-				.append("'")
-				.append(name)
-				.append("'");
-			}
-			if (iterator.hasNext()) {
-				names.append(", ");
-			}
-		}
-		holder.names.setText(names);
+		holder.names.setText(
+			AppBlauzahn.getNameListAsText(
+				d.getNames()
+			)
+		);
 		// and give back the modified view
 		return convertView;
 	}

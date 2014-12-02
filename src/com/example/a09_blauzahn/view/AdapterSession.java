@@ -78,7 +78,7 @@ extends AbstractAdapter<BTSession> {
 			String.format(
 				" %d %s",
 				s.getBTSightingsCount(),
-				s.getBTSightingsNames()
+				AppBlauzahn.getNameListAsText(s.getBTSightingsNames())
 			)
 		);
 		// and give back the modified view
