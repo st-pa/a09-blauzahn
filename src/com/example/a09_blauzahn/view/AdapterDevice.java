@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
-import com.example.a09_blauzahn.model.Device;
+import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSighting;
 import com.example.a09_blauzahn.util.DBHelper;
 
@@ -20,7 +20,7 @@ import com.example.a09_blauzahn.util.DBHelper;
  * @author stpa
  */
 public class AdapterDevice
-extends AbstractAdapter<Device> {
+extends AbstractAdapter<BTDevice> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -32,7 +32,7 @@ extends AbstractAdapter<Device> {
 	public AdapterDevice(
 		Context context,
 		int layout,
-		List<Device> list
+		List<BTDevice> list
 	) {
 		super(context,layout,list);
 	}
@@ -55,7 +55,7 @@ extends AbstractAdapter<Device> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		Device d = this.getItem(position);
+		BTDevice d = this.getItem(position);
 		holder.label.setText(
 			String.format(
 				"#%d (x%d) Ø%.2fdb first:%s\n[%s] last:%s",

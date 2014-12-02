@@ -1,12 +1,17 @@
 package com.example.a09_blauzahn.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import com.example.a09_blauzahn.util.DBHelper;
 
-public class BTSession {
+public class BTSession
+implements Serializable {
+
+	/** default serial id. */
+	private static final long serialVersionUID = 1L;
 
 	private long id;
 	private Date start;

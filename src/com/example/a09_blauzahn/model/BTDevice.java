@@ -1,5 +1,6 @@
 package com.example.a09_blauzahn.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,11 @@ import java.util.List;
  * represents a collection of sightings of the same hardware address.
  * @author stpa
  */
-public class Device {
+public class BTDevice
+implements Serializable {
+
+	/** default serial id. */
+	private static final long serialVersionUID = 1L;
 
 	private String address;
 	private List<String> names;
@@ -16,7 +21,7 @@ public class Device {
 	private double avgRssi;
 
 	/** Constructor. */
-	public Device(
+	public BTDevice(
 		String address,
 		List<String> names,
 		Date firstTime,

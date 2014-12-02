@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
-import com.example.a09_blauzahn.model.Device;
+import com.example.a09_blauzahn.model.BTDevice;
 
 /**
  * @author stpa
@@ -528,9 +528,9 @@ extends SQLiteOpenHelper {
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<Device> getListBTDevices(int limit) {
+	public List<BTDevice> getListBTDevices(int limit) {
 		init();
-		List<Device> result = new ArrayList<Device>();
+		List<BTDevice> result = new ArrayList<BTDevice>();
 		try {
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
@@ -551,7 +551,7 @@ extends SQLiteOpenHelper {
 			while (c.moveToNext()) {
 				String address = c.getString(0);
 				result.add(
-					new Device(
+					new BTDevice(
 						address,
 						getListBTDeviceNames(address),
 						new Date(c.getLong(1)),
@@ -572,19 +572,36 @@ extends SQLiteOpenHelper {
 	 * gets a list of all bluetooth sessions.
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @param device {@link BTDevice} optional filter, can be left <code>null</code>,
+	 * otherwise returns only sessions containing the given device
 	 * @return {@link List}<{@link BTSession}>
 	 */
-	public List<BTSession> getListBTSessions(int limit) {
+	public List<BTSession> getListBTSessions(int limit,BTDevice device) {
 		init();
 		List<BTSession> result = new ArrayList<BTSession>();
 		try {
+			/*
+select a."id",a."start",a."stop",count(*)
+from "btSession" as a inner join "btSighting" as b
+on b."sessionId" = a."id"
+where b."address" = "00:24:03:C9:4D:9F"
+group by 1,2,3
+			*/
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
-			.append(V3.KEY_BTSESSION_ID).append(",\n\t")
-			.append(V3.KEY_BTSESSION_START).append(",\n\t")
-			.append(V3.KEY_BTSESSION_STOP).append("\n")
-			.append("FROM ").append(V3.TAB_BTSESSION).append("\n")
-			.append("ORDER BY 1 DESC\n")
+			.append("a.").append(V3.KEY_BTSESSION_ID).append(",\n\t")
+			.append("a.").append(V3.KEY_BTSESSION_START).append(",\n\t")
+			.append("a.").append(V3.KEY_BTSESSION_STOP).append("\n")
+			.append("FROM ").append(V3.TAB_BTSESSION).append(" AS a\n");
+			if (device != null) {
+				s.append("INNER JOIN ").append(V3.TAB_BTSIGHTING).append(" AS b\n")
+				.append("ON a.").append(V3.KEY_BTSESSION_ID)
+				.append(" = b.").append(V3.KEY_BTSIGHTING_SESSION_ID).append("\n")
+				.append("WHERE b.").append(V3.KEY_BTSIGHTING_ADDRESS)
+				.append(" = \"").append(device.getAddress()).append("\"\n")
+				.append("GROUP BY 1,2,3\n");
+			}
+			s.append("ORDER BY 1 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
 			Cursor c = db.rawQuery(

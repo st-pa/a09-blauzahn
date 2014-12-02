@@ -1,8 +1,13 @@
 package com.example.a09_blauzahn.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BTSighting {
+public class BTSighting
+implements Serializable {
+
+	/** default serial id. */
+	private static final long serialVersionUID = 1L;
 
 	private long id;
 	private long btSessionId;
