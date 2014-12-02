@@ -69,6 +69,7 @@ implements OnItemClickListener, OnClickListener {
 		}
 		// decide on which list adapter to use
 		if (listType == AppBlauzahn.LIST_TYPE_BTSIGHTINGS) {
+			// retrieve an optional device from bundled intent extras to filter the resulting list
 			BTDevice device = (BTDevice) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTDEVICE);
 			adapter = new AdapterSighting(
 				this,
@@ -82,6 +83,7 @@ implements OnItemClickListener, OnClickListener {
 				app.db.getListBTDevices(LIMIT)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_BTSESSIONS) {
+			// retrieve an optional device from bundled intent extras to filter the resulting list
 			BTDevice device = (BTDevice) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTDEVICE);
 			adapter = new AdapterSession(
 				this,
@@ -145,14 +147,32 @@ implements OnItemClickListener, OnClickListener {
 			public void onClick(View v) {
 				if (v == btBTDevicePairing) {
 					// TODO try pairing with the bluetooth device
+					app.toast("no bluetooth pairing yet, sorry.");
 				} else if (v == btBTDeviceSessions) {
-					// TODO list the sessions containing this device
+					// list the sessions containing this device
+					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
+					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSESSIONS);
+					intent.putExtra(AppBlauzahn.EXTRA_LIST_BTDEVICE,item);
+					intent.putExtra(
+						AppBlauzahn.EXTRA_LIST_LABEL,
+						String.format(
+							getString(R.string.labelListBTSessionsDevice),
+							item.getAddress()
+						)
+					);
+					startActivity(intent);
 				} else if (v == btBTDeviceSightings) {
 					// show only sightings containing this device
 					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
 					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSIGHTINGS);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_LABEL,getString(R.string.labelListBTSightings));
 					intent.putExtra(AppBlauzahn.EXTRA_LIST_BTDEVICE,item);
+					intent.putExtra(
+						AppBlauzahn.EXTRA_LIST_LABEL,
+						String.format(
+							getString(R.string.labelListBTSightingsDevice),
+							item.getAddress()
+						)
+					);
 					startActivity(intent);
 				}
 				// close the dialog no matter which button was clicked

@@ -28,7 +28,9 @@
     <string name="dialogExitNo">no, not yet</string>
     <string name="labelListBTDevices">List of recently discovered unique bluetooth devices in decending order of their number of occurances.</string>
     <string name="labelListBTSessions">List of recently conducted bluetooth sessions with the most recent ones on top.</string>
+    <string name="labelListBTSessionsDevice">List of bluetooth sessions containing device address [%s] with the most recent sessions ones on top.</string>
     <string name="labelListBTSightings">List of recently recorded bluetooth sightings in chronological order.</string>
+    <string name="labelListBTSightingsDevice">List of recently recorded sightings of bluetooth device address [%s] in chronological order.</string>
     <string name="btBTDeviceSightings">list all sightings of this device</string>
     <string name="btBTDeviceSessions">list the sessions containing this device</string>
     <string name="btBTDevicePairing">try pairing with this device</string>
