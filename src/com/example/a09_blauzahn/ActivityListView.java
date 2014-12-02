@@ -45,6 +45,7 @@ implements OnItemClickListener, OnClickListener {
 
 	private int listType = 0;
 	private String listLabel = "";
+	private Dialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +69,11 @@ implements OnItemClickListener, OnClickListener {
 		}
 		// decide on which list adapter to use
 		if (listType == AppBlauzahn.LIST_TYPE_BTSIGHTINGS) {
+			BTDevice device = (BTDevice) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTDEVICE);
 			adapter = new AdapterSighting(
 				this,
 				R.layout.list_btsighting,
-				app.db.getListBTSightings(LIMIT)
+				app.db.getListBTSightings(LIMIT,device)
 			);
 		} else if (listType == AppBlauzahn.LIST_TYPE_BTDEVICES) {
 			adapter = new AdapterDevice(
@@ -132,7 +134,8 @@ implements OnItemClickListener, OnClickListener {
 
 	/** react to a click on a listed bluetooth device. */
 	private void itemClickBTDevice(final BTDevice item) {
-		final Dialog dialog = new Dialog(this);
+		dialog = new Dialog(this);
+		dialog.setContentView(R.layout.dialog_listitem_btdevice);
 		final Button btBTDeviceExit = (Button) dialog.findViewById(R.id.btBTDeviceExit);
 		final Button btBTDevicePairing = (Button) dialog.findViewById(R.id.btBTDevicePairing);
 		final Button btBTDeviceSessions = (Button) dialog.findViewById(R.id.btBTDeviceSessions);
@@ -154,6 +157,7 @@ implements OnItemClickListener, OnClickListener {
 				}
 				// close the dialog no matter which button was clicked
 				dialog.dismiss();
+				dialog = null;
 			}
 		};
 		btBTDeviceExit.setOnClickListener(listener);
@@ -161,9 +165,7 @@ implements OnItemClickListener, OnClickListener {
 		btBTDeviceSessions.setOnClickListener(listener);
 		btBTDeviceSightings.setOnClickListener(listener);
 		dialog.setCanceledOnTouchOutside(true);
-		dialog.setContentView(R.layout.dialog_listitem_btdevice);
 		dialog.show();
-		// TODO Auto-generated method stub
 	}
 
 	@Override

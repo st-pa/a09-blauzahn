@@ -452,9 +452,11 @@ extends SQLiteOpenHelper {
 	 * gets a list of all bluetooth device sightings.
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @param device {@link BTDevice} optional filter, can be left <code>null</code>,
+	 * otherwise returns only sightings of the given device
 	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<BTSighting> getListBTSightings(int limit) {
+	public List<BTSighting> getListBTSightings(int limit, BTDevice device) {
 		init();
 		List<BTSighting> result = new ArrayList<BTSighting>();
 		try {
@@ -466,8 +468,12 @@ extends SQLiteOpenHelper {
 			.append(V3.KEY_BTSIGHTING_NAME).append(",\n\t")
 			.append(V3.KEY_BTSIGHTING_ADDRESS).append(",\n\t")
 			.append(V3.KEY_BTSIGHTING_RSSI).append("\n")
-			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n")
-			.append("ORDER BY ").append(V3.KEY_BTSIGHTING_ID).append(" DESC\n")
+			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n");
+			if (device != null) {
+				s.append("WHERE ").append(V3.KEY_BTSIGHTING_ADDRESS)
+				.append(" = \"").append(device.getAddress()).append("\"\n");
+			}
+			s.append("ORDER BY ").append(V3.KEY_BTSIGHTING_ID).append(" DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
 			Cursor c = db.rawQuery(
