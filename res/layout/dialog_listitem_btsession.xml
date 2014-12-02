@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tvBTDeviceLabel"
+        android:id="@+id/tvBTSessionLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
+        android:padding="4dp"
         android:text="TextView"
         android:textSize="12sp" />
 
     <Button
-        android:id="@+id/btBTDeviceSightings"
+        android:id="@+id/btBTSessionDevices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btBTDeviceSightings" />
+        android:text="@string/btBTSessionDevices" />
 
     <Button
-        android:id="@+id/btBTDeviceSessions"
+        android:id="@+id/btBTSessionSightings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btBTDeviceSessions" />
+        android:text="@string/btBTSessionSightings" />
 
     <Button
-        android:id="@+id/btBTDevicePairing"
+        android:id="@+id/btBTSessionExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btBTDevicePairing" />
-
-    <Button
-        android:id="@+id/btBTDeviceExit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btBTDeviceExit" />
+        android:text="@string/btBTSessionExit" />
 
 </LinearLayout>

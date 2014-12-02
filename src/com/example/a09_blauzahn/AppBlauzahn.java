@@ -45,9 +45,10 @@ extends AppTTS {
 	// global constants
 	////////////////////////////////////////////
 
-	public static final String EXTRA_LIST_TYPE     = "listType";
-	public static final String EXTRA_LIST_LABEL    = "listLabel";
+	public static final String EXTRA_LIST_TYPE   = "listType";
+	public static final String EXTRA_LIST_LABEL   = "listLabel";
 	public static final String EXTRA_LIST_BTDEVICE = "listBTDevice";
+	public static final String EXTRA_LIST_BTSESSION = "listBTSession";
 	public static final int LIST_TYPE_BTSIGHTINGS = 0;
 	public static final int LIST_TYPE_BTDEVICES   = 1;
 	public static final int LIST_TYPE_BTSESSIONS  = 2;
@@ -222,6 +223,24 @@ extends AppTTS {
 		.append("last encounter = ").append(DATETIMESTAMP.format(device.getLastTime())).append("\n")
 		.toString();
 	}
+
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param device {@link BTSession}
+	 * @return {@link String}
+	 */
+	public static String getDescription(BTSession session) {
+		return new StringBuffer()
+		.append("session id = ").append(session.getId()).append("\n")
+		.append("number of sightings = ").append(session.getBTSightingsCount()).append("\n")
+		.append("sighted names = ")
+		.append(AppBlauzahn.getNameListAsText(session.getBTSightingsNames())).append("\n")
+		.append("duration = ").append(session.getDuration()).append("ms\n")
+		.append("start time = ").append(DATETIMESTAMP.format(session.getStart())).append("\n")
+		.append("stop time = ").append(DATETIMESTAMP.format(session.getStop())).append("\n")
+		.toString();
+	}
+
 
 	/** make a formatted timestamp. */
 	public static final String timestamp() {

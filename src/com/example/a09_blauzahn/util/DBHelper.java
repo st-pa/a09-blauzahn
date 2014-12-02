@@ -450,13 +450,16 @@ extends SQLiteOpenHelper {
 
 	/**
 	 * gets a list of all bluetooth device sightings.
-	 * warning! this can be very long.
+	 * warning! this can be very long. at least one
+	 * of the optional parameters should be <code>null</code>.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @param device {@link BTDevice} optional filter, can be left <code>null</code>,
 	 * otherwise returns only sightings of the given device
+	 * @param session {@link BTSession} optional filter, can be left <code>null</code>,
+	 * otherwise returns only sightings during the given session
 	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<BTSighting> getListBTSightings(int limit, BTDevice device) {
+	public List<BTSighting> getListBTSightings(int limit, BTDevice device, BTSession session) {
 		init();
 		List<BTSighting> result = new ArrayList<BTSighting>();
 		try {
@@ -472,6 +475,9 @@ extends SQLiteOpenHelper {
 			if (device != null) {
 				s.append("WHERE ").append(V3.KEY_BTSIGHTING_ADDRESS)
 				.append(" = \"").append(device.getAddress()).append("\"\n");
+			} else if (session != null) {
+				s.append("WHERE ").append(V3.KEY_BTSIGHTING_SESSION_ID)
+				.append(" = ").append(Long.toString(session.getId())).append("\n");
 			}
 			s.append("ORDER BY ").append(V3.KEY_BTSIGHTING_ID).append(" DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
@@ -532,9 +538,11 @@ extends SQLiteOpenHelper {
 	 * gets a list of all unique sighted bluetooth devices (addresses).
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
-	 * @return {@link List}<{@link BTSighting}>
+	 * @param session {@link BTSession} optional filter, can be left <code>null</code>,
+	 * otherwise returns only devices contained in the given session
+	 * @return {@link List}<{@link BTDevice}>
 	 */
-	public List<BTDevice> getListBTDevices(int limit) {
+	public List<BTDevice> getListBTDevices(int limit, BTSession session) {
 		init();
 		List<BTDevice> result = new ArrayList<BTDevice>();
 		try {
@@ -545,8 +553,12 @@ extends SQLiteOpenHelper {
 			.append("max(").append(V3.KEY_BTSIGHTING_TIME).append("),\n\t")
 			.append("count(DISTINCT ").append(V3.KEY_BTSIGHTING_SESSION_ID).append("),\n\t")
 			.append("avg(").append(V3.KEY_BTSIGHTING_RSSI).append(")\n")
-			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n")
-			.append("GROUP BY ").append(V3.KEY_BTSIGHTING_ADDRESS).append("\n")
+			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n");
+			if (session != null) {
+				s.append("WHERE ").append(V3.KEY_BTSIGHTING_SESSION_ID)
+				.append(" = ").append(Long.toString(session.getId())).append("\n");
+			}
+			s.append("GROUP BY ").append(V3.KEY_BTSIGHTING_ADDRESS).append("\n")
 			.append("ORDER BY 4 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
@@ -586,13 +598,6 @@ extends SQLiteOpenHelper {
 		init();
 		List<BTSession> result = new ArrayList<BTSession>();
 		try {
-			/*
-select a."id",a."start",a."stop",count(*)
-from "btSession" as a inner join "btSighting" as b
-on b."sessionId" = a."id"
-where b."address" = "00:24:03:C9:4D:9F"
-group by 1,2,3
-			*/
 			StringBuffer s = new StringBuffer()
 			.append("SELECT\n\t")
 			.append("a.").append(V3.KEY_BTSESSION_ID).append(",\n\t")
