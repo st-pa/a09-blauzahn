@@ -285,10 +285,8 @@ implements OnClickListener {
 			ActivityMain.this,
 			ActivityListView.class
 		);
-		intent.putExtra(
-			AppBlauzahn.EXTRA_LIST_TYPE,
-			AppBlauzahn.LIST_TYPE_BTSESSIONS
-		);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSESSIONS);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_LABEL,getString(R.string.labelListBTSessions));
 		startActivity(intent);
 	}
 
@@ -298,10 +296,8 @@ implements OnClickListener {
 			ActivityMain.this,
 			ActivityListView.class
 		);
-		intent.putExtra(
-			AppBlauzahn.EXTRA_LIST_TYPE,
-			AppBlauzahn.LIST_TYPE_BTDEVICES
-		);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTDEVICES);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_LABEL,getString(R.string.labelListBTDevices));
 		startActivity(intent);
 	}
 
@@ -311,10 +307,8 @@ implements OnClickListener {
 			ActivityMain.this,
 			ActivityListView.class
 		);
-		intent.putExtra(
-			AppBlauzahn.EXTRA_LIST_TYPE,
-			AppBlauzahn.LIST_TYPE_BTSIGHTINGS
-		);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSIGHTINGS);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_LABEL,getString(R.string.labelListBTSightings));
 		startActivity(intent);
 	}
 

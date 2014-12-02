@@ -43,6 +43,7 @@ extends AppTTS {
 	////////////////////////////////////////////
 
 	public static final String EXTRA_LIST_TYPE  = "listType";
+	public static final String EXTRA_LIST_LABEL = "listLabel";
 	public static final int LIST_TYPE_BTSIGHTINGS = 0;
 	public static final int LIST_TYPE_BTDEVICES   = 1;
 	public static final int LIST_TYPE_BTSESSIONS  = 2;

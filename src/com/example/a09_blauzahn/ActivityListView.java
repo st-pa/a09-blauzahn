@@ -11,10 +11,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.example.a09_blauzahn.model.Device;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.Device;
 import com.example.a09_blauzahn.view.AdapterDevice;
 import com.example.a09_blauzahn.view.AdapterSession;
 import com.example.a09_blauzahn.view.AdapterSighting;
@@ -34,12 +35,14 @@ implements OnItemClickListener, OnClickListener {
 	private static final int LIMIT = 512;
 
 	private AppBlauzahn app;
+	private TextView tvListLabel;
 	private ListView listView;
 	private Button btCloseListView;
 
 	private ArrayAdapter<?> adapter;
 
 	private int listType = 0;
+	private String listLabel = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ implements OnItemClickListener, OnClickListener {
 
 		app = (AppBlauzahn) getApplication();
 
+		tvListLabel = (TextView) findViewById(R.id.tvListLabel);
 		btCloseListView = (Button) findViewById(R.id.btCloseList);
 		btCloseListView.setOnClickListener(this);
 
@@ -57,6 +61,8 @@ implements OnItemClickListener, OnClickListener {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			listType  = extras.getInt(AppBlauzahn.EXTRA_LIST_TYPE);
+			listLabel = extras.getString(AppBlauzahn.EXTRA_LIST_LABEL);
+			tvListLabel.setText(listLabel);
 		}
 		// decide on which list adapter to use
 		if (listType == AppBlauzahn.LIST_TYPE_BTSIGHTINGS) {

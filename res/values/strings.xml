@@ -26,5 +26,8 @@
     <string name="dialogExitTitle">Exit Confirmation</string>
     <string name="dialogExitYes">yes, please</string>
     <string name="dialogExitNo">no, not yet</string>
+    <string name="labelListBTDevices">List of recently discovered unique bluetooth devices in decending order of their number of occurances.</string>
+    <string name="labelListBTSessions">List of recently conducted bluetooth sessions with the most recent ones on top.</string>
+    <string name="labelListBTSightings">List of recently recorded bluetooth sightings in chronological order.</string>
     
 </resources>
