@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -247,6 +248,7 @@ implements OnClickListener {
 		// ask for user permission to export entire database to external storage
 		dialog = new Dialog(this);
 		dialog.setCanceledOnTouchOutside(true);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.dialog_export);
 		final Button btExportYes = (Button) dialog.findViewById(R.id.btExportYes);
 		final Button btExportNo = (Button) dialog.findViewById(R.id.btExportNo);

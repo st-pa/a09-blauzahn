@@ -159,7 +159,7 @@ extends AppTTS {
 		this.btConnect = btConnect;
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
-//			dbImportFromAssets("2012.01.31-21.44.08-blauzahn.sqlite");
+//			dbImportFromAssets("2012.01.31-21.44.09-blauzahn.sqlite");
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (settings == null) settings = db.getSettings();
@@ -438,8 +438,10 @@ extends AppTTS {
 	private void copyAssetToSD(String source,String target) {
 		try {
 			// make sure the target folder(s) exist
-			File targetFolder = new File(target);
-			targetFolder.mkdirs();
+			File targetFolder = new File(target).getParentFile();
+			if (!targetFolder.canRead()) {
+				targetFolder.mkdirs();
+			}
 			// copy from source to target
 			InputStream is = this.getAssets().open(source);
 			OutputStream os = new FileOutputStream(target);
