@@ -1,5 +1,6 @@
 package com.example.a09_blauzahn;
 
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
@@ -221,7 +222,13 @@ implements OnClickListener {
 	 * the entire database to external storage.
 	 */
 	private void clickedBtExport() {
+		Dialog dialog = new Dialog(this);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setContentView(R.layout.dialog_export);
+		
 		// TODO ask for user permission to export entire database to external storage
+		
+		dialog.show();
 		app.dbExport();
 	}
 

@@ -132,9 +132,11 @@ extends AppTTS {
 		super.onTerminate();
 	}
 
-	/** try to initialize the database. 
+	/**
+	 * try to initialize the database. 
 	 * @param btConnect 
-	 * @param tvLabel */
+	 * @param tvLabel
+	 */
 	protected void init(Context context, TextView tvLabel, Button btConnect) {
 		this.tvLabel = tvLabel;
 		this.btConnect = btConnect;
