@@ -147,6 +147,7 @@ implements OnItemClickListener, OnClickListener {
 		final Button btBTSightingExit = (Button) dialog.findViewById(R.id.btBTSightingExit);
 		final Button btBTSightingSessions = (Button) dialog.findViewById(R.id.btBTSightingSessions);
 		final Button btBTSightingSightings = (Button) dialog.findViewById(R.id.btBTSightingSightings);
+		final Button btBTSightingPairing = (Button) dialog.findViewById(R.id.btBTSightingPairing);
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -176,6 +177,8 @@ implements OnItemClickListener, OnClickListener {
 						)
 					);
 					startActivity(intent);
+				} else if (v == btBTSightingPairing) {
+					pairing();
 				}
 				// close the dialog no matter which button was clicked
 				dialog.dismiss();
@@ -185,6 +188,7 @@ implements OnItemClickListener, OnClickListener {
 		btBTSightingExit.setOnClickListener(listener);
 		btBTSightingSessions.setOnClickListener(listener);
 		btBTSightingSightings.setOnClickListener(listener);
+		btBTSightingPairing.setOnClickListener(listener);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
 		// TODO react to a click on a listed bluetooth sighting
@@ -262,15 +266,14 @@ implements OnItemClickListener, OnClickListener {
 		tvBTDeviceLabel.setText(AppBlauzahn.getDescription(item));
 		// define click-behaviour for dialog buttons
 		final Button btBTDeviceExit = (Button) dialog.findViewById(R.id.btBTDeviceExit);
-		final Button btBTDevicePairing = (Button) dialog.findViewById(R.id.btBTDevicePairing);
+		final Button btBTDevicePairing = (Button) dialog.findViewById(R.id.btBTSightingPairing);
 		final Button btBTDeviceSessions = (Button) dialog.findViewById(R.id.btBTDeviceSessions);
 		final Button btBTDeviceSightings = (Button) dialog.findViewById(R.id.btBTDeviceSightings);
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (v == btBTDevicePairing) {
-					// TODO try pairing with the bluetooth device
-					app.toast("no bluetooth pairing as of yet, sorry.");
+					pairing();
 				} else if (v == btBTDeviceSessions) {
 					// list the sessions containing this device
 					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
@@ -309,6 +312,11 @@ implements OnItemClickListener, OnClickListener {
 		btBTDeviceSightings.setOnClickListener(listener);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
+	}
+
+	private void pairing() {
+		// TODO try pairing with the bluetooth device
+		app.toast("no bluetooth pairing as of yet, sorry.");
 	}
 
 	@Override

@@ -27,9 +27,15 @@
         android:text="@string/btBTSightingSightings" />
 
     <Button
+        android:id="@+id/btBTSightingPairing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btBTDevicePairing" />
+
+    <Button
         android:id="@+id/btBTSightingExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btBTSightingExit" />
+        android:text="@string/btBTDeviceExit" />
 
 </LinearLayout>

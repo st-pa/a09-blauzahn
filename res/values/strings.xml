@@ -39,10 +39,8 @@
     <string name="btBTDeviceExit">exit, doing nothing</string>
     <string name="btBTSessionDevices">list the devices found during this session</string>
     <string name="btBTSessionSightings">show the sightings from this session</string>
-    <string name="btBTSessionExit">exit, doing nothing</string>
     <string name="btBTSightingSessions">list of sessions where the device from this sighting was also sighted</string>
     <string name="btBTSightingSightings">list other sightings of the device from this sighting</string>
-    <string name="btBTSightingExit">exit, do nothing</string>
     <string name="btCalendar">calendar</string>
-    
+
 </resources>
