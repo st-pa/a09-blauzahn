@@ -314,8 +314,10 @@ implements OnItemClickListener, OnClickListener {
 		dialog.show();
 	}
 
+	/**
+	 * TODO try pairing with the bluetooth device
+	 */
 	private void pairing() {
-		// TODO try pairing with the bluetooth device
 		app.toast("no bluetooth pairing as of yet, sorry.");
 	}
 
