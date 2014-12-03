@@ -789,7 +789,7 @@ extends SQLiteOpenHelper {
 		Date t0 = new Date();
 		// adjust system time
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		am.setTime(c.getTimeInMillis());
+		am.setTime(c.getTime().getTime());
 		// get "new" current time
 		Date t1 = new Date();
 		// calculate difference

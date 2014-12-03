@@ -4,15 +4,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnHoverListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -27,7 +26,7 @@ import android.widget.TimePicker.OnTimeChangedListener;
  */
 public class ActivityCalendar
 extends ActionBarActivity
-implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListener {
+implements OnClickListener, OnTimeChangedListener {
 
 	////////////////////////////////////////////
 	// local fields
@@ -51,6 +50,7 @@ implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListe
 	private TimePicker timePicker;
 	private Button btOkay;
 	private Button btCancel;
+	private Calendar cal;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -64,9 +64,17 @@ implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListe
 		app = (AppBlauzahn) getApplication();
 
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
-		datePicker.setOnClickListener(this);
-		datePicker.setOnTouchListener(this);
-		datePicker.setOnHoverListener(this);
+		datePicker.init(
+			datePicker.getYear(),
+			datePicker.getMonth(),
+			datePicker.getDayOfMonth(),
+			new DatePicker.OnDateChangedListener(){
+				@Override
+				public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+					showDifference();
+				}
+			}
+		);
 
 		timePicker = (TimePicker) findViewById(R.id.timePicker);
 		timePicker.setIs24HourView(true);
@@ -91,7 +99,7 @@ implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListe
 		year = datePicker.getYear();
 		month = datePicker.getMonth();
 		day = datePicker.getDayOfMonth();
-		Calendar cal = new GregorianCalendar(
+		cal = new GregorianCalendar(
 			year,
 			month,
 			day,
@@ -101,7 +109,7 @@ implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListe
 		tvCalendarDifference.setText(
 			String.format(
 				getString(R.string.tvCalendarDifference),
-				new Date().getTime() - cal.getTime().getTime()
+				cal.getTime().getTime() - new Date().getTime()
 			)
 		);
 		app.toast(AppBlauzahn.DATETIMESTAMP.format(cal.getTime()));
@@ -128,17 +136,14 @@ implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListe
 
 	@Override
 	public void onClick(View v) {
-		int i = 0;
 		if (v == btCancel) {
 			finish();
 		} else if (v == btOkay) {
+			AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+			am.setTime(cal.getTime().getTime());
+
 			// TODO react to calendar change
 			app.toast("no calendar change as of yet, sorry.");
-		} else if (v == datePicker) {
-			year = datePicker.getYear();
-			month = datePicker.getMonth();
-			day = datePicker.getDayOfMonth();
-			showDifference();
 		}
 	}
 
@@ -147,17 +152,5 @@ implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListe
 		this.hour = hourOfDay;
 		this.minute = minute;
 		showDifference();
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		showDifference();
-		return true;
-	}
-
-	@Override
-	public boolean onHover(View v, MotionEvent event) {
-		showDifference();
-		return false;
 	}
 }
