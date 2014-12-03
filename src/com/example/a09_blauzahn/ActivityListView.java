@@ -19,9 +19,9 @@ import android.widget.TextView;
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
-import com.example.a09_blauzahn.view.AdapterDevice;
-import com.example.a09_blauzahn.view.AdapterSession;
-import com.example.a09_blauzahn.view.AdapterSighting;
+import com.example.a09_blauzahn.view.AdapterBTDevice;
+import com.example.a09_blauzahn.view.AdapterBTSession;
+import com.example.a09_blauzahn.view.AdapterBTSighting;
 
 /**
  * activity for displaying simple lists. the
@@ -76,7 +76,7 @@ implements OnItemClickListener, OnClickListener {
 			BTSession session = (BTSession) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSESSION);
 			// retrieve an optional session from bundled intent extras to filter the resulting list
 			BTSighting sighting = (BTSighting) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSIGHTING);
-			adapter = new AdapterSighting(
+			adapter = new AdapterBTSighting(
 				this,
 				R.layout.list_btsighting,
 				app.db.getListBTSightings(LIMIT,device,session,sighting)
@@ -84,7 +84,7 @@ implements OnItemClickListener, OnClickListener {
 		} else if (listType == AppBlauzahn.LIST_TYPE_BTDEVICES) {
 			// retrieve an optional session from bundled intent extras to filter the resulting list
 			BTSession session = (BTSession) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSESSION);
-			adapter = new AdapterDevice(
+			adapter = new AdapterBTDevice(
 				this,
 				R.layout.list_btdevice,
 				app.db.getListBTDevices(LIMIT,session)
@@ -94,7 +94,7 @@ implements OnItemClickListener, OnClickListener {
 			BTDevice device = (BTDevice) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTDEVICE);
 			// retrieve an optional sighting from bundled intent extras to filter the resulting list
 			BTSighting sighting = (BTSighting) extras.getSerializable(AppBlauzahn.EXTRA_LIST_BTSIGHTING);
-			adapter = new AdapterSession(
+			adapter = new AdapterBTSession(
 				this,
 				R.layout.list_btsession,
 				app.db.getListBTSessions(LIMIT,device,sighting)

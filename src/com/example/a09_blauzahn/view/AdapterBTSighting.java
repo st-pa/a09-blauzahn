@@ -10,27 +10,27 @@ import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
-import com.example.a09_blauzahn.model.BTSession;
+import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.util.DBHelper;
 
 /**
- * for displaying {@link BTSession}-information in a customized {@link ListView}.
+ * for displaying {@link BTSighting}-information in a customized {@link ListView}.
  * @author stpa
  */
-public class AdapterSession
-extends AbstractAdapter<BTSession> {
+public class AdapterBTSighting
+extends AbstractAdapter<BTSighting> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
-		TextView id;
 		TextView label;
-		TextView names;
+		TextView name;
 	}
 
 	/** Constructor. */
-	public AdapterSession(
+	public AdapterBTSighting(
 		Context context,
 		int layout,
-		List<BTSession> list
+		List<BTSighting> list
 	) {
 		super(context,layout,list);
 	}
@@ -40,48 +40,37 @@ extends AbstractAdapter<BTSession> {
 		// initialize the view holder
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = inflater.inflate(
-				this.layout,
-				parent,
-				false
-			);
+			convertView = inflater.inflate(layout, parent, false);
 			holder = new ViewHolder();
-			holder.id = (TextView) convertView.findViewById(R.id.tvList3id);
-			holder.label = (TextView) convertView.findViewById(R.id.tvList3label);
-			holder.names = (TextView) convertView.findViewById(R.id.tvList3names);
+			holder.label = (TextView) convertView.findViewById(R.id.tvList1label);
+			holder.name  = (TextView) convertView.findViewById(R.id.tvList1name);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		BTSession s = this.getItem(position);
-		holder.id.setText(
-			String.format(
-				"#%d (%.1f sec)",
-				s.getId(),
-				s.getDuration() / 1000f
-			)
-		);
+		BTSighting s = this.getItem(position);
 		holder.label.setText(
 			String.format(
-				"start: %s\nstop: %s",
+				"#%d (%d) %s [%s] %ddb",
+				s.getId(),
+				s.getBTSessionId(),
 				AppBlauzahn.DATETIMESTAMP.format(
-					s.getStart()
+					s.getTime()
 				),
-				AppBlauzahn.DATETIMESTAMP.format(
-					s.getStop()
-				)
+				s.getAddress(),
+				s.getRssi()
 			)
 		);
-		// get names of sighted devices
-		holder.names.setText(
-			String.format(
-				"(%d) %s",
-				s.getBTSightingsCount(),
-				AppBlauzahn.getNameListAsText(s.getBTSightingsNames())
-			)
-		);
+		String name = DBHelper.nullValue(s.getName());
+		if (name != null && name.length() > 0) {
+			holder.name.setText(name);
+			holder.name.setVisibility(View.VISIBLE);
+		} else {
+			holder.name.setVisibility(View.GONE);
+		}
 		// and give back the modified view
 		return convertView;
 	}
+
 }
