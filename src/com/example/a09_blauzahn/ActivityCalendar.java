@@ -110,7 +110,6 @@ implements OnClickListener, OnTimeChangedListener {
 				cal.getTime().getTime() - new Date().getTime()
 			)
 		);
-		app.toast(AppBlauzahn.DATETIMESTAMP.format(cal.getTime()));
 	}
 
 	@Override

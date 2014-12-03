@@ -162,7 +162,7 @@ extends AppTTS {
 		this.btConnect = btConnect;
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
-//			dbImportFromAssets("2012.01.31-21.44.09-blauzahn.sqlite");
+//			dbImportFromAssets("2012.02.02_22.11.37-blauzahn.sqlite");
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (settings == null) settings = db.getSettings();
