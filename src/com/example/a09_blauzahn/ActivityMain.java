@@ -229,7 +229,8 @@ implements OnClickListener {
 	 * related database columns.
 	 */
 	private void clickedBtCalendar() {
-		// TODO Auto-generated method stub
+		Intent intent = new Intent(this,ActivityCalendar.class);
+		startActivity(intent);
 	}
 
 	/**
@@ -396,7 +397,6 @@ implements OnClickListener {
 	/**
 	 * add a timestamped message to the app's log.
 	 * @param text {@link String}
-	 * TODO sometimes log messages are not visible in textview
 	 */
 	protected void log(String text) {
 		app.log(text);

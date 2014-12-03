@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">a09-blauzahn</string>
-    <string name="hello_world">Hello world!\n<br/>second line of text\n<br/>third line</string>
     <string name="action_settings">Settings</string>
     <string name="tvLog">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</string>
     <string name="btConnect">connect/scan</string>
@@ -42,5 +41,10 @@
     <string name="btBTSightingSessions">list of sessions where the device from this sighting was also sighted</string>
     <string name="btBTSightingSightings">list other sightings of the device from this sighting</string>
     <string name="btCalendar">calendar</string>
+    <string name="title_activity_activity_calendar">ActivityCalendar</string>
+    <string name="tvCalendarLabel">Choose a new time and date to set system wide. This will update all time related database columns as well.</string>
+    <string name="tvCalendarDifference">this will be added to all time columns: %s</string>
+    <string name="btCalendarOkay">okay</string>
+    <string name="btCalendarCancel">no, cancel</string>
 
 </resources>

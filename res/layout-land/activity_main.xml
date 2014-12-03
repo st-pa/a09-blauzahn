@@ -17,10 +17,10 @@
 
         <TextView
             android:id="@+id/tvLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="243dp"
             android:layout_height="wrap_content"
-            android:text="@string/hello_world"
-            android:textSize="12sp" />
+            android:text="@string/tvLog"
+            android:textSize="11sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
