@@ -59,6 +59,7 @@ implements OnClickListener {
 	private Button btShowSessions;
 	private Button btExport;
 	private Button btExit;
+	private Button btCalendar;
 	private CheckBox cbWifi;
 	private CheckBox cbAuto;
 	private Dialog dialog;
@@ -83,6 +84,7 @@ implements OnClickListener {
 		btShowSessions  = (Button) findViewById(R.id.btShowSessions);
 		btExport       = (Button) findViewById(R.id.btExport);
 		btExit        = (Button) findViewById(R.id.btExit);
+		btCalendar  = (Button) findViewById(R.id.btCalendar);
 
 		app = (AppBlauzahn) getApplication();
 		app.init(this,tvLabel,tvLog,btConnect);
@@ -100,6 +102,7 @@ implements OnClickListener {
 		btShowSessions .setOnClickListener(this);
 		btExport       .setOnClickListener(this);
 		btExit         .setOnClickListener(this);
+		btCalendar     .setOnClickListener(this);
 
 		// reference checkboxes
 		cbAuto = (CheckBox) findViewById(R.id.cbAutoScan);
@@ -214,7 +217,19 @@ implements OnClickListener {
 			clickedBtExport();
 		} else if (v == btExit) {
 			clickedBtExit();
+		} else if (v == btCalendar) {
+			clickedBtCalendar();
 		}
+	}
+
+	/**
+	 * react to click on {@link #btCalendar} by
+	 * allowing the user to change the system time
+	 * and at the same time to update all time
+	 * related database columns.
+	 */
+	private void clickedBtCalendar() {
+		// TODO Auto-generated method stub
 	}
 
 	/**

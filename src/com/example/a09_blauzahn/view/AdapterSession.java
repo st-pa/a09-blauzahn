@@ -76,7 +76,7 @@ extends AbstractAdapter<BTSession> {
 		// get names of sighted devices
 		holder.names.setText(
 			String.format(
-				" %d %s",
+				"(%d) %s",
 				s.getBTSightingsCount(),
 				AppBlauzahn.getNameListAsText(s.getBTSightingsNames())
 			)
