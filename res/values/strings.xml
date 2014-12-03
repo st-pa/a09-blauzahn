@@ -38,8 +38,8 @@
     <string name="btBTDeviceExit">exit, doing nothing</string>
     <string name="btBTSessionDevices">list the devices found during this session</string>
     <string name="btBTSessionSightings">show the sightings from this session</string>
-    <string name="btBTSightingSessions">list of sessions where the device from this sighting was also sighted</string>
-    <string name="btBTSightingSightings">list other sightings of the device from this sighting</string>
+    <string name="btBTSightingSessions">list sessions with sightings of this device</string>
+    <string name="btBTSightingSightings">list other sightings of this device</string>
     <string name="btCalendar">calendar</string>
     <string name="title_activity_activity_calendar">ActivityCalendar</string>
     <string name="tvCalendarLabel">Choose a new time and date to set system wide. This will update all time related database columns. Sadly, this app cannot change the system clock, so you will have to do that yourself.</string>

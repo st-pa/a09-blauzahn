@@ -191,7 +191,6 @@ implements OnItemClickListener, OnClickListener {
 		btBTSightingPairing.setOnClickListener(listener);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
-		// TODO react to a click on a listed bluetooth sighting
 	}
 
 	/**
