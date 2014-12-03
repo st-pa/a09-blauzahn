@@ -1,14 +1,18 @@
 package com.example.a09_blauzahn;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnHoverListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -23,7 +27,7 @@ import android.widget.TimePicker.OnTimeChangedListener;
  */
 public class ActivityCalendar
 extends ActionBarActivity
-implements OnClickListener, OnTimeChangedListener {
+implements OnClickListener, OnTimeChangedListener, OnTouchListener, OnHoverListener {
 
 	////////////////////////////////////////////
 	// local fields
@@ -61,6 +65,8 @@ implements OnClickListener, OnTimeChangedListener {
 
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
 		datePicker.setOnClickListener(this);
+		datePicker.setOnTouchListener(this);
+		datePicker.setOnHoverListener(this);
 
 		timePicker = (TimePicker) findViewById(R.id.timePicker);
 		timePicker.setIs24HourView(true);
@@ -82,14 +88,23 @@ implements OnClickListener, OnTimeChangedListener {
 
 	/** calculate the difference between system time and selected time for display. */
 	private void showDifference() {
-		Calendar c = new GregorianCalendar(
+		year = datePicker.getYear();
+		month = datePicker.getMonth();
+		day = datePicker.getDayOfMonth();
+		Calendar cal = new GregorianCalendar(
 			year,
 			month,
 			day,
 			hour,
 			minute
 		);
-		app.toast(c.toString());
+		tvCalendarDifference.setText(
+			String.format(
+				getString(R.string.tvCalendarDifference),
+				new Date().getTime() - cal.getTime().getTime()
+			)
+		);
+		app.toast(AppBlauzahn.DATETIMESTAMP.format(cal.getTime()));
 	}
 
 	@Override
@@ -113,6 +128,7 @@ implements OnClickListener, OnTimeChangedListener {
 
 	@Override
 	public void onClick(View v) {
+		int i = 0;
 		if (v == btCancel) {
 			finish();
 		} else if (v == btOkay) {
@@ -131,5 +147,17 @@ implements OnClickListener, OnTimeChangedListener {
 		this.hour = hourOfDay;
 		this.minute = minute;
 		showDifference();
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		showDifference();
+		return true;
+	}
+
+	@Override
+	public boolean onHover(View v, MotionEvent event) {
+		showDifference();
+		return false;
 	}
 }
