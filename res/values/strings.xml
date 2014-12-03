@@ -42,8 +42,8 @@
     <string name="btBTSightingSightings">list other sightings of the device from this sighting</string>
     <string name="btCalendar">calendar</string>
     <string name="title_activity_activity_calendar">ActivityCalendar</string>
-    <string name="tvCalendarLabel">Choose a new time and date to set system wide. This will update all time related database columns as well.</string>
-    <string name="tvCalendarDifference">%sms will be added to time columns.</string>
+    <string name="tvCalendarLabel">Choose a new time and date to set system wide. This will update all time related database columns. Sadly, this app cannot change the system clock, so you will have to do that yourself.</string>
+    <string name="tvCalendarDifference">%s milliseconds will be added to all time columns.</string>
     <string name="btCalendarOkay">okay</string>
     <string name="btCalendarCancel">no, cancel</string>
 

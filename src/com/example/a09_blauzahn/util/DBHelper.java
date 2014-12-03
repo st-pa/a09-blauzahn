@@ -787,11 +787,11 @@ extends SQLiteOpenHelper {
 	public void setSystemTime(Calendar c) {
 		// get "old" current time
 		Date t0 = new Date();
-		// adjust system time
+/*		// adjust system time
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.setTime(c.getTime().getTime());
-		// get "new" current time
-		Date t1 = new Date();
+*/		// get "new" current time
+		Date t1 = c.getTime();
 		// calculate difference
 		long dt = t1.getTime() - t0.getTime();
 		// update all time related table columns

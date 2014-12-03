@@ -139,11 +139,8 @@ implements OnClickListener, OnTimeChangedListener {
 		if (v == btCancel) {
 			finish();
 		} else if (v == btOkay) {
-			AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-			am.setTime(cal.getTime().getTime());
-
-			// TODO react to calendar change
-			app.toast("no calendar change as of yet, sorry.");
+			app.db.setSystemTime(cal);
+			app.toast("time columns updated.");
 		}
 	}
 

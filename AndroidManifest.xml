@@ -16,7 +16,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- for writing database backups to external storage. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- for setting the system's date and time -->
+    <!--
+    for setting the system's date and time - sadly has no effect,
+    see http://stackoverflow.com/questions/6584772/is-possible-to-set-system-datetime-from-my-android-app
+    -->
     <uses-permission android:name="android.permission.SET_TIME" />
 
     <application
