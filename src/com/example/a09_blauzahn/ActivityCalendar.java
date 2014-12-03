@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import android.app.AlarmManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -136,12 +134,12 @@ implements OnClickListener, OnTimeChangedListener {
 
 	@Override
 	public void onClick(View v) {
-		if (v == btCancel) {
-			finish();
-		} else if (v == btOkay) {
+		if (v == btOkay) {
 			app.db.setSystemTime(cal);
 			app.toast("time columns updated.");
 		}
+		// close this activity, no matter what button was clicked
+		finish();
 	}
 
 	@Override
