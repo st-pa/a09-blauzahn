@@ -7,10 +7,16 @@
         android:id="@+id/menu_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
+<<<<<<< HEAD
         app:showAsAction="never"/>
     <item android:id="@+id/menu_check_wifi" android:title="@string/cbWifi" android:icon="@android:drawable/ic_menu_share">
     </item>
     <item android:id="@+id/menu_check_auto" android:title="@string/cbAutoString" android:icon="@android:drawable/ic_menu_rotate"></item>
     <item android:id="@+id/menu_check_bt" android:title="@string/cbBt" android:enabled="true" android:visible="true" android:checkable="true"></item>
+=======
+        app:showAsAction="never" android:enabled="false"/>
+    <item android:id="@+id/action_check_wifi" android:title="@string/cbWifi" android:icon="@android:drawable/ic_menu_share" android:checkable="true" android:enabled="true" android:visible="true"></item>
+    <item android:id="@+id/action_check_auto" android:title="@string/cbAutoString" android:icon="@android:drawable/ic_menu_rotate" android:checkable="true" android:enabled="true" android:visible="true"></item>
+>>>>>>> refs/remotes/origin/master
 
 </menu>
