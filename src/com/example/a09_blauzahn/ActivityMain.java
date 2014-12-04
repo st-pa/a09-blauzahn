@@ -176,8 +176,8 @@ implements OnClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		menu.findItem(R.id.action_check_auto).setChecked(app.settings.isBtAuto());
-		menu.findItem(R.id.action_check_wifi).setChecked(app.settings.isWifiOn());
+		menu.findItem(R.id.menu_check_auto).setChecked(app.settings.isBtAuto());
+		menu.findItem(R.id.menu_check_wifi).setChecked(app.settings.isWifiOn());
 		return true;
 	}
 
@@ -189,12 +189,12 @@ implements OnClickListener {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
-		} else if (id == R.id.action_check_auto) {
+		} else if (id == R.id.menu_check_auto) {
 			app.settings.setBtAuto(!app.settings.isBtAuto());
 			cbAuto.setChecked(app.settings.isBtAuto());
 			item.setChecked(app.settings.isBtAuto());
 			return true;
-		} else if (id == R.id.action_check_wifi) {
+		} else if (id == R.id.menu_check_wifi) {
 			app.settings.setWifiOn(!app.settings.isWifiOn());
 			cbWifi.setChecked(app.settings.isWifiOn());
 			item.setChecked(app.settings.isBtAuto());
