@@ -234,7 +234,7 @@ implements OnClickListener {
 	}
 
 	/**
-	 * react to click on {@link #btExit} by ending this activiy
+	 * react to click on {@link #btExit} by ending this activity
 	 * (and thus, hopefully, the whole app) after asking for
 	 * user confirmation.
 	 */
