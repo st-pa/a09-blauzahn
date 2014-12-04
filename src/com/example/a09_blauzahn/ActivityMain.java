@@ -176,6 +176,8 @@ implements OnClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		menu.findItem(R.id.action_check_auto).setChecked(app.settings.isBtAuto());
+		menu.findItem(R.id.action_check_wifi).setChecked(app.settings.isWifiOn());
 		return true;
 	}
 
@@ -186,6 +188,16 @@ implements OnClickListener {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			return true;
+		} else if (id == R.id.action_check_auto) {
+			app.settings.setBtAuto(!app.settings.isBtAuto());
+			cbAuto.setChecked(app.settings.isBtAuto());
+			item.setChecked(app.settings.isBtAuto());
+			return true;
+		} else if (id == R.id.action_check_wifi) {
+			app.settings.setWifiOn(!app.settings.isWifiOn());
+			cbWifi.setChecked(app.settings.isWifiOn());
+			item.setChecked(app.settings.isBtAuto());
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -60,6 +60,7 @@ implements OnItemClickListener, OnClickListener {
 		btCloseListView.setOnClickListener(this);
 
 		listView = (ListView) findViewById(R.id.listView);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		// retrieve the type of list to be displayed from extras bundle
 		Bundle extras = getIntent().getExtras();
@@ -246,7 +247,9 @@ implements OnItemClickListener, OnClickListener {
 		};
 		btBTSessionExit.setOnClickListener(listener);
 		btBTSessionDevices.setOnClickListener(listener);
+		btBTSessionDevices.setEnabled(item.getBTSightingsCount() > 0);
 		btBTSessionSightings.setOnClickListener(listener);
+		btBTSessionSightings.setEnabled(item.getBTSightingsCount() > 0);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
 	}
