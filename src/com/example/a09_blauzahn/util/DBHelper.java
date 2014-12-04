@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import android.app.AlarmManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,9 +25,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.a09_blauzahn.AppBlauzahn;
+import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
-import com.example.a09_blauzahn.model.BTDevice;
 
 /**
  * @author stpa

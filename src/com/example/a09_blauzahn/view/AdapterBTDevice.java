@@ -17,7 +17,7 @@ import com.example.a09_blauzahn.model.BTSighting;
  * for displaying {@link BTSighting}-information in a customized {@link ListView}.
  * @author stpa
  */
-public class AdapterDevice
+public class AdapterBTDevice
 extends AbstractAdapter<BTDevice> {
 
 	/** inner convenience class for speeding up list display. */
@@ -27,7 +27,7 @@ extends AbstractAdapter<BTDevice> {
 	}
 
 	/** Constructor. */
-	public AdapterDevice(
+	public AdapterBTDevice(
 		Context context,
 		int layout,
 		List<BTDevice> list
