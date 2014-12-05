@@ -57,7 +57,13 @@ extends AppTTS {
 	public static final int LIST_TYPE_BTDEVICES   = 1;
 	public static final int LIST_TYPE_BTSESSIONS  = 2;
 
-	/** folder on the sd card used for exporting the sql database. */
+	/** whether or not to perform a database import from the project's assets. */
+	private static final boolean IMPORT = false;
+	/** file name of the sqlite database to be imported upon startup. */
+	private static final String IMPORT_DB_FROM_ASSETS = "2012.02.02_22.11.37-blauzahn.sqlite";
+//	private static final String IMPORT_DB_FROM_ASSETS = "2014.12.04_08.42.26-blauzahn.sqlite";
+
+	/** folder path on the sd card used for exporting the sql database. */
 	public static final String TARGET_FOLDER = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
 		.append(DBHelper.SEPARATOR)
@@ -162,7 +168,7 @@ extends AppTTS {
 		this.btConnect = btConnect;
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
-//			dbImportFromAssets("2012.02.02_22.11.37-blauzahn.sqlite");
+			if (IMPORT) dbImportFromAssets(IMPORT_DB_FROM_ASSETS);
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (settings == null) settings = db.getSettings();
