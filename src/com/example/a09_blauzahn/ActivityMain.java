@@ -226,8 +226,8 @@ implements OnClickListener {
 
 	/** react to click on menu item for enabling database reset. */
 	private void clickedCbEnableReset() {
-		miEnableResetDb.setEnabled(!miEnableResetDb.isEnabled());
-		btResetDb.setEnabled(miEnableResetDb.isEnabled());
+		miEnableResetDb.setChecked(!miEnableResetDb.isChecked());
+		btResetDb.setEnabled(miEnableResetDb.isChecked());
 	}
 
 	@Override
