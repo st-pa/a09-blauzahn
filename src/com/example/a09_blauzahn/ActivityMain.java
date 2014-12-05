@@ -62,6 +62,11 @@ implements OnClickListener {
 	private Button btCalendar;
 	private CheckBox cbWifi;
 	private CheckBox cbAuto;
+	private MenuItem miEnableResetDb;
+	private MenuItem miWifi;
+	private MenuItem miAuto;
+	private MenuItem miBt;
+	private MenuItem miSettings;
 	private Dialog dialog;
 
 	////////////////////////////////////////////
@@ -176,8 +181,18 @@ implements OnClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		menu.findItem(R.id.menu_check_auto).setChecked(app.settings.isBtAuto());
-		menu.findItem(R.id.menu_check_wifi).setChecked(app.settings.isWifiOn());
+
+		// reference menu items when they are created
+		miSettings = menu.findItem(R.id.action_settings);
+		miEnableResetDb = menu.findItem(R.id.menu_check_reset_db);
+		miWifi = menu.findItem(R.id.menu_check_wifi);
+		miAuto = menu.findItem(R.id.menu_check_auto);
+		miBt = menu.findItem(R.id.menu_check_bt);
+
+		// show proper settings in the menu
+		miAuto.setChecked(app.settings.isBtAuto());
+		miWifi.setChecked(app.settings.isWifiOn());
+
 		return true;
 	}
 
@@ -186,21 +201,33 @@ implements OnClickListener {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (item == miSettings) {
+			// TODO handle click on settings menu item
 			return true;
-		} else if (id == R.id.menu_check_auto) {
-			app.settings.setBtAuto(!app.settings.isBtAuto());
-			cbAuto.setChecked(app.settings.isBtAuto());
-			item.setChecked(app.settings.isBtAuto());
+		} else if (item == miAuto) {
+			clickedCbAuto();
 			return true;
-		} else if (id == R.id.menu_check_wifi) {
-			app.settings.setWifiOn(!app.settings.isWifiOn());
-			cbWifi.setChecked(app.settings.isWifiOn());
-			item.setChecked(app.settings.isBtAuto());
+		} else if (item == miWifi) {
+			clickedCbWifi();
+			return true;
+		} else if (item == miEnableResetDb) {
+			clickedCbEnableReset();
+			return true;
+		} else if (item == miBt) {
+			clickedCbBt();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	/** TODO react to click on bluetooth menu item. */
+	private void clickedCbBt() {
+	}
+
+	/** react to click on menu item for enabling database reset. */
+	private void clickedCbEnableReset() {
+		miEnableResetDb.setEnabled(!miEnableResetDb.isEnabled());
+		btResetDb.setEnabled(miEnableResetDb.isEnabled());
 	}
 
 	@Override
@@ -302,13 +329,17 @@ implements OnClickListener {
 
 	/** react to click on {@link #cbWifi} by updating settings. */
 	private void clickedCbWifi() {
-		this.app.settings.setWifiOn(this.cbWifi.isChecked());
+		app.settings.setWifiOn(!app.settings.isWifiOn());
+		cbWifi.setChecked(app.settings.isWifiOn());
+		miWifi.setChecked(app.settings.isWifiOn());
 		this.app.updateSettings();
 	}
 
 	/** react to click on {@link #cbAuto} by updating settings. */
 	private void clickedCbAuto() {
-		this.app.settings.setBtAuto(this.cbAuto.isChecked());
+		app.settings.setBtAuto(!app.settings.isBtAuto());
+		cbAuto.setChecked(app.settings.isBtAuto());
+		miAuto.setChecked(app.settings.isBtAuto());
 		this.app.updateSettings();
 	}
 

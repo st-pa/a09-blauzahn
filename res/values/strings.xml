@@ -47,5 +47,6 @@
     <string name="btCalendarOkay">okay</string>
     <string name="btCalendarCancel">no, cancel</string>
     <string name="cbBt">bluetooth</string>
+    <string name="cbEnableResetDb">enable database reset</string>
 
 </resources>
