@@ -11,8 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
-
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -22,15 +23,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.WifiSession;
+import com.example.a09_blauzahn.model.WifiSighting;
 import com.example.a09_blauzahn.util.DBHelper;
 import com.example.a09_blauzahn.util.Settings;
 import com.example.aTTS.AppTTS;
@@ -115,8 +120,10 @@ extends AppTTS {
 	protected Context context;
 	/** for collecting log messages. */
 	protected StringBuffer log = new StringBuffer();
-	/** informationen about the currently running bluetooth-session. */
+	/** information about the currently running bluetooth-session. */
 	protected BTSession session;
+	/** information about the currently running wifi-session. */
+	protected WifiSession sessionWifi;
 	/** application-wide bluetooth adapter to avoid reinitializations. */
 	protected BluetoothAdapter ba;
 	/** application-wide broadcast receiver to avoid reinitializations. */
@@ -125,6 +132,15 @@ extends AppTTS {
 	protected AlarmManager am;
 	/** user defined settings for this application. */
 	protected Settings settings;
+	/** application-wide wifi manager. */
+	protected WifiManager wm;
+	/** wifi receiver. */
+	protected BroadcastReceiver wr;
+
+	////////////////////////////////////////////
+	// gui elements
+	////////////////////////////////////////////
+
 	/** label for showing status of bluetooth and wifi. */
 	protected TextView tvLabel;
 	/** label for displaying the log. */
@@ -171,6 +187,7 @@ extends AppTTS {
 			if (IMPORT) dbImportFromAssets(IMPORT_DB_FROM_ASSETS);
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+			if (wm == null) wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 			if (settings == null) settings = db.getSettings();
 			this.context = context;
 		}
@@ -312,7 +329,7 @@ extends AppTTS {
 	/** discover bluetooth devices. */
 	protected void scan() {
 		if (ba.isEnabled()) {
-			toast("start discovery");
+			toast("start bluetooth discovery");
 			// there should only be one receiver, so check if it's there already
 			if (br == null) {
 				// create a receiver for bluetooth
@@ -322,7 +339,7 @@ extends AppTTS {
 						String action = intent.getAction();
 						log(action);
 						if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-							log("discovery started");
+							log("bluetooth discovery started");
 							if (session != null) {
 								log("error: double discovery session");
 							}
@@ -382,10 +399,76 @@ extends AppTTS {
 //				registerReceiver(br,new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 			}
 			// start to scan for devices
-			ba.startDiscovery();
+			if (!ba.isDiscovering()) {
+				ba.startDiscovery();
+			}
 		} else {
 			toast("error: expected active adapter");
 		}
+	}
+
+	protected void scanWifi() {
+		if (wm.isWifiEnabled()) {
+			toast("start wifi discovery");
+			if (wr == null) {
+				wr = new BroadcastReceiver() {
+					@SuppressLint("NewApi")
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						String action = intent.getAction();
+						log(action);
+						Bundle bundle = intent.getExtras();
+						Set<String> keys = bundle.keySet();
+						for (String key : keys) {
+							log("key [" + key + "] value [" + bundle.getString(key));
+						}
+						if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
+							log("wifi discovery started");
+							List<ScanResult> results = wm.getScanResults();
+							for (ScanResult result : results) {
+								long timestamp;
+								if (android.os.Build.VERSION.SDK_INT >= 17) {
+									timestamp = result.timestamp;
+								} else {
+									timestamp = new Date().getTime();
+								}
+								WifiSighting sighting = new WifiSighting(
+									-1,
+									sessionWifi.getId(),
+									result.BSSID,
+									result.capabilities,
+									result.frequency,
+									result.level,
+									result.SSID,
+									timestamp
+								);
+								
+							}
+							// TODO handle wifi events
+						} else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
+							log("wifi state changed");
+							// TODO handle wifi events
+						} else if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION.equals(action)) {
+							log("wifi supplicant state changed");
+							// TODO handle wifi events
+						} else if (WifiManager.NETWORK_IDS_CHANGED_ACTION.equals(action)) {
+							log("network ids changed");
+							// TODO handle wifi events
+						} else if (WifiManager.RSSI_CHANGED_ACTION.equals(action)) {
+							log("wifi rssi changed");
+							// TODO handle wifi events
+						}
+					}
+				};
+				registerReceiver(wr,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+				registerReceiver(wr,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
+				registerReceiver(wr,new IntentFilter(WifiManager.NETWORK_IDS_CHANGED_ACTION));
+				registerReceiver(wr,new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
+			}
+			wm.startScan();
+		}
+		// TODO scan for wifi
 	}
 
 	/** update the verbal bluetooth-status display. */

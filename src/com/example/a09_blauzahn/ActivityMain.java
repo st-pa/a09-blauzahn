@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -34,6 +35,8 @@ implements OnClickListener {
 	private static final String BT_NAME        = "GT-Ixxxx";
 	/** used as result code of the enable-bluetooth-request-action, unique value in this app. */
 	private static final int REQUEST_ENABLE_BT = 42;
+	/** used as result code of the enable-wifi-request-action, unique value in this app. */
+	private static final int REQUEST_ENABLE_WIFI = 43;
 	/** whether or not the button {@link #btResetDb} should be clickable. */
 	private static final boolean ENABLE_RESET  = false;
 
@@ -142,6 +145,15 @@ implements OnClickListener {
 				app.scan();
 			} else {
 				// in this case the user declined to allow bluetooth
+				btConnect.setEnabled(true);
+			}
+			app.showStatus();
+		} else if (requestCode == REQUEST_ENABLE_WIFI) {
+			// the request to enable wifi was answered
+			if (app.wm.isWifiEnabled()) {
+				app.scanWifi();
+			} else {
+				// in this case the user declined to allow wifi
 				btConnect.setEnabled(true);
 			}
 			app.showStatus();
@@ -422,7 +434,7 @@ implements OnClickListener {
 
 	/** react to a click on {@link #btConnect}. */
 	private void clickedBtConnect() {
-		if (app.ba != null) {
+		if (app.settings.isBtOn() && app.ba != null) {
 			if (app.ba.isEnabled()) {
 				app.scan();
 			} else {
@@ -432,6 +444,17 @@ implements OnClickListener {
 			}
 		} else {
 			log("no bluetooth found.");
+		}
+		if (app.settings.isWifiOn() && app.wm != null) {
+			if (app.wm.isWifiEnabled()) {
+				app.scanWifi();
+			} else {
+				Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+				startActivityForResult(intent,REQUEST_ENABLE_WIFI);
+			}
+			// TODO scan for wifi
+		} else {
+			log("no wifi found.");
 		}
 		app.showStatus();
 		enable(false);
