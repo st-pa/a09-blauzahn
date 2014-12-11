@@ -28,6 +28,8 @@ import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.WifiSession;
+import com.example.a09_blauzahn.model.WifiSighting;
 
 /**
  * @author stpa
@@ -148,7 +150,7 @@ extends SQLiteOpenHelper {
 			.toString()
 		;
 	}
-	protected class V4 {
+	protected static class V4 {
 		// table for wifi sessions
 		protected static final String TAB_WIFISESSION = "\"wifiSession\"";
 		protected static final String KEY_WIFISESSION_ID = "\"id\"";
@@ -157,9 +159,36 @@ extends SQLiteOpenHelper {
 		// table for wifi sightings
 		protected static final String TAB_WIFISIGHTING = "\"wifiSighting\"";
 		protected static final String KEY_WIFISIGHTING_ID = "\"id\"";
-		protected static final String KEY_WIFISIGHTING_SESSION_ID = "\"sessionId\"";
-		protected static final String KEY_WIFISIGHTING_TIME = "\"time\"";
-		// TODO add columns appropriate to wifi measurements
+		protected static final String KEY_WIFISIGHTING_WIFI_SESSION_ID = "\"wifiSessionId\"";
+		protected static final String KEY_WIFISIGHTING_BSSID = "\"bssid\"";
+		protected static final String KEY_WIFISIGHTING_CAPABILITIES = "\"capabilities\"";
+		protected static final String KEY_WIFISIGHTING_FREQUENCY = "\"frequency\"";
+		protected static final String KEY_WIFISIGHTING_LEVEL = "\"level\"";
+		protected static final String KEY_WIFISIGHTING_SSID = "\"ssid\"";
+		protected static final String KEY_WIFISIGHTING_TIMESTAMP = "\"timestamp\"";
+		protected static final String CREATE_TAB_WIFISESSIONS = new StringBuffer()
+		.append("CREATE TABLE ")
+		.append(V4.TAB_WIFISESSION)
+		.append(" (\n")
+		.append(V4.KEY_WIFISESSION_ID)   .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+		.append(V4.KEY_WIFISESSION_START).append(" INTEGER,\n")
+		.append(V4.KEY_WIFISESSION_STOP) .append(" INTEGER\n")
+		.append(")")
+		.toString();
+		protected static final String CREATE_TAB_WIFISIGHTINGS = new StringBuffer()
+		.append("CREATE TABLE ")
+		.append(V4.TAB_WIFISIGHTING)
+		.append(" (\n")
+		.append(V4.KEY_WIFISIGHTING_ID)             .append(" INTEGER PRIMARY KEY AUTOINCREMENT,\n")
+		.append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID).append(" INTEGER,\n")
+		.append(V4.KEY_WIFISIGHTING_BSSID)          .append(" TEXT,\n")
+		.append(V4.KEY_WIFISIGHTING_CAPABILITIES)   .append(" TEXT,\n")
+		.append(V4.KEY_WIFISIGHTING_FREQUENCY)      .append(" INTEGER,\n")
+		.append(V4.KEY_WIFISIGHTING_LEVEL)          .append(" INTEGER,\n")
+		.append(V4.KEY_WIFISIGHTING_SSID)           .append(" TEXT,\n")
+		.append(V4.KEY_WIFISIGHTING_TIMESTAMP)      .append(" INTEGER\n")
+		.append(")")
+		.toString();
 	}
 
 	////////////////////////////////////////////
@@ -400,6 +429,26 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * adds a new row to the wifi session-table
+	 * using only the start time value and returns the autoinced id.
+	 * @param session {@link WifiSession}
+	 * @return {@link Long}
+	 */
+	public long addWifiSession(WifiSession session) {
+		init();
+		long result = -1;
+		try {
+			vals.clear();
+			vals.put(V3.KEY_BTSESSION_START,session.getStart().getTime());
+			vals.put(V3.KEY_BTSESSION_STOP,-1);
+			result = db.insert(V4.TAB_WIFISESSION,null,vals);
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
 	 * adds a new row to the bluetooth sightings-table and returns the autoinced id.
 	 * @param sighting {@link BTSighting}
 	 * @return {@link Long}
@@ -422,8 +471,32 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * adds a new row to the wifi sightings-table and returns the autoinced id.
+	 * @param sighting {@link WifiSighting}
+	 * @return {@link Long}
+	 */
+	public long addWifiSighting(WifiSighting sighting) {
+		init();
+		long result = -1;
+		try {
+			vals.clear();
+			vals.put(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID,sighting.getWifiSessionId());
+			vals.put(V4.KEY_WIFISIGHTING_BSSID          ,sighting.getBSSID());
+			vals.put(V4.KEY_WIFISIGHTING_CAPABILITIES   ,sighting.getCapabilities());
+			vals.put(V4.KEY_WIFISIGHTING_FREQUENCY      ,sighting.getFrequency());
+			vals.put(V4.KEY_WIFISIGHTING_LEVEL          ,sighting.getLevel());
+			vals.put(V4.KEY_WIFISIGHTING_SSID           ,sighting.getSSID());
+			vals.put(V4.KEY_WIFISIGHTING_TIMESTAMP      ,sighting.getTimestamp());
+			result = db.insert(V4.TAB_WIFISIGHTING,null,vals);
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
 	 * updates the stop time of the given bluetooth session.
-	 * @param sighting {@link BTSession}
+	 * @param session {@link BTSession}
 	 */
 	public void setBTSession(BTSession session) {
 		init();
@@ -438,6 +511,32 @@ extends SQLiteOpenHelper {
 				.append(Long.toString(session.getStop().getTime()))
 				.append(" WHERE ")
 				.append(V3.KEY_BTSESSION_ID)
+				.append(" = ")
+				.append(Long.toString(session.getId()))
+				.toString()
+			);
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+	}
+
+	/**
+	 * updates the stop time of the given wifi session.
+	 * @param session {@link WifiSession}
+	 */
+	public void setWifiSession(WifiSession session) {
+		init();
+		try {
+			db.execSQL(
+				new StringBuffer()
+				.append("UPDATE ")
+				.append(V4.TAB_WIFISESSION)
+				.append(" SET ")
+				.append(V4.KEY_WIFISESSION_STOP)
+				.append(" = ")
+				.append(Long.toString(session.getStop().getTime()))
+				.append(" WHERE ")
+				.append(V4.KEY_WIFISESSION_ID)
 				.append(" = ")
 				.append(Long.toString(session.getId()))
 				.toString()
