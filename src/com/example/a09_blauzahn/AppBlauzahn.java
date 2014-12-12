@@ -453,7 +453,7 @@ extends AppTTS {
 						if (bundle != null) {
 							Set<String> keys = bundle.keySet();
 							for (String key : keys) {
-								log("key [" + key + "] value [" + bundle.getString(key) + "]");
+								log("key [" + key + "] value [" + bundle.getInt(key) + "]");
 							}
 						}
 						if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
@@ -495,10 +495,10 @@ extends AppTTS {
 					}
 				};
 				registerReceiver(wr,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-				registerReceiver(wr,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
-				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
-				registerReceiver(wr,new IntentFilter(WifiManager.NETWORK_IDS_CHANGED_ACTION));
-				registerReceiver(wr,new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
+//				registerReceiver(wr,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+//				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
+//				registerReceiver(wr,new IntentFilter(WifiManager.NETWORK_IDS_CHANGED_ACTION));
+//				registerReceiver(wr,new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
 			}
 			wm.startScan();
 		}

@@ -866,6 +866,9 @@ extends SQLiteOpenHelper {
 	public long addSettings(Settings settings) {
 		init();
 		long result = -1;
+		if (vals == null) {
+			toast("sql error");
+		}
 		try {
 			vals.clear();
 			vals.put(V3.KEY_SETTINGS_BT_ON,        settings.isBtOn() ? 0 : 1);

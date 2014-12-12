@@ -203,6 +203,7 @@ implements OnClickListener {
 		// show proper settings in the menu
 		miAuto.setChecked(app.settings.isBtAuto());
 		miWifi.setChecked(app.settings.isWifiOn());
+		miBt.setChecked(app.settings.isBtOn());
 
 		return true;
 	}
@@ -231,8 +232,11 @@ implements OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/** TODO react to click on bluetooth menu item. */
+	/** react to click on bluetooth menu item. */
 	private void clickedCbBt() {
+		app.settings.setBtOn(!app.settings.isBtOn());
+		miBt.setChecked(app.settings.isBtOn());
+		this.app.updateSettings();
 	}
 
 	/** react to click on menu item for enabling database reset. */
