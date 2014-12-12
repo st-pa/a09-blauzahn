@@ -5,14 +5,13 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -446,13 +445,7 @@ implements OnClickListener {
 			log("no bluetooth found.");
 		}
 		if (app.settings.isWifiOn() && app.wm != null) {
-			if (app.wm.isWifiEnabled()) {
-				app.scanWifi();
-			} else {
-				Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
-				startActivityForResult(intent,REQUEST_ENABLE_WIFI);
-			}
-			// TODO scan for wifi
+			app.scanWifi();
 		} else {
 			log("no wifi found.");
 		}

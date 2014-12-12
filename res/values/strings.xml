@@ -25,8 +25,8 @@
     <string name="dialogExitTitle">Exit Confirmation</string>
     <string name="dialogExitYes">yes, please</string>
     <string name="dialogExitNo">no, not yet</string>
-    <string name="labelListBTDevices">List of recently discovered unique bluetooth devices in decending order of their number of total occurances.</string>
-    <string name="labelListBTDevicesSession">List of unique bluetooth devices discovered during session #%d in decending order of their number of total occurances.</string>
+    <string name="labelListBTDevices">List of recently discovered unique bluetooth devices in decending order of their number of total occurences.</string>
+    <string name="labelListBTDevicesSession">List of unique bluetooth devices discovered during session #%d in decending order of their number of total occurences.</string>
     <string name="labelListBTSessions">List of recently conducted bluetooth sessions with the most recent ones on top.</string>
     <string name="labelListBTSessionsDevice">List of bluetooth sessions containing device address [%s] with the most recent sessions ones on top.</string>
     <string name="labelListBTSightings">List of recently recorded bluetooth sightings in chronological order.</string>

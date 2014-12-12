@@ -8,6 +8,12 @@
         android:minSdkVersion="10"
         android:targetSdkVersion="11" />
 
+    <!-- for wifi. -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- for wifi. -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- for wifi. -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <!-- for querying network information. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- for discovering bluetooth devices. -->
@@ -19,8 +25,8 @@
     <!--
     for setting the system's date and time - sadly has no effect,
     see http://stackoverflow.com/questions/6584772/is-possible-to-set-system-datetime-from-my-android-app
-    -->
     <uses-permission android:name="android.permission.SET_TIME" />
+    -->
 
     <application
         android:name=".AppBlauzahn"

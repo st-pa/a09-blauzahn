@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
@@ -22,6 +23,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -31,6 +33,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
@@ -147,6 +150,8 @@ extends AppTTS {
 	protected TextView tvLog;
 	/** utility pointer to the main activity's connect button. */
 	protected Button btConnect;
+	/** for monitoring network connections */
+	private ConnectivityManager cm;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -188,6 +193,7 @@ extends AppTTS {
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (wm == null) wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			if (cm == null) cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			if (settings == null) settings = db.getSettings();
 			this.context = context;
 		}
@@ -291,6 +297,24 @@ extends AppTTS {
 		.append("name = ").append(DBHelper.nullValue(sighting.getName())).append("\n")
 		.append("address = ").append(sighting.getAddress()).append("\n")
 		.append("rssi = ").append(Long.toString(sighting.getRssi())).append("db\n")
+		.toString();
+	}
+
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param sighting {@link WifiSighting}
+	 * @return {@link String}
+	 */
+	public static String getDescription(WifiSighting sighting) {
+		return new StringBuffer()
+		.append("sighting id = ").append(Long.toString(sighting.getId())).append("\n")
+		.append("session id = ").append(Long.toString(sighting.getWifiSessionId())).append("\n")
+		.append("bssid = ").append(sighting.getBSSID()).append("\n")
+		.append("capabilities = ").append(sighting.getCapabilities()).append("\n")
+		.append("frequency = ").append(Long.toString(sighting.getFrequency())).append("\n")
+		.append("level = ").append(sighting.getLevel()).append("db\n")
+		.append("ssid = ").append(sighting.getSSID()).append("\n")
+		.append("time = ").append(DATETIMESTAMP.format(new Date(sighting.getTimestamp()))).append("\n")
 		.toString();
 	}
 
@@ -408,6 +432,14 @@ extends AppTTS {
 	}
 
 	protected void scanWifi() {
+		if (!wm.isWifiEnabled()) {
+			toast("turning on wifi");
+			wm.setWifiEnabled(true);
+			if (sessionWifi != null) {
+				toast("unexpected double wifi session");
+			}
+			// TODO start new wifi session
+		}
 		if (wm.isWifiEnabled()) {
 			toast("start wifi discovery");
 			if (wr == null) {
@@ -418,12 +450,14 @@ extends AppTTS {
 						String action = intent.getAction();
 						log(action);
 						Bundle bundle = intent.getExtras();
-						Set<String> keys = bundle.keySet();
-						for (String key : keys) {
-							log("key [" + key + "] value [" + bundle.getString(key));
+						if (bundle != null) {
+							Set<String> keys = bundle.keySet();
+							for (String key : keys) {
+								log("key [" + key + "] value [" + bundle.getString(key) + "]");
+							}
 						}
 						if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
-							log("wifi discovery started");
+							log("WIFI SCAN RESULTS AVAILABLE");
 							List<ScanResult> results = wm.getScanResults();
 							for (ScanResult result : results) {
 								long timestamp;
@@ -434,7 +468,7 @@ extends AppTTS {
 								}
 								WifiSighting sighting = new WifiSighting(
 									-1,
-									sessionWifi.getId(),
+									-1,//sessionWifi.getId(),
 									result.BSSID,
 									result.capabilities,
 									result.frequency,
@@ -442,20 +476,20 @@ extends AppTTS {
 									result.SSID,
 									timestamp
 								);
-								
+								log(AppBlauzahn.getDescription(sighting));
 							}
 							// TODO handle wifi events
 						} else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
-							log("wifi state changed");
+							log("WIFI STATE CHANGED");
 							// TODO handle wifi events
 						} else if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION.equals(action)) {
-							log("wifi supplicant state changed");
+							log("wifi supplicant state changed".toUpperCase(LOCALE));
 							// TODO handle wifi events
 						} else if (WifiManager.NETWORK_IDS_CHANGED_ACTION.equals(action)) {
-							log("network ids changed");
+							log("network ids changed".toUpperCase(LOCALE));
 							// TODO handle wifi events
 						} else if (WifiManager.RSSI_CHANGED_ACTION.equals(action)) {
-							log("wifi rssi changed");
+							log("wifi rssi changed".toUpperCase(LOCALE));
 							// TODO handle wifi events
 						}
 					}
@@ -468,7 +502,6 @@ extends AppTTS {
 			}
 			wm.startScan();
 		}
-		// TODO scan for wifi
 	}
 
 	/** update the verbal bluetooth-status display. */
@@ -506,6 +539,14 @@ extends AppTTS {
 			toast("unregister Bluetooth receiver");
 			unregisterReceiver(br);
 			br = null;
+		}
+		if (wm != null && wm.isWifiEnabled()) {
+			wm.setWifiEnabled(false);
+		}
+		if (wr != null) {
+			toast("unregister Wifi receiver");
+			unregisterReceiver(wr);
+			wr = null;
 		}
 		showStatus();
 	}

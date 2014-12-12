@@ -50,6 +50,7 @@ extends SQLiteOpenHelper {
 	////////////////////////////////////////////
 	// local constants
 	////////////////////////////////////////////
+
 	/** internal version of the data model. */
 	protected static final int DB_VERSION = 3;
 
@@ -259,11 +260,15 @@ extends SQLiteOpenHelper {
 				.toString()
 			);
 		}
-		// prepare for upgrade to version three
 		if (DB_VERSION >= 3) {
 			db.execSQL(V3.CREATE_TAB_BTSESSIONS);
 			db.execSQL(V3.CREATE_TAB_BTSIGHTINGS);
 			db.execSQL(V3.CREATE_TAB_SETTINGS);
+		}
+		// prepare for upgrade to version four
+		if (DB_VERSION >= 4) {
+			db.execSQL(V4.CREATE_TAB_WIFISESSIONS);
+			db.execSQL(V4.CREATE_TAB_WIFISIGHTINGS);
 		}
 	}
 
@@ -308,6 +313,10 @@ extends SQLiteOpenHelper {
 				.append("RENAME TO ").append(V3.TAB_BTSIGHTING)
 				.toString()
 			);
+		} else if (oldVersion == 3 && newVersion == 4) {
+			// create wifi tables
+			db.execSQL(V4.CREATE_TAB_WIFISESSIONS);
+			db.execSQL(V4.CREATE_TAB_WIFISIGHTINGS);
 		}
 	}
 

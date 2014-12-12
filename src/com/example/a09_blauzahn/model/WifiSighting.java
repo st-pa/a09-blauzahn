@@ -2,6 +2,8 @@ package com.example.a09_blauzahn.model;
 
 import java.io.Serializable;
 
+import com.example.a09_blauzahn.AppBlauzahn;
+
 public class WifiSighting
 implements Serializable {
 
@@ -147,5 +149,10 @@ implements Serializable {
 	 */
 	public final void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	@Override
+	public final String toString() {
+		return AppBlauzahn.getDescription(this);
 	}
 }
