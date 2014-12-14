@@ -55,9 +55,9 @@ implements OnClickListener {
 	private Button btDisconnect;
 	private Button btRefresh;
 	private Button btResetDb;
-	private Button btShowSightings;
-	private Button btShowDevices;
-	private Button btShowSessions;
+	private Button btBtSightings;
+	private Button btBtDevices;
+	private Button btBtSessions;
 	private Button btExport;
 	private Button btExit;
 	private Button btCalendar;
@@ -83,13 +83,13 @@ implements OnClickListener {
 		btConnect   = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
 		btRefresh     = (Button) findViewById(R.id.btRefresh);
-		btResetDb      = (Button) findViewById(R.id.btResetDb);
-		btShowSightings = (Button) findViewById(R.id.btShowSightings);
-		btShowDevices   = (Button) findViewById(R.id.btShowDevices);
-		btShowSessions  = (Button) findViewById(R.id.btShowSessions);
-		btExport       = (Button) findViewById(R.id.btExport);
+		btResetDb     = (Button) findViewById(R.id.btResetDb);
+		btBtSightings = (Button) findViewById(R.id.btShowBtSightings);
+		btBtDevices   = (Button) findViewById(R.id.btShowBtDevices);
+		btBtSessions  = (Button) findViewById(R.id.btShowBtSessions);
+		btExport      = (Button) findViewById(R.id.btExport);
 		btExit        = (Button) findViewById(R.id.btExit);
-		btCalendar  = (Button) findViewById(R.id.btCalendar);
+		btCalendar   = (Button) findViewById(R.id.btCalendar);
 
 		app = (AppBlauzahn) getApplication();
 		app.init(this,tvLog,btConnect);
@@ -102,15 +102,15 @@ implements OnClickListener {
 		btRefresh      .setOnClickListener(this);
 		btResetDb      .setOnClickListener(this);
 		btResetDb.setEnabled(ENABLE_RESET);
-		btShowSightings.setOnClickListener(this);
-		btShowDevices  .setOnClickListener(this);
-		btShowSessions .setOnClickListener(this);
+		btBtSightings  .setOnClickListener(this);
+		btBtDevices    .setOnClickListener(this);
+		btBtSessions   .setOnClickListener(this);
 		btExport       .setOnClickListener(this);
 		btExit         .setOnClickListener(this);
 		btCalendar     .setOnClickListener(this);
 
 		// reference checkboxes
-		cbAuto = (CheckBox) findViewById(R.id.cbAutoScan);
+		cbAuto = (CheckBox) findViewById(R.id.cbWifiAuto);
 		cbWifi = (CheckBox) findViewById(R.id.cbWifi);
 		// check the checkboxes according to user settings
 		cbAuto.setChecked(this.app.settings.isBtAuto());
@@ -255,11 +255,11 @@ implements OnClickListener {
 			clickedBtRefresh();
 		} else if (v == btResetDb) {
 			clickedBtResetDb();
-		} else if (v == btShowSightings) {
+		} else if (v == btBtSightings) {
 			clickedBtShowSightings();
-		} else if (v == btShowDevices) {
+		} else if (v == btBtDevices) {
 			clickedBtShowDevices();
-		} else if (v == btShowSessions) {
+		} else if (v == btBtSessions) {
 			clickedBtShowSessions();
 		} else if (v == cbAuto) {
 			clickedCbAuto();
@@ -366,7 +366,7 @@ implements OnClickListener {
 		startActivity(intent);
 	}
 
-	/** react to click on {@link #btShowSightings}. */
+	/** react to click on {@link #btBtSightings}. */
 	private void clickedBtShowDevices() {
 		Intent intent = new Intent(
 			ActivityMain.this,
@@ -377,7 +377,7 @@ implements OnClickListener {
 		startActivity(intent);
 	}
 
-	/** react to click on {@link #btShowSightings}. */
+	/** react to click on {@link #btBtSightings}. */
 	private void clickedBtShowSightings() {
 		Intent intent = new Intent(
 			ActivityMain.this,

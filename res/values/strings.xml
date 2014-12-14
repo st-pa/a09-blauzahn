@@ -13,7 +13,7 @@
     <string name="btShowSightingsComplete">sightings</string>
     <string name="btShowDevices">devices</string>
     <string name="btShowSessions">sessions</string>
-    <string name="cbAutoString">background scan</string>
+    <string name="cbAutoScan">background scan</string>
     <string name="cbWifi">wifi</string>
     <string name="btExport">export</string>
     <string name="btExit">exit</string>

@@ -55,7 +55,7 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btShowSightings"
+                android:id="@+id/btShowBtSightings"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:padding="6dp"
@@ -63,7 +63,7 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btShowDevices"
+                android:id="@+id/btShowBtDevices"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:padding="6dp"
@@ -71,7 +71,7 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btShowSessions"
+                android:id="@+id/btShowBtSessions"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:padding="6dp"
@@ -91,7 +91,7 @@
                 android:text="@string/cbWifi" />
 
             <CheckBox
-                android:id="@+id/cbAutoScan"
+                android:id="@+id/cbWifiAuto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cbAutoString" />

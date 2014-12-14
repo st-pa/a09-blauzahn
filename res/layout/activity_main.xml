@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
         android:orientation="horizontal" >
 
         <CheckBox
@@ -24,29 +25,32 @@
             android:textSize="12sp" />
 
         <CheckBox
-            android:id="@+id/cbAutoScan"
+            android:id="@+id/cbWifiAuto"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:text="@string/cbAutoString"
             android:textSize="12sp" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/btExit"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right" >
+
+        <CheckBox
+            android:id="@+id/cbBt"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:height="24dp"
-            android:padding="6dp"
-            android:text="@string/btExit"
+            android:layout_height="wrap_content"
+            android:text="@string/cbBt"
             android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/btCalendar"
+        <CheckBox
+            android:id="@+id/cbBtAuto"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:height="24dp"
-            android:padding="6dp"
-            android:text="@string/btCalendar"
+            android:layout_height="wrap_content"
+            android:text="@string/cbAutoString"
             android:textSize="12sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +66,7 @@
 
             <Button
                 android:id="@+id/btConnect"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
@@ -71,7 +75,7 @@
 
             <Button
                 android:id="@+id/btDisconnect"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
@@ -80,7 +84,7 @@
 
             <Button
                 android:id="@+id/btRefresh"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
@@ -89,11 +93,20 @@
 
             <Button
                 android:id="@+id/btResetDb"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
                 android:text="@string/btResetDb"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btExit"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:height="24dp"
+                android:padding="6dp"
+                android:text="@string/btExit"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -103,8 +116,8 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/btShowSightings"
-                android:layout_width="wrap_content"
+                android:id="@+id/btShowBtSightings"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
@@ -112,8 +125,8 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btShowDevices"
-                android:layout_width="wrap_content"
+                android:id="@+id/btShowBtDevices"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
@@ -121,8 +134,8 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btShowSessions"
-                android:layout_width="wrap_content"
+                android:id="@+id/btShowBtSessions"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
@@ -131,13 +144,23 @@
 
             <Button
                 android:id="@+id/btExport"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
                 android:text="@string/btExport"
                 android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:height="24dp"
+                android:padding="6dp"
+                android:text="@string/btCalendar"
+                android:textSize="12sp" />
         </LinearLayout>
+
     </LinearLayout>
 
     <ScrollView
