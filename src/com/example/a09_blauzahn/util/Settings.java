@@ -2,6 +2,8 @@ package com.example.a09_blauzahn.util;
 
 import java.util.Date;
 
+import com.example.a09_blauzahn.AppBlauzahn;
+
 public class Settings {
 
 	private static final String NAME = "Blauzahn";
@@ -37,10 +39,8 @@ public class Settings {
 	/** Constructor, using all fields. */
 	public Settings(
 		long id, Date validFrom,
-		boolean wifiOn, String wifiName, boolean wifiAuto,
-		int wifiInterval, boolean wifiDisable,
-		boolean btOn, String btName,
-		boolean btAuto, int btInterval, boolean btDisable
+		boolean btOn, String btName, boolean btAuto, int btInterval, boolean btDisable,
+		boolean wifiOn, String wifiName, boolean wifiAuto,int wifiInterval, boolean wifiDisable
 	) {
 		super();
 		this.id = id;
@@ -240,4 +240,8 @@ public class Settings {
 		this.btOn = btOn;
 	}
 
+	@Override
+	public final String toString() {
+		return AppBlauzahn.getDescription(this);
+	}
 }

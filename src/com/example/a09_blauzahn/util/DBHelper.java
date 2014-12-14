@@ -52,7 +52,7 @@ extends SQLiteOpenHelper {
 	////////////////////////////////////////////
 
 	/** internal version of the data model. */
-	protected static final int DB_VERSION = 3;
+	protected static final int DB_VERSION = 4;
 
 	/**
 	 * utility class containing sql table and column names for version 1.
@@ -877,7 +877,7 @@ extends SQLiteOpenHelper {
 			vals.put(V3.KEY_SETTINGS_BT_INTERVAL,  settings.getBtInterval());
 			vals.put(V3.KEY_SETTINGS_BT_NAME,      settings.getBtName());
 			vals.put(V3.KEY_SETTINGS_VALID_FROM,   settings.getValidFrom().getTime());
-			vals.put(V3.KEY_SETTINGS_WIFI_ON,      settings.isWifiAuto() ? 0 : 1);
+			vals.put(V3.KEY_SETTINGS_WIFI_ON,      settings.isWifiOn() ? 0 : 1);
 			vals.put(V3.KEY_SETTINGS_WIFI_AUTO,    settings.isWifiAuto() ? 0 : 1);
 			vals.put(V3.KEY_SETTINGS_WIFI_DISABLE, settings.isWifiDisable() ? 0 : 1);
 			vals.put(V3.KEY_SETTINGS_WIFI_INTERVAL,settings.getWifiInterval());

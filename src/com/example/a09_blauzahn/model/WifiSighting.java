@@ -1,6 +1,10 @@
 package com.example.a09_blauzahn.model;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import android.annotation.SuppressLint;
+import android.net.wifi.ScanResult;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 
@@ -37,6 +41,25 @@ implements Serializable {
 		this.level = level;
 		this.SSID = SSID;
 		this.timestamp = timestamp;
+	}
+
+	/** Convenience-Constructor. */
+	@SuppressLint("NewApi")
+	public WifiSighting(
+		long id,
+		long wifiSessionId,
+		ScanResult result
+	) {
+		this(
+			id,
+			wifiSessionId,
+			result.BSSID,
+			result.capabilities,
+			result.frequency,
+			result.level,
+			result.SSID,
+			(android.os.Build.VERSION.SDK_INT >= 17) ? result.timestamp : new Date().getTime()
+		);
 	}
 
 	/**

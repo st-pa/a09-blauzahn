@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -23,7 +22,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -150,8 +148,8 @@ extends AppTTS {
 	protected TextView tvLog;
 	/** utility pointer to the main activity's connect button. */
 	protected Button btConnect;
-	/** for monitoring network connections */
-	private ConnectivityManager cm;
+//	/** for monitoring network connections */
+//	private ConnectivityManager cm;
 
 	////////////////////////////////////////////
 	// methods and functions
@@ -193,10 +191,11 @@ extends AppTTS {
 			if (ba == null) ba = BluetoothAdapter.getDefaultAdapter();
 			if (am == null) am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if (wm == null) wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-			if (cm == null) cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			if (settings == null) settings = db.getSettings();
+//			if (cm == null) cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			this.context = context;
 		}
+		if (settings == null) settings = db.getSettings();
+//		log("settings from " + DATETIMESTAMP.format(settings.getValidFrom()) + "\n" + getDescription(settings));
 	}
 
 	/**
@@ -318,6 +317,28 @@ extends AppTTS {
 		.toString();
 	}
 
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param settings {@link Settings}
+	 * @return {@link String}
+	 */
+	public static String getDescription(Settings settings) {
+		return new StringBuffer()
+		.append("id = ").append(settings.getId()).append("\n")
+		.append("validFrom = ").append(DATETIMESTAMP.format(settings.getValidFrom())).append("\n")
+		.append("btOn = ").append(Boolean.toString(settings.isBtOn())).append("\n")
+		.append("btAuto = ").append(Boolean.toString(settings.isBtAuto())).append("\n")
+		.append("btDisable = ").append(Boolean.toString(settings.isBtDisable())).append("\n")
+		.append("btInterval = ").append(Long.toString(settings.getBtInterval())).append("\n")
+		.append("btName = ").append(settings.getBtName()).append("\n")
+		.append("wifiOn = ").append(Boolean.toString(settings.isWifiOn())).append("\n")
+		.append("wifiAuto = ").append(Boolean.toString(settings.isWifiAuto())).append("\n")
+		.append("wifiDisable = ").append(Boolean.toString(settings.isWifiDisable())).append("\n")
+		.append("wifiInterval = ").append(Long.toString(settings.getWifiInterval())).append("\n")
+		.append("wifiName = ").append(settings.getWifiName()).append("\n")
+		.toString();
+	}
+
 	/** make a formatted timestamp. */
 	public static final String timestamp() {
 		return TIMESTAMP.format(new Date());
@@ -435,16 +456,11 @@ extends AppTTS {
 		if (!wm.isWifiEnabled()) {
 			toast("turning on wifi");
 			wm.setWifiEnabled(true);
-			if (sessionWifi != null) {
-				toast("unexpected double wifi session");
-			}
-			// TODO start new wifi session
 		}
 		if (wm.isWifiEnabled()) {
 			toast("start wifi discovery");
 			if (wr == null) {
 				wr = new BroadcastReceiver() {
-					@SuppressLint("NewApi")
 					@Override
 					public void onReceive(Context context, Intent intent) {
 						String action = intent.getAction();
@@ -459,29 +475,39 @@ extends AppTTS {
 						if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
 							log("WIFI SCAN RESULTS AVAILABLE");
 							List<ScanResult> results = wm.getScanResults();
+							startWifiSession();
 							for (ScanResult result : results) {
-								long timestamp;
-								if (android.os.Build.VERSION.SDK_INT >= 17) {
-									timestamp = result.timestamp;
-								} else {
-									timestamp = new Date().getTime();
-								}
-								WifiSighting sighting = new WifiSighting(
-									-1,
-									-1,//sessionWifi.getId(),
+								String msg = String.format(
+									LOCALE,
+									"wifi: %s [%s] %ddb",
 									result.BSSID,
-									result.capabilities,
-									result.frequency,
-									result.level,
 									result.SSID,
-									timestamp
+									result.level
 								);
-								log(AppBlauzahn.getDescription(sighting));
+								WifiSighting s = new WifiSighting(
+									-1,
+									sessionWifi.getId(),
+									result
+								);
+								s.setId(db.addWifiSighting(s));
+								toast(msg);
+								Log.d(
+									TAG,
+									msg
+								);
+								log(AppBlauzahn.getDescription(s));
 							}
 							// TODO handle wifi events
 						} else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
 							log("WIFI STATE CHANGED");
-							// TODO handle wifi events
+							int state = bundle.getInt(WifiManager.EXTRA_NEW_STATE);
+							if (WifiManager.WIFI_STATE_ENABLED == state) {
+								startWifiSession();
+							} else if (state == WifiManager.WIFI_STATE_DISABLED) {
+								stopWifiSession();
+							} else if (state == WifiManager.WIFI_STATE_DISABLING) {
+								stopWifiSession();
+							}
 						} else if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION.equals(action)) {
 							log("wifi supplicant state changed".toUpperCase(LOCALE));
 							// TODO handle wifi events
@@ -495,12 +521,32 @@ extends AppTTS {
 					}
 				};
 				registerReceiver(wr,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-//				registerReceiver(wr,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
-//				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
+				registerReceiver(wr,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
 //				registerReceiver(wr,new IntentFilter(WifiManager.NETWORK_IDS_CHANGED_ACTION));
 //				registerReceiver(wr,new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
 			}
 			wm.startScan();
+		}
+	}
+
+	private void startWifiSession() {
+		if (sessionWifi == null) {
+			Date now = new Date();
+			sessionWifi = new WifiSession(-1,now,now,null);
+			sessionWifi.setId(db.addWifiSession(sessionWifi));
+		}
+	}
+
+	private void stopWifiSession() {
+		if (sessionWifi != null) {
+			Date now = new Date();
+			sessionWifi.setStop(now);
+			db.setWifiSession(sessionWifi);
+			sessionWifi = null;
+			toast("wifi session stopped");
+		} else {
+			toast("no wifi session to stop");
 		}
 	}
 
@@ -545,6 +591,7 @@ extends AppTTS {
 		}
 		if (wr != null) {
 			toast("unregister Wifi receiver");
+			stopWifiSession();
 			unregisterReceiver(wr);
 			wr = null;
 		}
@@ -557,10 +604,12 @@ extends AppTTS {
 	 * the id value of the settings.
 	 */
 	public void updateSettings() {
-		this.settings.setValidFrom(new Date());
+		Date now = new Date();
+		this.settings.setValidFrom(now);
 		this.settings.setId(
 			this.db.addSettings(this.settings)
 		);
+//		log("settings added " + DATETIMESTAMP.format(now) + "\n" + getDescription(settings));
 	}
 
 	/**

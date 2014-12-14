@@ -29,21 +29,21 @@
             <Button
                 android:id="@+id/btConnect"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:text="@string/btConnect"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btDisconnect"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:text="@string/btDisconnect"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btRefresh"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:text="@string/btRefresh"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -57,14 +57,14 @@
             <Button
                 android:id="@+id/btResetDb"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:text="@string/btResetDb"
                 android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btShowSightings"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:padding="6dp"
                 android:text="@string/btShowSightingsComplete"
                 android:textSize="12sp" />
@@ -72,7 +72,7 @@
             <Button
                 android:id="@+id/btShowDevices"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:padding="6dp"
                 android:text="@string/btShowDevices"
                 android:textSize="12sp" />
@@ -80,11 +80,10 @@
             <Button
                 android:id="@+id/btShowSessions"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:padding="6dp"
                 android:text="@string/btShowSessions"
                 android:textSize="12sp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +111,7 @@
             <Button
                 android:id="@+id/btCalendar"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
                 android:text="@string/btCalendar"
@@ -121,7 +120,7 @@
             <Button
                 android:id="@+id/btExport"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
                 android:text="@string/btExport"
@@ -130,14 +129,12 @@
             <Button
                 android:id="@+id/btExit"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
                 android:text="@string/btExit"
                 android:textSize="12sp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
     <ScrollView
