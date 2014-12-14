@@ -50,7 +50,6 @@ implements OnClickListener {
 	// gui-elements
 	////////////////////////////////////////////
 
-	private TextView tvLabel;
 	private TextView tvLog;
 	private Button btConnect;
 	private Button btDisconnect;
@@ -80,7 +79,6 @@ implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		tvLabel   = (TextView) findViewById(R.id.tvLabel);
 		tvLog      = (TextView) findViewById(R.id.tvLog);
 		btConnect   = (Button) findViewById(R.id.btConnect);
 		btDisconnect = (Button) findViewById(R.id.btDisconnect);
@@ -94,7 +92,7 @@ implements OnClickListener {
 		btCalendar  = (Button) findViewById(R.id.btCalendar);
 
 		app = (AppBlauzahn) getApplication();
-		app.init(this,tvLabel,tvLog,btConnect);
+		app.init(this,tvLog,btConnect);
 		if (app.ba != null) {
 			app.ba.setName(BT_NAME);
 		}

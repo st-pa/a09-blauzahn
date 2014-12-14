@@ -142,8 +142,6 @@ extends AppTTS {
 	// gui elements
 	////////////////////////////////////////////
 
-	/** label for showing status of bluetooth and wifi. */
-	protected TextView tvLabel;
 	/** label for displaying the log. */
 	protected TextView tvLog;
 	/** utility pointer to the main activity's connect button. */
@@ -171,19 +169,16 @@ extends AppTTS {
 
 	/**
 	 * try to initialize the database.
-	 * @param context 
-	 * @param btConnect 
-	 * @param tvLabel
-	 * @param tvLog
+	 * @param context {@link Context}
+	 * @param tvLog {@link TextView}
+	 * @param btConnect {@link Button}
 	 */
 	protected void init(
 		Context context,
-		TextView tvLabel,
 		TextView tvLog,
 		Button btConnect
 	) {
 		this.tvLog = tvLog;
-		this.tvLabel = tvLabel;
 		this.btConnect = btConnect;
 		if (context != null) {
 			if (db == null) db = new DBHelper(context);
@@ -552,8 +547,7 @@ extends AppTTS {
 
 	/** update the verbal bluetooth-status display. */
 	protected void showStatus() {
-		tvLabel.setText(AppBlauzahn.getDescription(ba));
-		tvLabel.refreshDrawableState();
+		log(AppBlauzahn.getDescription(ba));
 	}
 
 	/**
