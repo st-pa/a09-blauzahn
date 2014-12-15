@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:padding="6dp"
-                android:text="@string/btShowSightingsComplete"
+                android:text="@string/btShowBtSightings"
                 android:textSize="12sp" />
 
             <Button
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:padding="6dp"
-                android:text="@string/btShowDevices"
+                android:text="@string/btShowBtDevices"
                 android:textSize="12sp" />
 
             <Button
@@ -75,26 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:padding="6dp"
-                android:text="@string/btShowSessions"
+                android:text="@string/btShowBtSessions"
                 android:textSize="12sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <CheckBox
-                android:id="@+id/cbWifi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cbWifi" />
-
-            <CheckBox
-                android:id="@+id/cbWifiAuto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cbAutoString" />
         </LinearLayout>
 
         <LinearLayout
@@ -128,6 +110,49 @@
                 android:text="@string/btExit"
                 android:textSize="12sp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/cbWifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cbWifi"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/cbWifiAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cbWifiAuto"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/cbBt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cbBt"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/cbBtAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cbBtAuto"
+                android:textSize="12sp" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <ScrollView
@@ -146,7 +171,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tvLog"
                 android:textSize="10sp" />
-
         </LinearLayout>
     </ScrollView>
 

@@ -28,7 +28,7 @@
             android:id="@+id/cbWifiAuto"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:text="@string/cbAutoString"
+            android:text="@string/cbWifiAuto"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -48,7 +48,7 @@
             android:id="@+id/cbBtAuto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cbAutoString"
+            android:text="@string/cbBtAuto"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -121,7 +121,7 @@
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
-                android:text="@string/btShowSightingsComplete"
+                android:text="@string/btShowBtSightings"
                 android:textSize="12sp" />
 
             <Button
@@ -130,7 +130,7 @@
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
-                android:text="@string/btShowDevices"
+                android:text="@string/btShowBtDevices"
                 android:textSize="12sp" />
 
             <Button
@@ -139,7 +139,7 @@
                 android:layout_height="36dp"
                 android:height="24dp"
                 android:padding="6dp"
-                android:text="@string/btShowSessions"
+                android:text="@string/btShowBtSessions"
                 android:textSize="12sp" />
 
             <Button

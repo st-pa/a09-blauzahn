@@ -396,7 +396,7 @@ extends AppTTS {
 							} else log("error: missing discovery session");
 							btConnect.setEnabled(true);
 						} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-							showStatus();
+							log(BluetoothAdapter.ACTION_STATE_CHANGED);
 						} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 							Date now = new Date();
 							BluetoothDevice device = intent
@@ -582,6 +582,7 @@ extends AppTTS {
 		}
 		if (wm != null && wm.isWifiEnabled()) {
 			wm.setWifiEnabled(false);
+			toast("wifi disabled");
 		}
 		if (wr != null) {
 			toast("unregister Wifi receiver");
@@ -589,7 +590,7 @@ extends AppTTS {
 			unregisterReceiver(wr);
 			wr = null;
 		}
-		showStatus();
+		log("disconnection complete");
 	}
 
 	/**

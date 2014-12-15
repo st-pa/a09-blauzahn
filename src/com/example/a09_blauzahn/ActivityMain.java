@@ -62,11 +62,14 @@ implements OnClickListener {
 	private Button btExit;
 	private Button btCalendar;
 	private CheckBox cbWifi;
-	private CheckBox cbAuto;
+	private CheckBox cbWifiAuto;
+	private CheckBox cbBt;
+	private CheckBox cbBtAuto;
 	private MenuItem miEnableResetDb;
 	private MenuItem miWifi;
 	private MenuItem miAuto;
 	private MenuItem miBt;
+	private MenuItem miBtAuto;
 	private MenuItem miSettings;
 	private Dialog dialog;
 
@@ -110,14 +113,20 @@ implements OnClickListener {
 		btCalendar     .setOnClickListener(this);
 
 		// reference checkboxes
-		cbAuto = (CheckBox) findViewById(R.id.cbWifiAuto);
-		cbWifi = (CheckBox) findViewById(R.id.cbWifi);
+		cbWifiAuto = (CheckBox) findViewById(R.id.cbWifiAuto);
+		cbWifi    = (CheckBox) findViewById(R.id.cbWifi);
+		cbBtAuto = (CheckBox) findViewById(R.id.cbBtAuto);
+		cbBt    = (CheckBox) findViewById(R.id.cbBt);
 		// check the checkboxes according to user settings
-		cbAuto.setChecked(this.app.settings.isBtAuto());
+		cbWifiAuto.setChecked(this.app.settings.isBtAuto());
 		cbWifi.setChecked(this.app.settings.isWifiOn());
+		cbBtAuto.setChecked(this.app.settings.isBtAuto());
+		cbBt.setChecked(app.settings.isBtOn());
 		// register click listeners AFTER checking to avoid mayhem
-		cbAuto.setOnClickListener(this);
+		cbWifiAuto.setOnClickListener(this);
 		cbWifi.setOnClickListener(this);
+		cbBtAuto.setOnClickListener(this);
+		cbBt.setOnClickListener(this);
 
 		app.showStatus();
 		if (app.isLogEmpty()) {
@@ -144,7 +153,7 @@ implements OnClickListener {
 				// in this case the user declined to allow bluetooth
 				btConnect.setEnabled(true);
 			}
-			app.showStatus();
+			log("scanning for bluetooth");
 		} else if (requestCode == REQUEST_ENABLE_WIFI) {
 			// the request to enable wifi was answered
 			if (app.wm.isWifiEnabled()) {
@@ -152,8 +161,9 @@ implements OnClickListener {
 			} else {
 				// in this case the user declined to allow wifi
 				btConnect.setEnabled(true);
+				app.scanWifi();
 			}
-			app.showStatus();
+			log("scanning for wifi");
 		}
 	}
 
@@ -195,13 +205,15 @@ implements OnClickListener {
 		miSettings = menu.findItem(R.id.action_settings);
 		miEnableResetDb = menu.findItem(R.id.menu_check_reset_db);
 		miWifi = menu.findItem(R.id.menu_check_wifi);
-		miAuto = menu.findItem(R.id.menu_check_auto);
+		miAuto = menu.findItem(R.id.menu_check_wifi_auto);
 		miBt = menu.findItem(R.id.menu_check_bt);
+		miBtAuto = menu.findItem(R.id.menu_check_bt_auto);
 
 		// show proper settings in the menu
 		miAuto.setChecked(app.settings.isBtAuto());
 		miWifi.setChecked(app.settings.isWifiOn());
 		miBt.setChecked(app.settings.isBtOn());
+		miBtAuto.setChecked(app.settings.isBtAuto());
 
 		return true;
 	}
@@ -237,6 +249,13 @@ implements OnClickListener {
 		this.app.updateSettings();
 	}
 
+	/** react to click on bluetooth menu item. */
+	private void clickedCbBtAuto() {
+		app.settings.setBtAuto(!app.settings.isBtAuto());
+		miBtAuto.setChecked(app.settings.isBtAuto());
+		this.app.updateSettings();
+	}
+
 	/** react to click on menu item for enabling database reset. */
 	private void clickedCbEnableReset() {
 		miEnableResetDb.setChecked(!miEnableResetDb.isChecked());
@@ -261,10 +280,14 @@ implements OnClickListener {
 			clickedBtShowDevices();
 		} else if (v == btBtSessions) {
 			clickedBtShowSessions();
-		} else if (v == cbAuto) {
+		} else if (v == cbWifiAuto) {
 			clickedCbAuto();
 		} else if (v == cbWifi) {
 			clickedCbWifi();
+		} else if (v == cbBt) {
+			clickedCbBt();
+		} else if (v == cbBtAuto) {
+			clickedCbBtAuto();
 		} else if (v == btExport) {
 			clickedBtExport();
 		} else if (v == btExit) {
@@ -348,10 +371,10 @@ implements OnClickListener {
 		this.app.updateSettings();
 	}
 
-	/** react to click on {@link #cbAuto} by updating settings. */
+	/** react to click on {@link #cbWifiAuto} by updating settings. */
 	private void clickedCbAuto() {
 		app.settings.setBtAuto(!app.settings.isBtAuto());
-		cbAuto.setChecked(app.settings.isBtAuto());
+		cbWifiAuto.setChecked(app.settings.isBtAuto());
 		miAuto.setChecked(app.settings.isBtAuto());
 		this.app.updateSettings();
 	}
@@ -435,6 +458,7 @@ implements OnClickListener {
 
 	/** react to a click on {@link #btConnect}. */
 	private void clickedBtConnect() {
+		log("connect");
 		if (app.settings.isBtOn() && app.ba != null) {
 			if (app.ba.isEnabled()) {
 				app.scan();
@@ -451,7 +475,6 @@ implements OnClickListener {
 		} else {
 			log("no wifi found.");
 		}
-		app.showStatus();
 		enable(false);
 	}
 
