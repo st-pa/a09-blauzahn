@@ -361,26 +361,21 @@ extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	/**
-	 * gets the maximum id value in the bluetooth session table,
-	 * which should be identical to the row count.
-	 * @return {@link Integer}
-	 */
-	public int getMaxBTSessionId() {
+	protected long getMaxId(String table, String idColumn) {
 		init();
-		int result = -1;
+		long result = -1;
 		try {
 			Cursor c = db.rawQuery(
 				new StringBuffer()
 				.append("SELECT max(")
-				.append(V3.KEY_BTSESSION_ID)
+				.append(table)
 				.append(") FROM ")
-				.append(V3.TAB_BTSESSION)
+				.append(idColumn)
 				.toString(),
 				null
 			);
 			if (c.moveToFirst()) {
-				result = c.getInt(0);
+				result = c.getLong(0);
 			};
 			c.close();
 		} catch (SQLiteException e) {
@@ -390,31 +385,39 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * gets the maximum id value in the bluetooth session table,
+	 * which should be identical to the row count.
+	 * @return {@link Long}
+	 */
+	public long getMaxBTSessionId() {
+		return getMaxId(V3.TAB_BTSESSION,V3.KEY_BTSESSION_ID);
+	}
+
+	/**
 	 * gets the maximum id value in the bluetooth sighting table,
 	 * which should be identical to the row count.
-	 * @return {@link Integer}
+	 * @return {@link Long}
 	 */
-	public int getMaxBTSightingId() {
-		init();
-		int result = -1;
-		try {
-			Cursor c = db.rawQuery(
-				new StringBuffer()
-				.append("SELECT max(")
-				.append(V3.KEY_BTSIGHTING_ID)
-				.append(") FROM ")
-				.append(V3.TAB_BTSIGHTING)
-				.toString(),
-				null
-			);
-			if (c.moveToFirst()) {
-				result = c.getInt(0);
-			};
-			c.close();
-		} catch (SQLiteException e) {
-			Log.e("SQL",e.toString());
-		}
-		return result;
+	public long getMaxBTSightingId() {
+		return getMaxId(V3.TAB_BTSIGHTING,V3.KEY_BTSIGHTING_ID);
+	}
+
+	/**
+	 * gets the maximum id value in the wifi session table,
+	 * which should be identical to the row count.
+	 * @return {@link Long}
+	 */
+	public long getMaxWifiSessionId() {
+		return getMaxId(V4.TAB_WIFISESSION,V4.KEY_WIFISESSION_ID);
+	}
+
+	/**
+	 * gets the maximum id value in the wifi sighting table,
+	 * which should be identical to the row count.
+	 * @return {@link Long}
+	 */
+	public long getMaxWifiSightingId() {
+		return getMaxId(V4.TAB_WIFISIGHTING,V4.KEY_WIFISIGHTING_ID);
 	}
 
 	/**
