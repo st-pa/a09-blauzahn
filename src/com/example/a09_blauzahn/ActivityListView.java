@@ -19,9 +19,12 @@ import android.widget.TextView;
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.WifiSession;
+import com.example.a09_blauzahn.model.WifiSighting;
 import com.example.a09_blauzahn.view.AdapterBTDevice;
 import com.example.a09_blauzahn.view.AdapterBTSession;
 import com.example.a09_blauzahn.view.AdapterBTSighting;
+import com.example.a09_blauzahn.view.AdapterWifiSighting;
 
 /**
  * activity for displaying simple lists. the
@@ -99,6 +102,14 @@ implements OnItemClickListener, OnClickListener {
 				this,
 				R.layout.list_btsession,
 				app.db.getListBTSessions(LIMIT,device,sighting)
+			);
+		} else if (listType == AppBlauzahn.LIST_TYPE_WIFISIGHTINGS) {
+			WifiSession session = (WifiSession) extras.getSerializable(AppBlauzahn.EXTRA_LIST_WIFISESSION);
+			WifiSighting sighting = (WifiSighting) extras.getSerializable(AppBlauzahn.EXTRA_LIST_WIFISIGHTING);
+			adapter = new AdapterWifiSighting(
+				this,
+				R.layout.list_wifisighting,
+				app.db.getListWifiSightings(LIMIT,session,sighting)
 			);
 		}
 		// set the list adapter

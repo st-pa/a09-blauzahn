@@ -1,6 +1,7 @@
 package com.example.a09_blauzahn.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -88,5 +89,32 @@ implements Serializable {
 	 */
 	public final void setWifiSightings(List<WifiSighting> wifiSightings) {
 		this.wifiSightings = wifiSightings;
+	}
+
+	/** gives {@link #stop}-time minus {@link #start}-time. */
+	public final long getDuration() {
+		return stop.getTime() - start.getTime();
+	}
+
+	/**
+	 * the names (not the addresses!) of the sighted
+	 * devices during this wifi session.
+	 * @return {@link List}<{@link String}>
+	 */
+	public final List<String> getWifiSightingsNames() {
+		List<String> list = new ArrayList<String>();
+		if (wifiSightings != null) {
+			for (WifiSighting sighting : wifiSightings) {
+				list.add(sighting.getSSID());
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * @return the number of wifi sightings
+	 */
+	public int getWifiSightingsCount() {
+		return (wifiSightings == null) ? 0 : wifiSightings.size();
 	}
 }

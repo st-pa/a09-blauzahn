@@ -313,7 +313,13 @@ implements OnClickListener {
 	}
 
 	private void clickedBtWifiSightings() {
-		// TODO Auto-generated method stub
+		Intent intent = new Intent(
+			ActivityMain.this,
+			ActivityListView.class
+		);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_WIFIDEVICES);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_LABEL,getString(R.string.labelListWifiSightings));
+		startActivity(intent);
 	}
 
 	private void clickedBtWifiSessions() {

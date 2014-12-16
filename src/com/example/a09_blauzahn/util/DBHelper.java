@@ -594,7 +594,7 @@ extends SQLiteOpenHelper {
 				s.append("WHERE ").append(V3.KEY_BTSIGHTING_ADDRESS)
 				.append(" = \"").append(sighting.getAddress()).append("\"\n");
 			}
-			s.append("ORDER BY ").append(V3.KEY_BTSIGHTING_ID).append(" DESC\n")
+			s.append("ORDER BY 1 DESC\n")
 			.append("LIMIT ").append(Integer.toString(limit))
 			;
 			Cursor c = db.rawQuery(
@@ -610,6 +610,66 @@ extends SQLiteOpenHelper {
 						c.getString(3),
 						c.getString(4),
 						c.getLong(5)
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
+	 * gets a list of all wifi device sightings.
+	 * warning! this can be very long. at least one
+	 * of the optional parameters should be <code>null</code>.
+	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @param session {@link WifiSession} optional filter, can be left <code>null</code>,
+	 * otherwise returns only sightings during the given session
+	 * @param sighting {@link WifiSighting}
+	 * @return {@link List}<{@link WifiSighting}>
+	 */
+	public List<WifiSighting> getListWifiSightings(int limit, WifiSession session, WifiSighting sighting) {
+		init();
+		List<WifiSighting> result = new ArrayList<WifiSighting>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT\n\t")
+			.append(V4.KEY_WIFISIGHTING_ID).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_CAPABILITIES).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_FREQUENCY).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_LEVEL).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_SSID).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_TIMESTAMP).append("\n")
+			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n");
+			// at most one of the three parameters should be different from null
+			if (session != null) {
+				s.append("WHERE ").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID)
+				.append(" = ").append(Long.toString(session.getId())).append("\n");
+			} else if (sighting != null) {
+				s.append("WHERE ").append(V4.KEY_WIFISIGHTING_BSSID)
+				.append(" = \"").append(sighting.getBSSID()).append("\"\n");
+			}
+			s.append("ORDER BY 1 DESC\n")
+			.append("LIMIT ").append(Integer.toString(limit))
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				result.add(
+					new WifiSighting(
+						c.getLong(0),//id,
+						c.getLong(1),//wifiSessionId,
+						c.getString(2),//BSSID,
+						c.getString(3),//capabilities,
+						c.getLong(4),//frequency,
+						c.getLong(5),//level,
+						c.getString(6),//SSID,
+						c.getLong(7)//timestamp
 					)
 				);
 			};

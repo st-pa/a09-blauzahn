@@ -33,6 +33,7 @@
     <string name="labelListBTSightings">List of recently recorded bluetooth sightings in chronological order.</string>
     <string name="labelListBTSightingsSession">List of recorded bluetooth sightings during session #%d in chronological order.</string>
     <string name="labelListBTSightingsDevice">List of recently recorded sightings of bluetooth device address [%s] in chronological order.</string>
+    <string name="labelListWifiSightings">List of recently recorded wifi sightings in chronological order.</string>
     <string name="btBTDeviceSightings">list all sightings of this device</string>
     <string name="btBTDeviceSessions">list the sessions containing this device</string>
     <string name="btBTDevicePairing">try pairing with this device</string>
