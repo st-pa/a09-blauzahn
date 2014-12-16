@@ -10,9 +10,9 @@
     <string name="btShowNetInfo">netInfo</string>
     <string name="btResetDb">reset db</string>
     <string name="btCloseListSightingComplete">close this list view</string>
-    <string name="btShowBtSightings">sightings</string>
-    <string name="btShowBtDevices">devices</string>
-    <string name="btShowBtSessions">sessions</string>
+    <string name="btShowBtSightings">btSightings</string>
+    <string name="btShowBtDevices">btDevices</string>
+    <string name="btShowBtSessions">btSessions</string>
     <string name="cbBtAuto">background bt scan</string>
     <string name="cbWifiAuto">background wifi scan</string>
     <string name="cbWifi">wifi</string>
@@ -49,5 +49,8 @@
     <string name="btCalendarCancel">no, cancel</string>
     <string name="cbBt">bluetooth</string>
     <string name="cbEnableResetDb">enable database reset</string>
+    <string name="btShowWifiSightings">wifiSightings</string>
+    <string name="btShowWifiDevices">wifiDevices</string>
+    <string name="btShowWifiSessions">wifiSessions</string>
 
 </resources>

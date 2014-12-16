@@ -58,6 +58,9 @@ implements OnClickListener {
 	private Button btBtSightings;
 	private Button btBtDevices;
 	private Button btBtSessions;
+	private Button btWifiSightings;
+	private Button btWifiDevices;
+	private Button btWifiSessions;
 	private Button btExport;
 	private Button btExit;
 	private Button btCalendar;
@@ -89,10 +92,13 @@ implements OnClickListener {
 		btResetDb     = (Button) findViewById(R.id.btResetDb);
 		btBtSightings = (Button) findViewById(R.id.btShowBtSightings);
 		btBtDevices   = (Button) findViewById(R.id.btShowBtDevices);
-		btBtSessions  = (Button) findViewById(R.id.btShowBtSessions);
-		btExport      = (Button) findViewById(R.id.btExport);
-		btExit        = (Button) findViewById(R.id.btExit);
-		btCalendar   = (Button) findViewById(R.id.btCalendar);
+		btBtSessions   = (Button) findViewById(R.id.btShowBtSessions);
+		btWifiSightings = (Button) findViewById(R.id.btShowWifiSightings);
+		btWifiSessions = (Button) findViewById(R.id.btShowWifiSessions);
+		btWifiDevices = (Button) findViewById(R.id.btShowWifiDevices);
+		btExport     = (Button) findViewById(R.id.btExport);
+		btExit      = (Button) findViewById(R.id.btExit);
+		btCalendar = (Button) findViewById(R.id.btCalendar);
 
 		app = (AppBlauzahn) getApplication();
 		app.init(this,tvLog,btConnect);
@@ -108,6 +114,9 @@ implements OnClickListener {
 		btBtSightings  .setOnClickListener(this);
 		btBtDevices    .setOnClickListener(this);
 		btBtSessions   .setOnClickListener(this);
+		btWifiSightings.setOnClickListener(this);
+		btWifiDevices  .setOnClickListener(this);
+		btWifiSessions .setOnClickListener(this);
 		btExport       .setOnClickListener(this);
 		btExit         .setOnClickListener(this);
 		btCalendar     .setOnClickListener(this);
@@ -294,7 +303,25 @@ implements OnClickListener {
 			clickedBtExit();
 		} else if (v == btCalendar) {
 			clickedBtCalendar();
+		} else if (v == btWifiDevices) {
+			clickedBtWifiDevices();
+		} else if (v == btWifiSessions) {
+			clickedBtWifiSessions();
+		} else if (v == btWifiSightings) {
+			clickedBtWifiSightings();
 		}
+	}
+
+	private void clickedBtWifiSightings() {
+		// TODO Auto-generated method stub
+	}
+
+	private void clickedBtWifiSessions() {
+		// TODO Auto-generated method stub
+	}
+
+	private void clickedBtWifiDevices() {
+		// TODO Auto-generated method stub
 	}
 
 	/**

@@ -743,9 +743,64 @@ extends SQLiteOpenHelper {
 			);
 			while (c.moveToNext()) {
 				long sessionId = c.getLong(0);
-				List<BTSighting> sightings = getBTSightingsInSession(sessionId);
+				List<BTSighting> sightings = getSightingsInBTSession(sessionId);
 				result.add(
 					new BTSession(
+						sessionId,
+						new Date(c.getLong(1)),
+						new Date(c.getLong(2)),
+						sightings
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
+	 * gets a list of all wifi sessions.
+	 * warning! this can be very long.
+	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @param sighting {@link WifiSighting}
+	 * @return {@link List}<{@link WifiSession}>
+	 */
+	public List<WifiSession> getListWifiSessions(int limit, WifiSighting sighting) {
+		init();
+		List<WifiSession> result = new ArrayList<WifiSession>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT\n\t")
+			.append("a.").append(V4.KEY_WIFISESSION_ID).append(",\n\t")
+			.append("a.").append(V4.KEY_WIFISESSION_START).append(",\n\t")
+			.append("a.").append(V4.KEY_WIFISESSION_STOP).append("\n")
+			.append("FROM ").append(V4.TAB_WIFISESSION).append(" AS a\n");
+			String bssid = null;
+			if (sighting != null) {
+				bssid = sighting.getBSSID();
+			}
+			if (bssid != null) {
+				s.append("INNER JOIN ").append(V4.TAB_WIFISIGHTING).append(" AS b\n")
+				.append("ON a.").append(V4.KEY_WIFISESSION_ID)
+				.append(" = b.").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID).append("\n")
+				.append("WHERE b.").append(V4.KEY_WIFISIGHTING_BSSID)
+				.append(" = \"").append(bssid).append("\"\n")
+				.append("GROUP BY 1,2,3\n");
+			}
+			s.append("ORDER BY 1 DESC\n")
+			.append("LIMIT ").append(Integer.toString(limit))
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				long sessionId = c.getLong(0);
+				List<WifiSighting> sightings = getSightingsInWifiSession(sessionId);
+				result.add(
+					new WifiSession(
 						sessionId,
 						new Date(c.getLong(1)),
 						new Date(c.getLong(2)),
@@ -765,7 +820,7 @@ extends SQLiteOpenHelper {
 	 * @param sessionId {@loink Long}
 	 * @return {@link List}<{@link BTSighting}>
 	 */
-	public List<BTSighting> getBTSightingsInSession(long sessionId) {
+	public List<BTSighting> getSightingsInBTSession(long sessionId) {
 		init();
 		List<BTSighting> result = new ArrayList<BTSighting>();
 		try {
@@ -793,6 +848,54 @@ extends SQLiteOpenHelper {
 						c.getString(2),
 						c.getString(3),
 						c.getLong(4)
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
+	 * count the wifi sightings in the given wifi session.
+	 * @param sessionId {@loink Long}
+	 * @return {@link List}<{@link WifiSighting}>
+	 */
+	public List<WifiSighting> getSightingsInWifiSession(long sessionId) {
+		init();
+		List<WifiSighting> result = new ArrayList<WifiSighting>();
+		try {
+			Cursor c = db.rawQuery(
+				new StringBuffer()
+				.append("SELECT\n\t")
+				.append(V4.KEY_WIFISIGHTING_ID).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_BSSID).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_CAPABILITIES).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_FREQUENCY).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_LEVEL).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_SSID).append(",\n\t")
+				.append(V4.KEY_WIFISIGHTING_TIMESTAMP).append("\n")
+				.append("FROM ").append(V4.TAB_WIFISIGHTING).append("\n")
+				.append("WHERE ").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID)
+				.append(" = ").append(Long.toString(sessionId)).append("\n")
+				.append("ORDER BY 2 ASC")
+				.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				result.add(
+					new WifiSighting(
+						c.getLong(0),
+						c.getLong(1),
+						c.getString(2),
+						c.getString(3),
+						c.getLong(4),
+						c.getLong(5),
+						c.getString(6),
+						c.getLong(7)
 					)
 				);
 			};

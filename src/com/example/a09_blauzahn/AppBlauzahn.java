@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import android.app.AlarmManager;
@@ -452,7 +451,7 @@ extends AppTTS {
 			toast("turning on wifi");
 			wm.setWifiEnabled(true);
 		}
-		if (wm.isWifiEnabled()) {
+//		if (wm.isWifiEnabled()) {
 			toast("start wifi discovery");
 			if (wr == null) {
 				wr = new BroadcastReceiver() {
@@ -461,23 +460,23 @@ extends AppTTS {
 						String action = intent.getAction();
 						log(action);
 						Bundle bundle = intent.getExtras();
-						if (bundle != null) {
+/*						if (bundle != null) {
 							Set<String> keys = bundle.keySet();
 							for (String key : keys) {
 								log("key [" + key + "] value [" + bundle.getInt(key) + "]");
 							}
 						}
-						if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
+*/						if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
 							log("WIFI SCAN RESULTS AVAILABLE");
 							List<ScanResult> results = wm.getScanResults();
 							startWifiSession();
 							for (ScanResult result : results) {
 								String msg = String.format(
 									LOCALE,
-									"wifi: %s [%s] %ddb",
+									"wifi: [%s] %ddb %s",
 									result.BSSID,
-									result.SSID,
-									result.level
+									result.level,
+									result.SSID
 								);
 								WifiSighting s = new WifiSighting(
 									-1,
@@ -490,9 +489,8 @@ extends AppTTS {
 									TAG,
 									msg
 								);
-								log(AppBlauzahn.getDescription(s));
+//								log(AppBlauzahn.getDescription(s));
 							}
-							// TODO handle wifi events
 						} else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
 							log("WIFI STATE CHANGED");
 							int state = bundle.getInt(WifiManager.EXTRA_NEW_STATE);
@@ -505,24 +503,23 @@ extends AppTTS {
 							}
 						} else if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION.equals(action)) {
 							log("wifi supplicant state changed".toUpperCase(LOCALE));
-							// TODO handle wifi events
 						} else if (WifiManager.NETWORK_IDS_CHANGED_ACTION.equals(action)) {
 							log("network ids changed".toUpperCase(LOCALE));
-							// TODO handle wifi events
 						} else if (WifiManager.RSSI_CHANGED_ACTION.equals(action)) {
 							log("wifi rssi changed".toUpperCase(LOCALE));
-							// TODO handle wifi events
 						}
 					}
 				};
 				registerReceiver(wr,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 				registerReceiver(wr,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
-				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
+//				registerReceiver(wr,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
 //				registerReceiver(wr,new IntentFilter(WifiManager.NETWORK_IDS_CHANGED_ACTION));
 //				registerReceiver(wr,new IntentFilter(WifiManager.RSSI_CHANGED_ACTION));
 			}
-			wm.startScan();
-		}
+			if (!wm.startScan()) {
+				toast("could not start wifi scan");
+			};
+//		}
 	}
 
 	private void startWifiSession() {
@@ -563,7 +560,18 @@ extends AppTTS {
 		).show();
 	}
 
+	/** try to deactivate bluetooth and wifi. */
 	public void disconnect() {
+		if (wm != null && wm.isWifiEnabled()) {
+			wm.setWifiEnabled(false);
+			toast("wifi disabled");
+		}
+		if (wr != null) {
+			toast("unregister Wifi receiver");
+			stopWifiSession();
+			unregisterReceiver(wr);
+			wr = null;
+		}
 		if (ba != null) {
 			toast("disconnect Bluetooth adapter");
 			if (ba.isDiscovering()) {
@@ -579,16 +587,6 @@ extends AppTTS {
 			toast("unregister Bluetooth receiver");
 			unregisterReceiver(br);
 			br = null;
-		}
-		if (wm != null && wm.isWifiEnabled()) {
-			wm.setWifiEnabled(false);
-			toast("wifi disabled");
-		}
-		if (wr != null) {
-			toast("unregister Wifi receiver");
-			stopWifiSession();
-			unregisterReceiver(wr);
-			wr = null;
 		}
 		log("disconnection complete");
 	}
