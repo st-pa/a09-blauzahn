@@ -55,12 +55,22 @@ extends AppTTS {
 
 	public static final String EXTRA_LIST_TYPE   = "listType";
 	public static final String EXTRA_LIST_LABEL   = "listLabel";
+	
 	public static final String EXTRA_LIST_BTDEVICE = "listBTDevice";
 	public static final String EXTRA_LIST_BTSESSION = "listBTSession";
 	public static final String EXTRA_LIST_BTSIGHTING = "listBTSighting";
+
+	public static final String EXTRA_LIST_WIFIDEVICE = "listWifiDevice";
+	public static final String EXTRA_LIST_WIFISESSION = "listWifiSession";
+	public static final String EXTRA_LIST_WIFISIGHTING = "listWifiSighting";
+	
 	public static final int LIST_TYPE_BTSIGHTINGS = 0;
 	public static final int LIST_TYPE_BTDEVICES   = 1;
 	public static final int LIST_TYPE_BTSESSIONS  = 2;
+
+	public static final int LIST_TYPE_WIFISIGHTINGS = 3;
+	public static final int LIST_TYPE_WIFIDEVICES   = 4;
+	public static final int LIST_TYPE_WIFISESSIONS  = 5;
 
 	/** whether or not to perform a database import from the project's assets. */
 	private static final boolean IMPORT = false;
@@ -68,7 +78,7 @@ extends AppTTS {
 	private static final String IMPORT_DB_FROM_ASSETS = "2012.02.02_22.11.37-blauzahn.sqlite";
 //	private static final String IMPORT_DB_FROM_ASSETS = "2014.12.04_08.42.26-blauzahn.sqlite";
 
-	/** folder path on the sd card used for exporting the sql database. */
+	/** path to folder on the sd card used for exporting the sql database. */
 	public static final String TARGET_FOLDER = new StringBuffer()
 		.append(Environment.getExternalStorageDirectory().getAbsolutePath())
 		.append(DBHelper.SEPARATOR)
