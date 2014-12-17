@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">a09-blauzahn</string>
-    <string name="action_settings">Settings</string>
     <string name="tvLog">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</string>
     <string name="btConnect">connect/scan</string>
     <string name="btDisconnect">disconnect</string>

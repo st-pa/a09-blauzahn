@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/tvList4label1"
@@ -12,7 +12,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text="#id (duration)"
+        android:text="#id (duration) from timestamp til timestamp"
         android:textSize="10sp" />
 
     <TextView
@@ -21,18 +21,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text="start time\nstop time"
-        android:textSize="10sp" />
-
-    <TextView
-        android:id="@+id/tvList4label3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:text="# &amp; names of sightings"
+        android:text="name(s) of wifi sighting(s)"
         android:textSize="10sp" />
 
 </LinearLayout>

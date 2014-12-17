@@ -119,14 +119,14 @@ implements OnItemClickListener, OnClickListener {
 				R.layout.list_wifisession,
 				app.db.getListWifiSessions(LIMIT,sighting)
 			);
-		}/* else if (listType == AppBlauzahn.LIST_TYPE_WIFIDEVICES) {
-			adapter = new AdapterWifiDevice(
-				this,
-				R.layout.list_wifidevice,
-				app.db.getListWifiDevices(LIMIT)
-			);
+		} else if (listType == AppBlauzahn.LIST_TYPE_WIFIDEVICES) {
+//			adapter = new AdapterWifiDevice(
+//				this,
+//				R.layout.list_wifidevice,
+//				app.db.getListWifiDevices(LIMIT)
+//			);
 		}
-*/		// set the list adapter
+		// set the list adapter
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
 	}
@@ -134,7 +134,7 @@ implements OnItemClickListener, OnClickListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_sighting_list, menu);
+//		getMenuInflater().inflate(R.menu.activity_sighting_list, menu);
 		return true;
 	}
 
@@ -143,10 +143,7 @@ implements OnItemClickListener, OnClickListener {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+//		int id = item.getItemId();
 		return super.onOptionsItemSelected(item);
 	}
 

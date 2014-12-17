@@ -638,12 +638,13 @@ extends SQLiteOpenHelper {
 			.append("SELECT\n\t")
 			.append(V4.KEY_WIFISIGHTING_ID).append(",\n\t")
 			.append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID).append(",\n\t")
+			.append(V4.KEY_WIFISIGHTING_BSSID).append(",\n\t")
 			.append(V4.KEY_WIFISIGHTING_CAPABILITIES).append(",\n\t")
 			.append(V4.KEY_WIFISIGHTING_FREQUENCY).append(",\n\t")
 			.append(V4.KEY_WIFISIGHTING_LEVEL).append(",\n\t")
 			.append(V4.KEY_WIFISIGHTING_SSID).append(",\n\t")
 			.append(V4.KEY_WIFISIGHTING_TIMESTAMP).append("\n")
-			.append("FROM ").append(V3.TAB_BTSIGHTING).append("\n");
+			.append("FROM ").append(V4.TAB_WIFISIGHTING).append("\n");
 			// at most one of the three parameters should be different from null
 			if (session != null) {
 				s.append("WHERE ").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID)

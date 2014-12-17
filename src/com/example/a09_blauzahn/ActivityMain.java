@@ -73,7 +73,6 @@ implements OnClickListener {
 	private MenuItem miAuto;
 	private MenuItem miBt;
 	private MenuItem miBtAuto;
-	private MenuItem miSettings;
 	private Dialog dialog;
 
 	////////////////////////////////////////////
@@ -211,7 +210,6 @@ implements OnClickListener {
 		getMenuInflater().inflate(R.menu.main, menu);
 
 		// reference menu items when they are created
-		miSettings = menu.findItem(R.id.action_settings);
 		miEnableResetDb = menu.findItem(R.id.menu_check_reset_db);
 		miWifi = menu.findItem(R.id.menu_check_wifi);
 		miAuto = menu.findItem(R.id.menu_check_wifi_auto);
@@ -232,10 +230,7 @@ implements OnClickListener {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		if (item == miSettings) {
-			// TODO handle click on settings menu item
-			return true;
-		} else if (item == miAuto) {
+		if (item == miAuto) {
 			clickedCbAuto();
 			return true;
 		} else if (item == miWifi) {

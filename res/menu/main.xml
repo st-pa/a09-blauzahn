@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.a09_blauzahn.MainActivity" >
 
-    <item android:id="@+id/menu_settings" android:orderInCategory="100" android:title="@string/action_settings" app:showAsAction="never"/>
     <item android:id="@+id/menu_check_wifi" android:title="@string/cbWifi" android:icon="@android:drawable/ic_menu_share" android:enabled="true" android:visible="true" android:checkable="true"/>
     <item android:id="@+id/menu_check_wifi_auto" android:title="@string/cbWifiAuto" android:icon="@android:drawable/ic_menu_rotate" android:enabled="true" android:visible="true" android:checkable="true"></item>
     <item android:id="@+id/menu_check_bt" android:title="@string/cbBt" android:enabled="true" android:visible="true" android:checkable="true"></item>

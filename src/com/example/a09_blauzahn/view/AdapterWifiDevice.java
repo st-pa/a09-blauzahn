@@ -10,14 +10,15 @@ import android.widget.TextView;
 
 import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.R;
-import com.example.a09_blauzahn.model.WifiSession;
+import com.example.a09_blauzahn.model.WifiDevice;
+import com.example.a09_blauzahn.model.WifiSighting;
 
 /**
- * for displaying {@link WifiSession}-information in a customized {@link ListView}.
+ * for displaying {@link WifiSighting}-information in a customized {@link ListView}.
  * @author stpa
  */
-public class AdapterWifiSession
-extends AbstractAdapter<WifiSession> {
+public class AdapterWifiDevice
+extends AbstractAdapter<WifiDevice> {
 
 	/** inner convenience class for speeding up list display. */
 	static class ViewHolder {
@@ -26,10 +27,10 @@ extends AbstractAdapter<WifiSession> {
 	}
 
 	/** Constructor. */
-	public AdapterWifiSession(
+	public AdapterWifiDevice(
 		Context context,
 		int layout,
-		List<WifiSession> list
+		List<WifiDevice> list
 	) {
 		super(context,layout,list);
 	}
@@ -45,33 +46,28 @@ extends AbstractAdapter<WifiSession> {
 				false
 			);
 			holder = new ViewHolder();
-			holder.label1 = (TextView) convertView.findViewById(R.id.tvList4label1);
-			holder.label2 = (TextView) convertView.findViewById(R.id.tvList4label2);
+			holder.label1 = (TextView) convertView.findViewById(R.id.tvList6label1);
+			holder.label2  = (TextView) convertView.findViewById(R.id.tvList6label2);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		WifiSession s = this.getItem(position);
+		WifiDevice d = this.getItem(position);
 		holder.label1.setText(
 			String.format(
-				"#%d (%.1f sec) from %s til %s",
-				s.getId(),
-				s.getDuration() / 1000f,
-				AppBlauzahn.DATETIMESTAMP.format(
-					s.getStart()
-				),
-				AppBlauzahn.DATETIMESTAMP.format(
-					s.getStop()
-				)
+				"#%d (x%d) Ø%.2fdb first:%s\n[%s] last:%s",
+				position,
+				d.getSessionCount(),
+				d.getAvgLevel(),
+				AppBlauzahn.DATETIMESTAMP.format(d.getFirstTime()),
+				d.getBSSID(),
+				AppBlauzahn.DATETIMESTAMP.format(d.getLastTime())
 			)
 		);
-		// get names of sighted devices
 		holder.label2.setText(
-			String.format(
-				"(%d) %s",
-				s.getWifiSightingsCount(),
-				AppBlauzahn.getNameListAsText(s.getWifiSightingsNames())
+			AppBlauzahn.getNameListAsText(
+				d.getNames()
 			)
 		);
 		// and give back the modified view
