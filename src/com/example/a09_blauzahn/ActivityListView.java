@@ -24,6 +24,7 @@ import com.example.a09_blauzahn.model.WifiSighting;
 import com.example.a09_blauzahn.view.AdapterBTDevice;
 import com.example.a09_blauzahn.view.AdapterBTSession;
 import com.example.a09_blauzahn.view.AdapterBTSighting;
+import com.example.a09_blauzahn.view.AdapterWifiSession;
 import com.example.a09_blauzahn.view.AdapterWifiSighting;
 
 /**
@@ -111,8 +112,21 @@ implements OnItemClickListener, OnClickListener {
 				R.layout.list_wifisighting,
 				app.db.getListWifiSightings(LIMIT,session,sighting)
 			);
+		} else if (listType == AppBlauzahn.LIST_TYPE_WIFISESSIONS) {
+			WifiSighting sighting = (WifiSighting) extras.getSerializable(AppBlauzahn.EXTRA_LIST_WIFISIGHTING);
+			adapter = new AdapterWifiSession(
+				this,
+				R.layout.list_wifisession,
+				app.db.getListWifiSessions(LIMIT,sighting)
+			);
+		}/* else if (listType == AppBlauzahn.LIST_TYPE_WIFIDEVICES) {
+			adapter = new AdapterWifiDevice(
+				this,
+				R.layout.list_wifidevice,
+				app.db.getListWifiDevices(LIMIT)
+			);
 		}
-		// set the list adapter
+*/		// set the list adapter
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
 	}
