@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+	
+	    <TextView
+	        android:id="@+id/tvSightingLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:padding="4dp"
+	        android:text="TextView"
+	        android:textSize="12sp" />
+	
+	    <Button
+	        android:id="@+id/btSightingSessions"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/btSightingSessions" />
+	
+	    <Button
+	        android:id="@+id/btSightingSightings"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/btBTSightingSightings" />
+	
+	    <Button
+	        android:id="@+id/btSightingPairing"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/btBTDevicePairing" />
+	
+	    <Button
+	        android:id="@+id/btSightingExit"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/btBTDeviceExit" />
+	
+	</LinearLayout>
+</ScrollView>

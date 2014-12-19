@@ -28,6 +28,7 @@ import com.example.a09_blauzahn.AppBlauzahn;
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.WifiDevice;
 import com.example.a09_blauzahn.model.WifiSession;
 import com.example.a09_blauzahn.model.WifiSighting;
 
@@ -627,10 +628,15 @@ extends SQLiteOpenHelper {
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @param session {@link WifiSession} optional filter, can be left <code>null</code>,
 	 * otherwise returns only sightings during the given session
+	 * @param limit {@link Integer}
+	 * @param device {@link WifiDevice}
+	 * @param session {@link WifiSession}
 	 * @param sighting {@link WifiSighting}
 	 * @return {@link List}<{@link WifiSighting}>
 	 */
-	public List<WifiSighting> getListWifiSightings(int limit, WifiSession session, WifiSighting sighting) {
+	public List<WifiSighting> getListWifiSightings(
+		int limit, WifiDevice device, WifiSession session, WifiSighting sighting
+	) {
 		init();
 		List<WifiSighting> result = new ArrayList<WifiSighting>();
 		try {
@@ -646,7 +652,10 @@ extends SQLiteOpenHelper {
 			.append(V4.KEY_WIFISIGHTING_TIMESTAMP).append("\n")
 			.append("FROM ").append(V4.TAB_WIFISIGHTING).append("\n");
 			// at most one of the three parameters should be different from null
-			if (session != null) {
+			if (device != null) {
+				s.append("WHERE ").append(V4.KEY_WIFISIGHTING_BSSID)
+				.append(" = \"").append(device.getBSSID()).append("\"\n");
+			} else if (session != null) {
 				s.append("WHERE ").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID)
 				.append(" = ").append(Long.toString(session.getId())).append("\n");
 			} else if (sighting != null) {
@@ -716,6 +725,8 @@ extends SQLiteOpenHelper {
 	 * @param limit {@link Integer} limit number of rows to be retrieved
 	 * @param session {@link BTSession} optional filter, can be left <code>null</code>,
 	 * otherwise returns only devices contained in the given session
+	 * @param limit {@link Integer}
+	 * @param session {@link BTDevice}
 	 * @return {@link List}<{@link BTDevice}>
 	 */
 	public List<BTDevice> getListBTDevices(int limit, BTSession session) {
@@ -746,6 +757,60 @@ extends SQLiteOpenHelper {
 				String address = c.getString(0);
 				result.add(
 					new BTDevice(
+						address,
+						getListBTDeviceNames(address),
+						new Date(c.getLong(1)),
+						new Date(c.getLong(2)),
+						c.getLong(3),
+						c.getDouble(4)
+					)
+				);
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
+	 * gets a list of all unique sighted wifi devices (addresses).
+	 * warning! this can be very long.
+	 * @param limit {@link Integer} limit number of rows to be retrieved
+	 * @param session {@link BTSession} optional filter, can be left <code>null</code>,
+	 * otherwise returns only devices contained in the given session
+	 * @param limit {@link Integer}
+	 * @param session {@link WifiDevice}
+	 * @return {@link List}<{@link WifiDevice}>
+	 */
+	public List<WifiDevice> getListWifiDevices(int limit, WifiSession session) {
+		init();
+		List<WifiDevice> result = new ArrayList<WifiDevice>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT\n\t")
+			.append(V4.KEY_WIFISIGHTING_BSSID).append(",\n\t")
+			.append("min(").append(V4.KEY_WIFISIGHTING_TIMESTAMP).append("),\n\t")
+			.append("max(").append(V4.KEY_WIFISIGHTING_TIMESTAMP).append("),\n\t")
+			.append("count(DISTINCT ").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID).append("),\n\t")
+			.append("avg(").append(V4.KEY_WIFISIGHTING_LEVEL).append(")\n")
+			.append("FROM ").append(V4.TAB_WIFISIGHTING).append("\n");
+			if (session != null) {
+				s.append("WHERE ").append(V4.KEY_WIFISIGHTING_WIFI_SESSION_ID)
+				.append(" = ").append(Long.toString(session.getId())).append("\n");
+			}
+			s.append("GROUP BY ").append(V4.KEY_WIFISIGHTING_BSSID).append("\n")
+			.append("ORDER BY 4 DESC\n")
+			.append("LIMIT ").append(Integer.toString(limit))
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				String address = c.getString(0);
+				result.add(
+					new WifiDevice(
 						address,
 						getListBTDeviceNames(address),
 						new Date(c.getLong(1)),

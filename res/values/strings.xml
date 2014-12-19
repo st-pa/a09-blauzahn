@@ -27,11 +27,15 @@
     <string name="dialogExitNo">no, not yet</string>
     <string name="labelListBTDevices">List of recently discovered unique bluetooth devices in decending order of their number of total occurrences.</string>
     <string name="labelListBTDevicesSession">List of unique bluetooth devices discovered during session #%d in decending order of their number of total occurrences.</string>
+    <string name="labelListWifiDevicesSession">List of unique wifi devices discovered during session #%d in decending order of their number of total occurrences.</string>
     <string name="labelListBTSessions">List of recently conducted bluetooth sessions with the most recent ones on top.</string>
     <string name="labelListBTSessionsDevice">List of bluetooth sessions containing device address [%s] with the most recent sessions ones on top.</string>
+    <string name="labelListWifiSessionsDevice">List of wifi sessions containing device address [%s] with the most recent sessions ones on top.</string>
     <string name="labelListBTSightings">List of recently recorded bluetooth sightings in chronological order.</string>
     <string name="labelListBTSightingsSession">List of recorded bluetooth sightings during session #%d in chronological order.</string>
+    <string name="labelListWifiSightingsSession">List of recorded wifi sightings during session #%d in chronological order.</string>
     <string name="labelListBTSightingsDevice">List of recently recorded sightings of bluetooth device address [%s] in chronological order.</string>
+    <string name="labelListWifiSightingsDevice">List of recently recorded sightings of wifi device address [%s] in chronological order.</string>
     <string name="labelListWifiSightings">List of recently recorded wifi sightings in chronological order.</string>
     <string name="labelListWifiSessions">List of recently conducted wifi sessions with the most recent ones on top.</string>
     <string name="labelListWifiDevices">List of recently discovered unique wifi devices in decending order of their number of total occurrences</string>
@@ -41,7 +45,7 @@
     <string name="btBTDeviceExit">exit, doing nothing</string>
     <string name="btBTSessionDevices">list the devices found during this session</string>
     <string name="btBTSessionSightings">show the sightings from this session</string>
-    <string name="btBTSightingSessions">list sessions with sightings of this device</string>
+    <string name="btSightingSessions">list sessions with sightings of this device</string>
     <string name="btBTSightingSightings">list other sightings of this device</string>
     <string name="btCalendar">calendar</string>
     <string name="title_activity_activity_calendar">ActivityCalendar</string>

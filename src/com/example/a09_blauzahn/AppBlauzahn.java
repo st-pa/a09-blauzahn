@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.a09_blauzahn.model.BTDevice;
 import com.example.a09_blauzahn.model.BTSession;
 import com.example.a09_blauzahn.model.BTSighting;
+import com.example.a09_blauzahn.model.WifiDevice;
 import com.example.a09_blauzahn.model.WifiSession;
 import com.example.a09_blauzahn.model.WifiSighting;
 import com.example.a09_blauzahn.util.DBHelper;
@@ -56,13 +57,13 @@ extends AppTTS {
 	public static final String EXTRA_LIST_TYPE   = "listType";
 	public static final String EXTRA_LIST_LABEL   = "listLabel";
 	
-	public static final String EXTRA_LIST_BTDEVICE = "listBTDevice";
-	public static final String EXTRA_LIST_BTSESSION = "listBTSession";
-	public static final String EXTRA_LIST_BTSIGHTING = "listBTSighting";
+	public static final String EXTRA_BTDEVICE = "BTDevice";
+	public static final String EXTRA_BTSESSION = "BTSession";
+	public static final String EXTRA_BTSIGHTING = "BTSighting";
 
-	public static final String EXTRA_LIST_WIFIDEVICE = "listWifiDevice";
-	public static final String EXTRA_LIST_WIFISESSION = "listWifiSession";
-	public static final String EXTRA_LIST_WIFISIGHTING = "listWifiSighting";
+	public static final String EXTRA_WIFIDEVICE = "WifiDevice";
+	public static final String EXTRA_WIFISESSION = "WifiSession";
+	public static final String EXTRA_WIFISIGHTING = "WifiSighting";
 	
 	public static final int LIST_TYPE_BTSIGHTINGS = 0;
 	public static final int LIST_TYPE_BTDEVICES   = 1;
@@ -272,6 +273,22 @@ extends AppTTS {
 
 	/**
 	 * returns a multiline text description of the given object.
+	 * @param device {@link WifiDevice}
+	 * @return {@link String}
+	 */
+	public static final String getDescription(WifiDevice device) {
+		return new StringBuffer()
+		.append(String.format("average signal strength = %.1fdb\n",device.getAvgLevel()))
+		.append("number of sessions = ").append(device.getSessionCount()).append("\n")
+		.append("known names = ").append(AppBlauzahn.getNameListAsText(device.getNames())).append("\n")
+		.append("address = [").append(device.getBSSID()).append("]\n")
+		.append("first encounter = ").append(DATETIMESTAMP.format(device.getFirstTime())).append("\n")
+		.append("last encounter = ").append(DATETIMESTAMP.format(device.getLastTime())).append("\n")
+		.toString();
+	}
+
+	/**
+	 * returns a multiline text description of the given object.
 	 * @param device {@link BTSession}
 	 * @return {@link String}
 	 */
@@ -281,6 +298,23 @@ extends AppTTS {
 		.append("number of sightings = ").append(session.getBTSightingsCount()).append("\n")
 		.append("sighted names = ")
 		.append(AppBlauzahn.getNameListAsText(session.getBTSightingsNames())).append("\n")
+		.append("duration = ").append(session.getDuration()).append("ms\n")
+		.append("start time = ").append(DATETIMESTAMP.format(session.getStart())).append("\n")
+		.append("stop time = ").append(DATETIMESTAMP.format(session.getStop())).append("\n")
+		.toString();
+	}
+
+	/**
+	 * returns a multiline text description of the given object.
+	 * @param device {@link WifiSession}
+	 * @return {@link String}
+	 */
+	public static String getDescription(WifiSession session) {
+		return new StringBuffer()
+		.append("session id = ").append(session.getId()).append("\n")
+		.append("number of sightings = ").append(session.getWifiSightingsCount()).append("\n")
+		.append("sighted names = ")
+		.append(AppBlauzahn.getNameListAsText(session.getWifiSightingsNames())).append("\n")
 		.append("duration = ").append(session.getDuration()).append("ms\n")
 		.append("start time = ").append(DATETIMESTAMP.format(session.getStart())).append("\n")
 		.append("stop time = ").append(DATETIMESTAMP.format(session.getStop())).append("\n")
