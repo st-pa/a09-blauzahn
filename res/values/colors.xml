@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <color name="red">#ffff0000</color>
-    <color name="listItemEven">#fff8e0f2</color>
-    <color name="listItemOdd">#fff8f2e0</color>
-
-</resources>

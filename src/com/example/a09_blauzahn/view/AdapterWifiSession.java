@@ -52,7 +52,7 @@ extends AbstractAdapter<WifiSession> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		int color = getColor(position);
+		convertView.setBackgroundColor(this.getColor(position));
 		WifiSession s = this.getItem(position);
 		holder.label1.setText(
 			String.format(
@@ -67,7 +67,6 @@ extends AbstractAdapter<WifiSession> {
 				)
 			)
 		);
-		holder.label1.setBackgroundColor(color);
 		// get names of sighted devices
 		holder.label2.setText(
 			String.format(
@@ -76,7 +75,6 @@ extends AbstractAdapter<WifiSession> {
 				AppBlauzahn.getNameListAsText(s.getWifiSightingsNames())
 			)
 		);
-		holder.label2.setBackgroundColor(color);
 		// and give back the modified view
 		return convertView;
 	}

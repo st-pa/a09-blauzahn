@@ -49,7 +49,7 @@ extends AbstractAdapter<BTSighting> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		int color = getColor(position);
+		convertView.setBackgroundColor(this.getColor(position));
 		BTSighting s = this.getItem(position);
 		holder.label.setText(
 			String.format(
@@ -63,7 +63,6 @@ extends AbstractAdapter<BTSighting> {
 				s.getRssi()
 			)
 		);
-		holder.label.setBackgroundColor(color);
 		String name = DBHelper.nullValue(s.getName());
 		if (name != null && name.length() > 0) {
 			holder.name.setText(name);
@@ -71,7 +70,6 @@ extends AbstractAdapter<BTSighting> {
 		} else {
 			holder.name.setVisibility(View.GONE);
 		}
-		holder.name.setBackgroundColor(color);
 		// and give back the modified view
 		return convertView;
 	}

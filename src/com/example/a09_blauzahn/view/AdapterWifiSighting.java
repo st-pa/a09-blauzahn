@@ -49,7 +49,7 @@ extends AbstractAdapter<WifiSighting> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		int color = getColor(position);
+		convertView.setBackgroundColor(this.getColor(position));
 		WifiSighting s = this.getItem(position);
 		holder.label1.setText(
 			String.format(
@@ -63,7 +63,6 @@ extends AbstractAdapter<WifiSighting> {
 				s.getLevel()
 			)
 		);
-		holder.label1.setBackgroundColor(color);
 		String name = DBHelper.nullValue(s.getSSID());
 		if (name != null && name.length() > 0) {
 			holder.label2.setText(name);
@@ -71,7 +70,6 @@ extends AbstractAdapter<WifiSighting> {
 		} else {
 			holder.label2.setVisibility(View.GONE);
 		}
-		holder.label2.setBackgroundColor(color);
 		// and give back the modified view
 		return convertView;
 	}

@@ -47,7 +47,7 @@ extends ArrayAdapter<T> {
 	 */
 	protected int getColor(int position) {
 		return (position % 2 == 0) ?
-		context.getResources().getColor(R.color.background_light) :
-		context.getResources().getColor(R.color.background_dark);
+		0xfff8e0f2 :
+		0xfff8f2e0;
 	}
 }

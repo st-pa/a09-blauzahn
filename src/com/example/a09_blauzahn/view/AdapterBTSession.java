@@ -54,7 +54,7 @@ extends AbstractAdapter<BTSession> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
-		int color = getColor(position);
+		convertView.setBackgroundColor(this.getColor(position));
 		BTSession s = this.getItem(position);
 		holder.id.setText(
 			String.format(
@@ -63,7 +63,6 @@ extends AbstractAdapter<BTSession> {
 				s.getDuration() / 1000f
 			)
 		);
-		holder.id.setBackgroundColor(color);
 		holder.label.setText(
 			String.format(
 				"start: %s\nstop: %s",
@@ -75,7 +74,6 @@ extends AbstractAdapter<BTSession> {
 				)
 			)
 		);
-		holder.label.setBackgroundColor(color);
 		// get names of sighted devices
 		holder.names.setText(
 			String.format(
@@ -84,7 +82,6 @@ extends AbstractAdapter<BTSession> {
 				AppBlauzahn.getNameListAsText(s.getBTSightingsNames())
 			)
 		);
-		holder.names.setBackgroundColor(color);
 		// and give back the modified view
 		return convertView;
 	}
