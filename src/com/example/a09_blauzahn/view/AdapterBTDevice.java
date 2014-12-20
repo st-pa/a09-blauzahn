@@ -53,6 +53,7 @@ extends AbstractAdapter<BTDevice> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// now set the view holder's values
+		int color = getColor(position);
 		BTDevice d = this.getItem(position);
 		holder.label.setText(
 			String.format(
@@ -65,11 +66,13 @@ extends AbstractAdapter<BTDevice> {
 				AppBlauzahn.DATETIMESTAMP.format(d.getLastTime())
 			)
 		);
+		holder.label.setBackgroundColor(color);
 		holder.names.setText(
 			AppBlauzahn.getNameListAsText(
 				d.getNames()
 			)
 		);
+		holder.names.setBackgroundColor(color);
 		// and give back the modified view
 		return convertView;
 	}

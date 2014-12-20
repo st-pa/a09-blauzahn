@@ -2,6 +2,7 @@ package com.example.a09_blauzahn.view;
 
 import java.util.List;
 
+import android.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,9 @@ extends ArrayAdapter<T> {
 	/** R.id of the layout for this adapter. */
 	protected int layout;
 
+	/** needed to retrieve resources. */
+	protected Context context;
+
 	/** Constructor. */
 	public AbstractAdapter(
 		Context context,
@@ -33,5 +37,17 @@ extends ArrayAdapter<T> {
 		super(context,layout,list);
 		AbstractAdapter.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.layout = layout;
+		this.context = context;
+	}
+
+	/**
+	 * gives back one color for odd and another for even positions.
+	 * @param position {@link Integer} position of an item in a list.
+	 * @return {@link Integer} pointing to  resource id.
+	 */
+	protected int getColor(int position) {
+		return (position % 2 == 0) ?
+		context.getResources().getColor(R.color.background_light) :
+		context.getResources().getColor(R.color.background_dark);
 	}
 }

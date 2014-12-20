@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.example.a09_blauzahn.AppBlauzahn;
+
 public class WifiSession
 implements Serializable {
 
@@ -116,5 +118,10 @@ implements Serializable {
 	 */
 	public int getWifiSightingsCount() {
 		return (wifiSightings == null) ? 0 : wifiSightings.size();
+	}
+
+	@Override
+	public final String toString() {
+		return AppBlauzahn.getDescription(this);
 	}
 }

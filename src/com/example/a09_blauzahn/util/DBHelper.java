@@ -720,6 +720,35 @@ extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * list all names seen for the given address.
+	 * @param address {@link String}
+	 * @return {@link List}<{@link String}>
+	 */
+	public List<String> getListWifiDeviceNames(String BSSID) {
+		init();
+		List<String> result = new ArrayList<String>();
+		try {
+			StringBuffer s = new StringBuffer()
+			.append("SELECT DISTINCT ").append(V4.KEY_WIFISIGHTING_SSID).append("\n")
+			.append("FROM ").append(V4.TAB_WIFISIGHTING).append("\n")
+			.append("WHERE ").append(V4.KEY_WIFISIGHTING_BSSID)
+			.append(" = \"").append(BSSID).append("\"")
+			;
+			Cursor c = db.rawQuery(
+				s.toString(),
+				null
+			);
+			while (c.moveToNext()) {
+				result.add(c.getString(0));
+			};
+			c.close();
+		} catch (SQLiteException e) {
+			Log.e("SQL",e.toString());
+		}
+		return result;
+	}
+
+	/**
 	 * gets a list of all unique sighted bluetooth devices (addresses).
 	 * warning! this can be very long.
 	 * @param limit {@link Integer} limit number of rows to be retrieved
@@ -812,7 +841,7 @@ extends SQLiteOpenHelper {
 				result.add(
 					new WifiDevice(
 						address,
-						getListBTDeviceNames(address),
+						getListWifiDeviceNames(address),
 						new Date(c.getLong(1)),
 						new Date(c.getLong(2)),
 						c.getLong(3),
