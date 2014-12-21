@@ -12,7 +12,7 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/tvBTDeviceLabel"
+            android:id="@+id/tvDeviceLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -20,13 +20,13 @@
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/btBTDeviceSightings"
+            android:id="@+id/btDeviceSightings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btBTDeviceSightings" />
 
         <Button
-            android:id="@+id/btBTDeviceSessions"
+            android:id="@+id/btDeviceSessions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btBTDeviceSessions" />
@@ -38,7 +38,7 @@
             android:text="@string/btBTDevicePairing" />
 
         <Button
-            android:id="@+id/btBTDeviceExit"
+            android:id="@+id/btDeviceExit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btBTDeviceExit" />

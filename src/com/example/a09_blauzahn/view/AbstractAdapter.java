@@ -47,7 +47,8 @@ extends ArrayAdapter<T> {
 	 */
 	protected int getColor(int position) {
 		return (position % 2 == 0) ?
-		0xfff8e0f2 :
+//		0xfff8e0f2 :
+		0xffffffff :
 		0xfff8f2e0;
 	}
 }

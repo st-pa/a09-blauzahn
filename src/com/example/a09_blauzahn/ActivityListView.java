@@ -168,6 +168,28 @@ implements OnItemClickListener, OnClickListener {
 		}
 	}
 
+	/**
+	 * convenience method to generate intents for various list views.
+	 * @param listType {@link Integer} see {@link AppBlauzahn#LIST_TYPE_BTDEVICES} and others.
+	 * @param label {@link String} label to be displayed over the list
+	 * @param args {@link Object} additional objects like {@link WifiSession}, {@link BTDevice}, etc.
+	 * @return {@link Intent}
+	 */
+	private Intent makeIntent(int listType, String label, Object... args) {
+		Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,listType);
+		intent.putExtra(AppBlauzahn.EXTRA_LIST_LABEL,label);
+		for (Object item : args) {
+			if (item instanceof BTDevice) intent.putExtra(AppBlauzahn.EXTRA_BTDEVICE,(BTDevice) item);
+			else if (item instanceof BTSession) intent.putExtra(AppBlauzahn.EXTRA_BTSESSION,(BTSession) item);
+			else if (item instanceof BTSighting) intent.putExtra(AppBlauzahn.EXTRA_BTSIGHTING,(BTSighting) item);
+			else if (item instanceof WifiDevice) intent.putExtra(AppBlauzahn.EXTRA_WIFIDEVICE,(WifiDevice) item);
+			else if (item instanceof WifiSession) intent.putExtra(AppBlauzahn.EXTRA_WIFISESSION,(WifiSession) item);
+			else if (item instanceof WifiSighting) intent.putExtra(AppBlauzahn.EXTRA_WIFISIGHTING,(WifiSighting) item);
+		}
+		return intent;
+	}
+
 	/** TODO check {@link #itemClickWifiSighting} */
 	private void itemClickWifiSighting(final WifiSighting item) {
 		dialog = new Dialog(this);
@@ -186,32 +208,26 @@ implements OnItemClickListener, OnClickListener {
 			public void onClick(View v) {
 				if (v == btSightingSessions) {
 					// list all the sessions containing the sighted device
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_WIFISESSIONS);
-					intent.putExtra(AppBlauzahn.EXTRA_WIFISIGHTING,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_WIFISESSIONS,
 						String.format(
 							getString(R.string.labelListWifiSessionsDevice),
 							item.getBSSID()
-						)
+						),item
 					);
 					startActivity(intent);
 				} else if (v == btSightingSightings) {
 					// list all the sessions containing the sighted device
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_WIFISIGHTINGS);
-					intent.putExtra(AppBlauzahn.EXTRA_WIFISIGHTING,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_WIFISIGHTINGS,
 						String.format(
 							getString(R.string.labelListWifiSightingsDevice),
 							item.getBSSID()
-						)
+						),item
 					);
 					startActivity(intent);
 				} else if (v == btSightingPairing) {
-					pairingWifi();
+					pairingWifi(item.getBSSID());
 				}
 				// close the dialog no matter which button was clicked
 				dialog.dismiss();
@@ -245,28 +261,22 @@ implements OnItemClickListener, OnClickListener {
 			public void onClick(View v) {
 				if (v == btSessionDevices) {
 					// list the devices contained in this session
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_WIFIDEVICES);
-					intent.putExtra(AppBlauzahn.EXTRA_WIFISESSION,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_WIFIDEVICES,
 						String.format(
 							getString(R.string.labelListWifiDevicesSession),
 							item.getId()
-						)
+						),item
 					);
 					startActivity(intent);
 				} else if (v == btSessionSightings) {
 					// list the sightings during this session (devices could be sighted twice)
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_WIFISIGHTINGS);
-					intent.putExtra(AppBlauzahn.EXTRA_BTSESSION,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_WIFISIGHTINGS,
 						String.format(
 							getString(R.string.labelListWifiSightingsSession),
 							item.getId()
-						)
+						),item
 					);
 					startActivity(intent);
 				}
@@ -285,7 +295,55 @@ implements OnItemClickListener, OnClickListener {
 	}
 
 	private void itemClickWifiDevice(final WifiDevice item) {
-		// TODO Auto-generated method stub
+		dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.dialog_listitem_device);
+		// display some information about the selected device
+		TextView tvDeviceLabel = (TextView) dialog.findViewById(R.id.tvDeviceLabel);
+		tvDeviceLabel.setText(AppBlauzahn.getDescription(item));
+		// define click-behaviour for dialog buttons
+		final Button btDeviceExit = (Button) dialog.findViewById(R.id.btDeviceExit);
+		final Button btDevicePairing = (Button) dialog.findViewById(R.id.btSightingPairing);
+		final Button btDeviceSessions = (Button) dialog.findViewById(R.id.btDeviceSessions);
+		final Button btDeviceSightings = (Button) dialog.findViewById(R.id.btDeviceSightings);
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (v == btDevicePairing) {
+					pairingWifi(item.getBSSID());
+				} else if (v == btDeviceSessions) {
+					// list the sessions containing this device
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_WIFISESSIONS,
+						String.format(
+							getString(R.string.labelListWifiSessionsDevice),
+							item.getBSSID()
+						),
+						item
+					);
+					startActivity(intent);
+				} else if (v == btDeviceSightings) {
+					// show only sightings containing this device
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_WIFISIGHTINGS,
+						String.format(
+							getString(R.string.labelListWifiSightingsDevice),
+							item.getBSSID()
+						),item
+					);
+					startActivity(intent);
+				}
+				// close the dialog no matter which button was clicked
+				dialog.dismiss();
+				dialog = null;
+			}
+		};
+		btDeviceExit.setOnClickListener(listener);
+		btDevicePairing.setOnClickListener(listener);
+		btDeviceSessions.setOnClickListener(listener);
+		btDeviceSightings.setOnClickListener(listener);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
 	}
 
 	/** react to a click on a listed bluetooth sighting. */
@@ -306,28 +364,22 @@ implements OnItemClickListener, OnClickListener {
 			public void onClick(View v) {
 				if (v == btBTSightingSessions) {
 					// list all the sessions containing the sighted device
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSESSIONS);
-					intent.putExtra(AppBlauzahn.EXTRA_BTSIGHTING,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_BTSESSIONS,
 						String.format(
 							getString(R.string.labelListBTSessionsDevice),
 							item.getAddress()
-						)
+						),item
 					);
 					startActivity(intent);
 				} else if (v == btBTSightingSightings) {
 					// list all the sessions containing the sighted device
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSIGHTINGS);
-					intent.putExtra(AppBlauzahn.EXTRA_BTSIGHTING,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_BTSIGHTINGS,
 						String.format(
 							getString(R.string.labelListBTSightingsDevice),
 							item.getAddress()
-						)
+						),item
 					);
 					startActivity(intent);
 				} else if (v == btBTSightingPairing) {
@@ -367,28 +419,22 @@ implements OnItemClickListener, OnClickListener {
 			public void onClick(View v) {
 				if (v == btBTSessionDevices) {
 					// list the devices contained in this session
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTDEVICES);
-					intent.putExtra(AppBlauzahn.EXTRA_BTSESSION,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_BTDEVICES,
 						String.format(
 							getString(R.string.labelListBTDevicesSession),
 							item.getId()
-						)
+						),item
 					);
 					startActivity(intent);
 				} else if (v == btBTSessionSightings) {
 					// list the sightings during this session (devices could be sighted twice)
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSIGHTINGS);
-					intent.putExtra(AppBlauzahn.EXTRA_BTSESSION,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_BTSIGHTINGS,
 						String.format(
 							getString(R.string.labelListBTSightingsSession),
 							item.getId()
-						)
+						),item
 					);
 					startActivity(intent);
 				}
@@ -416,42 +462,37 @@ implements OnItemClickListener, OnClickListener {
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.dialog_listitem_device);
 		// display some information about the selected device
-		TextView tvBTDeviceLabel = (TextView) dialog.findViewById(R.id.tvBTDeviceLabel);
-		tvBTDeviceLabel.setText(AppBlauzahn.getDescription(item));
+		TextView tvDeviceLabel = (TextView) dialog.findViewById(R.id.tvDeviceLabel);
+		tvDeviceLabel.setText(AppBlauzahn.getDescription(item));
 		// define click-behaviour for dialog buttons
-		final Button btBTDeviceExit = (Button) dialog.findViewById(R.id.btBTDeviceExit);
-		final Button btBTDevicePairing = (Button) dialog.findViewById(R.id.btSightingPairing);
-		final Button btBTDeviceSessions = (Button) dialog.findViewById(R.id.btBTDeviceSessions);
-		final Button btBTDeviceSightings = (Button) dialog.findViewById(R.id.btBTDeviceSightings);
+		final Button btDeviceExit = (Button) dialog.findViewById(R.id.btDeviceExit);
+		final Button btDevicePairing = (Button) dialog.findViewById(R.id.btSightingPairing);
+		final Button btDeviceSessions = (Button) dialog.findViewById(R.id.btDeviceSessions);
+		final Button btDeviceSightings = (Button) dialog.findViewById(R.id.btDeviceSightings);
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (v == btBTDevicePairing) {
+				if (v == btDevicePairing) {
 					pairingBT();
-				} else if (v == btBTDeviceSessions) {
+				} else if (v == btDeviceSessions) {
 					// list the sessions containing this device
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSESSIONS);
-					intent.putExtra(AppBlauzahn.EXTRA_BTDEVICE,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_BTSESSIONS,
 						String.format(
 							getString(R.string.labelListBTSessionsDevice),
 							item.getAddress()
-						)
+						),
+						item
 					);
 					startActivity(intent);
-				} else if (v == btBTDeviceSightings) {
+				} else if (v == btDeviceSightings) {
 					// show only sightings containing this device
-					Intent intent = new Intent(ActivityListView.this,ActivityListView.class);
-					intent.putExtra(AppBlauzahn.EXTRA_LIST_TYPE,AppBlauzahn.LIST_TYPE_BTSIGHTINGS);
-					intent.putExtra(AppBlauzahn.EXTRA_BTDEVICE,item);
-					intent.putExtra(
-						AppBlauzahn.EXTRA_LIST_LABEL,
+					Intent intent = makeIntent(
+						AppBlauzahn.LIST_TYPE_BTSIGHTINGS,
 						String.format(
 							getString(R.string.labelListBTSightingsDevice),
 							item.getAddress()
-						)
+						),item
 					);
 					startActivity(intent);
 				}
@@ -460,10 +501,10 @@ implements OnItemClickListener, OnClickListener {
 				dialog = null;
 			}
 		};
-		btBTDeviceExit.setOnClickListener(listener);
-		btBTDevicePairing.setOnClickListener(listener);
-		btBTDeviceSessions.setOnClickListener(listener);
-		btBTDeviceSightings.setOnClickListener(listener);
+		btDeviceExit.setOnClickListener(listener);
+		btDevicePairing.setOnClickListener(listener);
+		btDeviceSessions.setOnClickListener(listener);
+		btDeviceSightings.setOnClickListener(listener);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
 	}
@@ -477,8 +518,9 @@ implements OnItemClickListener, OnClickListener {
 
 	/**
 	 * TODO try pairing with the wifi device
+	 * @param address {@link String}
 	 */
-	private void pairingWifi() {
+	private void pairingWifi(String address) {
 		app.toast("no wifi pairing as of yet, sorry.");
 	}
 
